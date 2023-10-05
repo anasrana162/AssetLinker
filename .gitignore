@@ -3,6 +3,14 @@
 .DS_Store
 
 
+# Files
+package-lock.json
+jest.config.js
+metro.config.js
+Gemfile
+Gemfile.lock
+tsconfig.json
+
 #IOS
 ios/
 
