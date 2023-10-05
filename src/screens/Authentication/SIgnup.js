@@ -736,7 +736,7 @@ const styles = StyleSheet.create({
     screenTitle: {
         fontSize: 28,
         fontWeight: "600",
-        color: "#14588c",
+        color: Colors.main,
         marginTop: 20,
     },
     signup_btn: {
@@ -745,7 +745,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginBottom: 20,
-        backgroundColor: "#3081bf",
+        backgroundColor: Colors.main,
         alignSelf: "center",
         borderRadius: 10,
     },

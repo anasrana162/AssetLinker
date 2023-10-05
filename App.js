@@ -22,7 +22,7 @@ const App = (props) => {
   return (
     <>
       <Provider store={store}>
-        <View style={{ flex: 1, backgroundColor: "#3081bf", }}>
+        <View style={{ flex: 1, backgroundColor: "#001645", }}>
 
           <View style={{ marginTop: StatusBarManager?.HEIGHT, flex: 1 }} >
             {Platform.OS == "ios" && <StatusBar

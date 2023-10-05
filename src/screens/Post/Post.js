@@ -450,6 +450,7 @@ const styles = StyleSheet.create({
         height: height,
         justifyContent: "flex-start",
         alignItems: 'center',
+        backgroundColor:"white"
     },
     space_line: {
         width: width - 20,

@@ -167,7 +167,7 @@ class Login extends Component {
                             text={"Create an Account"}
                             navProps={this.props.navigation}
                             navToScreenName={"SignUp"}
-                            style={{ marginBottom: 400 }}
+                            // style={{ marginBottom: 400 }}
                         />
                         <Links
                             text={"Forget Passsword"}
@@ -177,7 +177,7 @@ class Login extends Component {
                         />
 
                     </ScrollView>
-                    <View style={{ width: width, height: 45, position: "absolute", bottom: 0, backgroundColor: "#3081bf" }}></View>
+                    <View style={{ width: width, height: 45, position: "absolute", bottom: 0, backgroundColor: Colors.main }}></View>
 
 
 
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     screenTitle: {
         fontSize: 28,
         fontWeight: "600",
-        color: "#14588c",
+        color: Colors.main,
         marginTop: 60,
         alignSelf: "center",
     },

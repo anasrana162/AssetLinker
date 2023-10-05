@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View,SafeAreaView, StyleSheet, ImageBackground, Image, Animated, Dimensions, NativeModules } from 'react-native';
+import { View, SafeAreaView, StyleSheet, ImageBackground, Image, Animated, Dimensions, NativeModules } from 'react-native';
 
 {/* {---------------Redux Imports------------} */ }
 import { connect } from 'react-redux';
@@ -23,25 +23,25 @@ const Splash = (props, { navigation }) => {
 
     useEffect(() => {
 
-        console.log("currentValue",animatedValue)
-                if (currentValue >= 90) {
-                    Animated.spring(animatedValue, {
-                        toValue: 0,
-                        tension: 5,
-                        friction: 5,
-                        duration: 5000,
-                        useNativeDriver: false,
-                    }).start();
-                } else {
-                    Animated.spring(animatedValue, {
-                        toValue: 180,
-                        tension: .1,
-                        friction: .5,
-                        duration: 5000,
+        console.log("currentValue", animatedValue)
+        if (currentValue >= 90) {
+            Animated.spring(animatedValue, {
+                toValue: 0,
+                tension: 5,
+                friction: 5,
+                duration: 5000,
+                useNativeDriver: false,
+            }).start();
+        } else {
+            Animated.spring(animatedValue, {
+                toValue: 180,
+                tension: .1,
+                friction: .5,
+                duration: 5000,
 
-                        useNativeDriver: false,
-                    }).start();
-                }
+                useNativeDriver: false,
+            }).start();
+        }
 
         checkUserExist()
     });
@@ -51,30 +51,32 @@ const Splash = (props, { navigation }) => {
         const res = await AsyncStorage.getItem("@assetlinker_usertoken")
         const data = await AsyncStorage.getItem("@assetlinker_userData")
         console.log("Token in App js", res)
-        if (res !== null || res !== '') {
-            console.log("WOrking login", data, " ", actions)
-            actions.user(JSON.parse(data))
-            actions.userToken(res)
-            // props.navigation.navigate("Dash")
-        }
-        else {
-            setTimeout(() => {
+        setTimeout(() => {
+            if (res !== null || res !== '') {
+                console.log("WOrking login", data, " ", actions)
+                actions.user(JSON.parse(data))
+                actions.userToken(res)
+                // props.navigation.navigate("GetStarted")
+                props.navigation.navigate("Dash")
+            }
+            if (res == null) {
                 props.navigation.navigate("GetStarted")
-            }, 3000)
-        }
+
+            }
+        }, 3000)
     }
 
-        const setInterpolate = animatedValue.interpolate({
-            inputRange: [0, 180],
-            outputRange: ['360deg', '0deg'],
-            
-        });
-    console.log("setInterpolate",setInterpolate)
-        const rotateYAnimatedStyle = {
-            // width:width-50,
-            
-            transform: [{ rotateY: setInterpolate }],
-        };
+    const setInterpolate = animatedValue.interpolate({
+        inputRange: [0, 180],
+        outputRange: ['360deg', '0deg'],
+
+    });
+    console.log("setInterpolate", setInterpolate)
+    const rotateYAnimatedStyle = {
+        // width:width-50,
+
+        transform: [{ rotateY: setInterpolate }],
+    };
 
     return (
         <View style={styles.container}>
@@ -82,7 +84,7 @@ const Splash = (props, { navigation }) => {
                 source={require('../../assets/watermark2.jpg')}
                 style={[styles.backgroundImage]}>
                 <Animated.Image
-            
+
                     // source={{
                     //     uri: 'https://www.nicesnippets.com/image/imgpsh_fullsize.png',
                     // }}
@@ -144,8 +146,8 @@ const styles = StyleSheet.create({
         borderRadius: 6,
     },
     logoImageSignIn: {
-        width: width-40,
-        height: 120, 
+        width: width - 40,
+        height: 120,
         marginBottom: 170
     },
 });

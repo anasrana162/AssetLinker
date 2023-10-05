@@ -20,8 +20,8 @@ const AuthTextIput = ({ placeholder, placeholderTextColor, onChangeText, style, 
                     <TouchableOpacity
                         onPress={() => setSecureTextEntry(!secureTextEntry)}
                         style={styles.eye_cont}>
-                        { !secureTextEntry && <Ionicons name="eye" size={20} color="#3081bf" />}
-                        { secureTextEntry && <Ionicons name="eye-off" size={20} color="#3081bf" />}
+                        {!secureTextEntry && <Ionicons name="eye" size={20} color={Colors.main} />}
+                        {secureTextEntry && <Ionicons name="eye-off" size={20} color={Colors.main} />}
                     </TouchableOpacity>}
             </View>
         </View>

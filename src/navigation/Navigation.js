@@ -13,7 +13,8 @@ import Splash from '../screens/Splash';
 // import Home from '../screens/Dash/Home';
 import Dash from '../screens/Dash/Home';
 import DetailScreen from '../screens/DetailScreen';
-import ForgotPassword from '../screens/ForgotPassword';
+import ForgetPassword from '../screens/Authentication/ForgetPassword';
+// import ForgotPassword from '../screens/ForgotPassword';
 import AccountScreen from '../screens/AccountScreen';
 import Sell from '../screens/Sell';
 import MyAdds from '../screens/MyAdds';
@@ -43,7 +44,8 @@ import CommentScreen from '../screens/CommentScreen';
 import Post from '../screens/Post/Post';
 import { NavService } from '../config';
 import { useSelector } from 'react-redux';
-import OTP from '../screens/OTP';
+// import OTP from '../screens/OTP';
+import Otp from '../screens/Authentication/Otp';
 import MyProfile from '../screens/MyProfile';
 import Profile from '../screens/Profile';
 
@@ -228,7 +230,7 @@ const Stack = createNativeStackNavigator();
 //   );
 // };
 export default Navigation = () => {
- 
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -259,12 +261,12 @@ export default Navigation = () => {
         />
         <Stack.Screen
           name="Forgot"
-          component={ForgotPassword}
+          component={ForgetPassword}
           options={{ headerShown: false }}
         />
         <Stack.Screen
           name="OTP"
-          component={OTP}
+          component={Otp}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -275,6 +277,27 @@ export default Navigation = () => {
         <Stack.Screen
           name="Dash"
           component={Dash}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={Chat}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="Post"
+          component={Post}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Favourite"
+          component={Favourite}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Account"
+          component={AccountScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -364,11 +387,6 @@ export default Navigation = () => {
         <Stack.Screen
           name="VoiceOfLinkerNews"
           component={VoiceOfLinkerNews}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="AccountScreen"
-          component={AccountScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen

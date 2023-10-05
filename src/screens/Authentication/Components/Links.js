@@ -20,11 +20,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignSelf: "center",
         alignItems: "center",
-        marginBottom: 50,
+        // marginBottom: 50,
         marginTop: 10,
     },
     text: {
-        fontSize: 18,
+        fontSize: 14,
         fontWeight: "600",
         color: Colors.black
     }
