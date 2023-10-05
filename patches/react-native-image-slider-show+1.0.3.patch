@@ -1,0 +1,49 @@
+diff --git a/node_modules/react-native-image-slider-show/Slideshow.js b/node_modules/react-native-image-slider-show/Slideshow.js
+index c0e4bd8..ae478dd 100644
+--- a/node_modules/react-native-image-slider-show/Slideshow.js
++++ b/node_modules/react-native-image-slider-show/Slideshow.js
+@@ -177,7 +177,7 @@ export default class Slideshow extends Component {
+     return (
+       <View style={[
+           this.props.containerStyle,
+-          { height: height }
++          { height: 280 }
+         ]}>
+         {/* SECTION IMAGE */}
+         <ScrollView
+@@ -189,7 +189,7 @@ export default class Slideshow extends Component {
+           {...this._panResponder.panHandlers}
+           style={[
+             styles.container, 
+-            { height: height }
++            { height: 280 }
+           ]}>
+           {this.props.dataSource.map((image, index) => {
+             const imageObject = typeof image.url === 'string' ? {uri: image.url} : image.url;
+@@ -203,7 +203,7 @@ export default class Slideshow extends Component {
+               <View key={index}>
+                 <Image
+                   source={imageObject}
+-                  style={{height, width}}/>
++                  style={{height:280, width}}/>
+                 {textComponent}
+               </View>
+             );
+@@ -264,7 +264,7 @@ export default class Slideshow extends Component {
+         <View 
+           style={[
+             layoutArrow(this.props.height, this.props.arrowSize), 
+-            { left: 10, height: 50 },
++            { left: 10, height: 50, marginTop:width * 0.08 },
+           ]}>
+           <TouchableOpacity
+             onPress={() => this._prev()}>
+@@ -285,7 +285,7 @@ export default class Slideshow extends Component {
+         <View 
+           style={[
+             layoutArrow(this.props.height, this.props.arrowSize), 
+-            { right: 10, height: 50 },
++            { right: 10, height: 50,marginTop:width * 0.08 },
+           ]}>
+           <TouchableOpacity
+             onPress={() => this._next()}>
