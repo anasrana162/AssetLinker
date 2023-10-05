@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View, Dimensions, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-const ButtonList = ({ data, titleSale,onSelectValue }) => {
+const ButtonList = ({ data, titleSale,onSelectValue,style }) => {
 
     const [selected, setSelected] = React.useState('')
 
     return (
-        <View style={styles.button_list_cont}>
+        <View style={[styles.button_list_cont,style]}>
             <Text style={styles.title}>{titleSale}</Text>
 
             {/* Type list */}

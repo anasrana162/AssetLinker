@@ -35,158 +35,19 @@ import SelectType from './Components/SelectType';
 import ImageSelector from './Components/ImageSelector';
 import Options from './Components/Options';
 import DropDown from './Components/DropDown';
+import ButtonList from './Components/ButtonList';
+// Data Arrays
+import {
+    Property_Types, sale_rent, PropertyCommercialCategories, listOfArea, ResidentialCategories, Yards,
+    Phase, Area_unit, Rooms, Location_Bahria, Location_DHA_City, furnishes, bedrooms, bathrooms, Plots, Plots1
+} from './DataArrays';
 
 const Post = () => {
 
-    // Arrays for Options
-    const Property_Types = [
-        {
-            type: "Commercial",
-        },
-        {
-            type: "Residential"
-        },
-        {
-            type: "Plot"
-        },
-    ]
-    const sale_rent = [
-        {
-            id: 1,
-            name: "Rent"
-        },
-        {
-            id: 2,
-            name: "Sale"
-        },
-    ]
-    const PropertyCommercialCategories = [
-        {
-            id: 1,
-            name: "Building"
-        },
-        {
-            id: 2,
-            name: "Shop"
-        },
-        {
-            id: 3,
-            name: "Office"
-        },
-        {
-            id: 4,
-            name: "Basement"
-        },
-        {
-            id: 5,
-            name: "Mise.Nine"
-        },
-        {
-            id: 6,
-            name: "WareHouse",
-        },
-        {
-            id: 7,
-            name: "PentHouse",
-        },
-        {
-            id: 8,
-            name: "Others"
-        },
 
-    ];
-    const listOfArea = [
-        {
-            name: 'Bahria Town',
-        },
-        {
-            name: 'DHA city',
-        },
-        {
-            name: 'DHA',
-        },
-        {
-            name: 'Clifton',
-        },
-        {
-            name: 'MDA',
-        },
-    ];
-    const ResidentialCategories = [
-        { id: 1, name: 'Bangalow' },
-        { id: 2, name: 'FramHouse' },
-        { id: 3, name: 'TownHouse' },
-        { id: 4, name: 'Apartment' },
-        { id: 5, name: 'PentHouse' },
-        { id: 6, name: 'Others' },
-    ];
-    const Yards = [
-        { id: 1, name: 'ACRE' },
-        { id: 2, name: 'KANAL' },
-        { id: 3, name: 'YARD' },
-        { id: 4, name: 'MARLA' },
-        { id: 5, name: 'Others' },
-    ];
-    const Phase = [
-        { id: 1, name: 'Phase' },
-        { id: 2, name: 'Precent' },
-        { id: 3, name: 'Sector' },
-        { id: 4, name: 'Block' },
-        { id: 5, name: 'Others' },
-    ];
-    const Area_unit = [
-        { id: 1, name: 'Sq. Feet' },
-        { id: 2, name: 'Sq. Yard' },
-    ]
-    const Rooms = [
-        { id: 1, name: '1' },
-        { id: 2, name: '2' },
-        { id: 3, name: '3' },
-        { id: 4, name: '4' },
-        { id: 5, name: '5' },
-        { id: 6, name: '6+' },
-    ]
-    const Location_Bahria = [
-        { id: 1, name: 'Bahria Karachi' },
-        { id: 2, name: 'Bahria Lahore' },
-        { id: 3, name: 'Bahria Pindi' },
-        { id: 4, name: 'Bahria Industrial' },
-    ]
-    const Location_DHA_City = [
-        { id: 1, name: 'Bhawalpur' },
-        { id: 2, name: 'Multan' },
-        { id: 3, name: 'Peshawar' },
-        { id: 4, name: 'Quetta' },
-        { id: 5, name: 'Gujranwala' },
-        { id: 6, name: 'Islamabad' },
-    ]
-    const furnishes = [
-        { id: 1, name: 'Unfurnished' },
-        { id: 2, name: 'Furnished' },
-    ]
-    const bedrooms = [
-        { id: 1, name: '1' },
-        { id: 2, name: '2' },
-        { id: 3, name: '3' },
-        { id: 4, name: '4' },
-        { id: 5, name: '5' },
-        { id: 6, name: '6+' },
-        { id: 7, name: 'Studio' },
-    ]
-    const bathrooms = [
-        { id: 1, name: '1' },
-        { id: 2, name: '2' },
-        { id: 3, name: '3' },
-        { id: 4, name: '4' },
-        { id: 5, name: '5' },
-        { id: 6, name: '6+' },
-        { id: 7, name: '7+' },
-    ]
-    const Plots = ['West Open', 'East Open'];
-    const Plots1 = ['Corner', 'Non Corner'];
 
     // States
-    const [sale_Rent, setSale_Rent] = useState("")
+    const [sale_Rent, setSale_Rent] = useState("Rent")
     const [rooms, setRooms] = useState("")
     const [yards, setYards] = useState("")
     const [yardsNumber, setYardsNumber] = useState("")
@@ -369,10 +230,23 @@ const Post = () => {
 
             <ScrollView style={{ width: "100%" }}>
 
+                {/* Sale/Rent */}
+                <ButtonList
+                    data={selectTypeData}
+                    titleSale={"Sale/Rent *"}
+                    onSelectValue={(val) => valueAssigner(val, "sale/rent")}
+                    style={{
+                        marginTop: 30,
+                    }}
+                />
+
+                {/* Space Line */}
+                <View style={[styles.space_line, { marginBottom: 20 }]}></View>
 
                 {/* Select Type {Property} */}
                 <SelectType
                     Property_Types={Property_Types}
+                    sale_Rent={sale_Rent}
                     Category_Selected={(val) => onCategoryChange(val)}
                 />
 
@@ -450,7 +324,7 @@ const styles = StyleSheet.create({
         height: height,
         justifyContent: "flex-start",
         alignItems: 'center',
-        backgroundColor:"white"
+        backgroundColor: "white"
     },
     space_line: {
         width: width - 20,

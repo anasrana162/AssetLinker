@@ -3,7 +3,7 @@ import React from 'react'
 
 const width = Dimensions.get("screen").width
 
-const SelectType = ({ Property_Types,Category_Selected }) => {
+const SelectType = ({ Property_Types, Category_Selected, sale_Rent }) => {
 
     const [selected_cat, setSelected_cat] = React.useState("Commercial")
 
@@ -49,17 +49,31 @@ const SelectType = ({ Property_Types,Category_Selected }) => {
                     <View style={styles.horizontal_list_cont}>
                         {
                             Property_Types.map((type, index) => {
-                                console.log("type", type?.type)
+                                console.log("type", sale_Rent,index)
                                 return (
-
-                                    <TouchableOpacity
-                                        onPress={() => SelectedCategory(type?.type)}
-                                        style={[styles.type_btn, {
-                                            backgroundColor: type?.type == selected_cat ? '#144272' : '#2C74B3'
-                                        }]}
-                                    >
-                                        <Text style={styles.type_btn_text}>{type?.type}</Text>
-                                    </TouchableOpacity>
+                                    <>
+                                        {sale_Rent == "Rent" ?
+                                            <>
+                                                {index <= 1 && <TouchableOpacity
+                                                    onPress={() => SelectedCategory(type?.type)}
+                                                    style={[styles.type_btn, {
+                                                        backgroundColor: type?.type == selected_cat ? '#144272' : '#2C74B3'
+                                                    }]}
+                                                >
+                                                    <Text style={styles.type_btn_text}>{type?.type}</Text>
+                                                </TouchableOpacity>}
+                                            </>
+                                            :
+                                            <TouchableOpacity
+                                                onPress={() => SelectedCategory(type?.type)}
+                                                style={[styles.type_btn, {
+                                                    backgroundColor: type?.type == selected_cat ? '#144272' : '#2C74B3'
+                                                }]}
+                                            >
+                                                <Text style={styles.type_btn_text}>{type?.type}</Text>
+                                            </TouchableOpacity>
+                                        }
+                                    </>
 
                                 )
                             })

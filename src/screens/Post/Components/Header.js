@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     
   include_some_details: {
     height: 50,
-    width: width-20,
+    width: "100%",
     alignSelf:"center",
     backgroundColor: '#EEEEEE',
     alignItems: 'flex-start',
@@ -48,5 +48,6 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: '500',
     color: 'black',
+    marginLeft:5
   },
 })

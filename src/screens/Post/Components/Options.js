@@ -39,7 +39,7 @@ const Options = ({
         <>
             <View style={styles.mainContainer}>
 
-                {selectTypeData !== "" &&
+                {/* {selectTypeData !== "" &&
 
                     <ButtonList
                         data={selectTypeData}
@@ -47,7 +47,7 @@ const Options = ({
                         onSelectValue={(val) => onSelectValue(val, "sale/rent")}
                     />
 
-                }
+                } */}
 
                 {/* Price */}
                 <CustomTextInp

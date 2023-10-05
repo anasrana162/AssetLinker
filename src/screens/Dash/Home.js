@@ -95,7 +95,6 @@ class Dash extends Component {
                 <Headlines />
 
                 {/* Slider */}
-
                 <Slideshow position={this.state.position} dataSource={this.state.sliderImages} />
 
                 {/* Tab Navigator */}
