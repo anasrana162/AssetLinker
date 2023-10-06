@@ -3,9 +3,9 @@ import { StyleSheet, LogBox, View, NativeModules, Dimensions, StatusBar } from '
 import { Provider } from 'react-redux';
 import Navigation from './src/navigation/Navigation';
 import Toast from 'react-native-toast-message';
-import { store } from './src/redux1';
-import Loader from './src/config/Helpers/Loader';
-import { loaderStop } from './src/redux1/actions';
+// import { store } from './src/redux1';
+// import Loader from './src/config/Helpers/Loader';
+// import { loaderStop } from './src/redux1/actions';
 
 const { StatusBarManager: { HEIGHT }, StatusBarManager } = NativeModules;
 const width = Dimensions.get("screen").width
@@ -13,15 +13,15 @@ const height = Dimensions.get("screen").height - HEIGHT
 
 const App = (props) => {
 
-  useEffect(() => {
-    loaderStop()
-  }, [])
+  // useEffect(() => {
+  //   loaderStop()
+  // }, [])
 
 
   LogBox.ignoreAllLogs()
   return (
     <>
-      <Provider store={store}>
+      {/* <Provider store={store}> */}
         <View style={{ flex: 1, backgroundColor: "#001645", }}>
 
           <View style={{ marginTop: StatusBarManager?.HEIGHT, flex: 1 }} >
@@ -39,12 +39,12 @@ const App = (props) => {
 
 
          <Navigation  />
-            <Loader />
+            {/* <Loader /> */}
             <Toast />
 
           </View>
         </View>
-      </Provider>
+      {/* </Provider> */}
 
 
     </>

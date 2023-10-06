@@ -9,6 +9,7 @@ export function userToken(token) {
     }
 }
 export function user(userObject) {
+    // console.log("userObject in redux action",userObject)
     return {
         type: USER,
         payload: userObject

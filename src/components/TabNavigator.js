@@ -34,7 +34,7 @@ export default TabNavigator = ({ navProps, screenName }) => {
             iconName: "heart-outline",
         },
         {
-            id: 2,
+            id: 5,
             label: "Account",
             navName: "Account",
             iconName: "account-settings-outline",

@@ -49,9 +49,9 @@ const SelectType = ({ Property_Types, Category_Selected, sale_Rent }) => {
                     <View style={styles.horizontal_list_cont}>
                         {
                             Property_Types.map((type, index) => {
-                                console.log("type", sale_Rent,index)
+                                // console.log("type", sale_Rent,index)
                                 return (
-                                    <>
+                                    <View key={String(index)}>
                                         {sale_Rent == "Rent" ?
                                             <>
                                                 {index <= 1 && <TouchableOpacity
@@ -73,7 +73,7 @@ const SelectType = ({ Property_Types, Category_Selected, sale_Rent }) => {
                                                 <Text style={styles.type_btn_text}>{type?.type}</Text>
                                             </TouchableOpacity>
                                         }
-                                    </>
+                                    </View>
 
                                 )
                             })

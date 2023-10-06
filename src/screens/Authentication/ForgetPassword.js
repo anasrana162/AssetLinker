@@ -37,6 +37,14 @@ class ForgetPassword extends Component {
         })
     }
 
+    onSubmitPress = () => {
+        if (this.state.mobile == null || this.state.mobile == "") {
+            alert("Please enter mobile number!")
+        } else {
+            this.props.navigation.navigate("OTP", { mobile: this.state.mobile })
+        }
+    }
+
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -80,7 +88,7 @@ class ForgetPassword extends Component {
                     {/* Signup Button */}
 
                     <TouchableOpacity
-                        onPress={() => this.onLoginPress()}
+                        onPress={() => this.onSubmitPress()}
                         style={styles.signup_btn}>
                         {
                             this.state.loader ?
@@ -139,8 +147,8 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.main,
         justifyContent: "center",
         alignItems: "center",
-        borderBottomLeftRadius: 30,
-        borderBottomRightRadius: 30
+        borderBottomLeftRadius: 60,
+        // borderBottomRightRadius: 30
     },
     screenTitle: {
         fontSize: 30,

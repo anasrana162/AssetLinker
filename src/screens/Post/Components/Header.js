@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     header_text: {
         fontSize: 20,
         fontWeight: "600",
-        color: "white"
+        color: "white",
     },
     
   include_some_details: {
@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: '500',
     color: 'black',
-    marginLeft:5
+    marginLeft:10
   },
 })

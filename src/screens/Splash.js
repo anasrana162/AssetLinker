@@ -21,39 +21,43 @@ const Splash = (props, { navigation }) => {
         currentValue = value;
     });
 
-    useEffect(() => {
-
-        console.log("currentValue", animatedValue)
-        if (currentValue >= 90) {
-            Animated.spring(animatedValue, {
-                toValue: 0,
-                tension: 5,
-                friction: 5,
-                duration: 5000,
-                useNativeDriver: false,
-            }).start();
-        } else {
-            Animated.spring(animatedValue, {
-                toValue: 180,
-                tension: .1,
-                friction: .5,
-                duration: 5000,
-
-                useNativeDriver: false,
-            }).start();
-        }
-
+    useEffect(()=>{
         checkUserExist()
-    });
+    },[])
+
+    // useEffect(() => {
+
+    //     // console.log("currentValue", animatedValue)
+    //     if (currentValue >= 90) {
+    //         Animated.spring(animatedValue, {
+    //             toValue: 0,
+    //             tension: 5,
+    //             friction: 5,
+    //             duration: 5000,
+    //             useNativeDriver: false,
+    //         }).start();
+    //     } else {
+    //         Animated.spring(animatedValue, {
+    //             toValue: 180,
+    //             tension: .1,
+    //             friction: .5,
+    //             duration: 5000,
+
+    //             useNativeDriver: false,
+    //         }).start();
+    //     }
+
+      
+    // });
 
     const checkUserExist = async () => {
         var { actions } = props
         const res = await AsyncStorage.getItem("@assetlinker_usertoken")
         const data = await AsyncStorage.getItem("@assetlinker_userData")
-        console.log("Token in App js", res)
+        // console.log("Token in App js", res)
         setTimeout(() => {
             if (res !== null || res !== '') {
-                console.log("WOrking login", data, " ", actions)
+                // console.log("WOrking login", data, " ", actions)
                 actions.user(JSON.parse(data))
                 actions.userToken(res)
                 // props.navigation.navigate("GetStarted")
@@ -66,31 +70,31 @@ const Splash = (props, { navigation }) => {
         }, 3000)
     }
 
-    const setInterpolate = animatedValue.interpolate({
-        inputRange: [0, 180],
-        outputRange: ['360deg', '0deg'],
+    // const setInterpolate = animatedValue.interpolate({
+    //     inputRange: [0, 180],
+    //     outputRange: ['360deg', '0deg'],
 
-    });
-    console.log("setInterpolate", setInterpolate)
-    const rotateYAnimatedStyle = {
-        // width:width-50,
+    // });
+    // // console.log("setInterpolate", setInterpolate)
+    // const rotateYAnimatedStyle = {
+    //     // width:width-50,
 
-        transform: [{ rotateY: setInterpolate }],
-    };
+    //     transform: [{ rotateY: setInterpolate }],
+    // };
 
     return (
         <View style={styles.container}>
             <ImageBackground
                 source={require('../../assets/watermark2.jpg')}
                 style={[styles.backgroundImage]}>
-                <Animated.Image
+                <Image
 
                     // source={{
                     //     uri: 'https://www.nicesnippets.com/image/imgpsh_fullsize.png',
                     // }}
                     source={require('../../assets/logo.png')}
                     style={[
-                        rotateYAnimatedStyle,
+                        // rotateYAnimatedStyle,
                         styles.logoImageSignIn]}
                 />
 

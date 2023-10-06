@@ -76,21 +76,22 @@ class Login extends Component {
         }).then((res) => {
             console.log("response Login Api:", res?.data)
             if (res?.data) {
-                setImmediate(() => {
-                    this.setState({
-                        loader: false
-                    })
-                })
+               
                 if (res?.data?.error !== undefined) {
                     return alert(res?.data?.error)
                 }
                 // save data in redux
                 actions.userToken(res?.data?.token)
                 actions.user(res?.data?.response)
-                console.log("Token",res?.data?.token)
+                console.log("Token", res?.data?.token)
                 AsyncStorage.setItem("@assetlinker_usertoken", JSON.stringify(res?.data?.token));
-                AsyncStorage.setItem("@assetlinker_userData",JSON.stringify(res?.data?.response));
-                this.props.navigation.navigate("Dash")
+                AsyncStorage.setItem("@assetlinker_userData", JSON.stringify(res?.data?.response));
+                setTimeout(() => {
+                    this.setState({
+                        loader: false
+                    })
+                    this.props.navigation.navigate("Dash")
+                },2000)
 
             }
         }).catch((err) => {
@@ -167,7 +168,7 @@ class Login extends Component {
                             text={"Create an Account"}
                             navProps={this.props.navigation}
                             navToScreenName={"SignUp"}
-                            // style={{ marginBottom: 400 }}
+                        // style={{ marginBottom: 400 }}
                         />
                         <Links
                             text={"Forget Passsword"}

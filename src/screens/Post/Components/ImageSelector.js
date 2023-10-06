@@ -49,6 +49,7 @@ const ImageSelector = ({
                                 <View
                                     style={{ position: 'relative', marginHorizontal: 5 }}
                                     key={index + 1}>
+                                 {       console.log("Item in com",item)}
                                     <Image
                                         style={{
                                             height: Dimensions.get('window').height * 0.11,
@@ -56,7 +57,7 @@ const ImageSelector = ({
                                             borderRadius: 10,
                                             resizeMode: 'contain',
                                         }}
-                                        source={{ uri: item?.uri }}
+                                        source={{ uri: item }}
                                     />
                                     <TouchableOpacity
                                         onPress={() => {
@@ -64,7 +65,7 @@ const ImageSelector = ({
                                         }}
                                         style={{
                                             position: 'absolute',
-                                            top: -8,
+                                            top: 8,
                                             right: 5,
                                         }}>
                                         <Text

@@ -1,19 +1,19 @@
 import { StyleSheet, Text, View, Dimensions, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-const ButtonList = ({ data, titleSale,onSelectValue,style }) => {
+const ButtonList = ({ data, titleSale,onSelectValue,style,styleTitle }) => {
 
     const [selected, setSelected] = React.useState('')
 
     return (
         <View style={[styles.button_list_cont,style]}>
-            <Text style={styles.title}>{titleSale}</Text>
+            <Text style={[styles.title,styleTitle]}>{titleSale}</Text>
 
             {/* Type list */}
             <View style={styles.horizontal_list_cont}>
                 {
                     data.map((data, index) => {
-                        console.log("Name", data?.name)
+                        // console.log("Name", data?.name)
                         return (
 
                             <TouchableOpacity

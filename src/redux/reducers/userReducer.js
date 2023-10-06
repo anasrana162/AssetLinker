@@ -9,6 +9,7 @@ const initialState = {
 };
 
 const userReducer = (state = initialState, action) => {
+    // console.log("action.payload in Redux",action.payload)
     switch (action.type) {
         case TOKEN:
             return {

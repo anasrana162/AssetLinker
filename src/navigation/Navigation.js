@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, View, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import GetStarted from '../screens/GetStarted';
 // import Login from '../screens/Login';
 import Login from '../screens/Authentication/login';
@@ -12,44 +12,45 @@ import Splash from '../screens/Splash';
 // import Home from '../screens/Home';
 // import Home from '../screens/Dash/Home';
 import Dash from '../screens/Dash/Home';
-import DetailScreen from '../screens/DetailScreen';
+// import DetailScreen from '../screens/DetailScreen';
 import ForgetPassword from '../screens/Authentication/ForgetPassword';
 // import ForgotPassword from '../screens/ForgotPassword';
-import AccountScreen from '../screens/AccountScreen';
-import Sell from '../screens/Sell';
-import MyAdds from '../screens/MyAdds';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Chat from '../screens/Chat';
-import ChangePassword from '../screens/ChangePassword';
-import EditProfile from '../screens/EditProfile';
-import Setting from '../screens/Setting';
-import Privacy from '../screens/Privacy';
-import ChangeAccountpassword from '../screens/ChangeAccountpassword';
-import ManageAccount from '../screens/ManageAccount';
-import Notification from '../screens/Notification';
-import About from '../screens/About';
-import UserProfile from '../screens/UserProfile';
-import DeleteAccount from '../screens/DeleteAccount';
-import Location from '../screens/Location';
-import Notifications from '../screens/Notifications';
-import LocationSearch from '../components/LocationSearch';
-import VoiceOfLinkerNews from '../screens/VoiceOfLinkerNews';
-import PropertySearch from '../screens/PropertySearch';
-import Favourite from '../screens/Favourite';
-import Messages from '../screens/Messages';
-import { useNavigation } from '@react-navigation/native';
-import ActionSheet from 'react-native-actions-sheet';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import CommentScreen from '../screens/CommentScreen';
+// import AccountScreen from '../screens/AccountScreen';
+// import Sell from '../screens/Sell';
+// import MyAdds from '../screens/MyAdds';
+// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// import Chat from '../screens/Chat';
+import ChangePassword from '../screens/Authentication/ChangePassword';
+// // import ChangePassword from '../screens/ChangePassword';
+// import EditProfile from '../screens/EditProfile';
+// import Setting from '../screens/Setting';
+// import Privacy from '../screens/Privacy';
+// import ChangeAccountpassword from '../screens/ChangeAccountpassword';
+// import ManageAccount from '../screens/ManageAccount';
+// import Notification from '../screens/Notification';
+// import About from '../screens/About';
+// import UserProfile from '../screens/UserProfile';
+// import DeleteAccount from '../screens/DeleteAccount';
+// import Location from '../screens/Location';
+// import Notifications from '../screens/Notifications';
+// import LocationSearch from '../components/LocationSearch';
+// import VoiceOfLinkerNews from '../screens/VoiceOfLinkerNews';
+// import PropertySearch from '../screens/PropertySearch';
+// import Favourite from '../screens/Favourite';
+// import Messages from '../screens/Messages';
+// import { useNavigation } from '@react-navigation/native';
+// import ActionSheet from 'react-native-actions-sheet';
+// import AntDesign from 'react-native-vector-icons/AntDesign';
+// import CommentScreen from '../screens/CommentScreen';
 import Post from '../screens/Post/Post';
-import { NavService } from '../config';
-import { useSelector } from 'react-redux';
+// import { NavService } from '../config';
+// import { useSelector } from 'react-redux';
 // import OTP from '../screens/OTP';
 import Otp from '../screens/Authentication/Otp';
-import MyProfile from '../screens/MyProfile';
-import Profile from '../screens/Profile';
+// import MyProfile from '../screens/MyProfile';
+// import Profile from '../screens/Profile';
 
-const Tab = createBottomTabNavigator();
+
 // const NewTab = () => {
 //   const navigation = useNavigation();
 
@@ -279,28 +280,28 @@ export default Navigation = () => {
           component={Dash}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Chat"
           component={Chat}
           options={{ headerShown: false }}
-        />
+        /> */}
 
         <Stack.Screen
           name="Post"
           component={Post}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Favourite"
           component={Favourite}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="Account"
           component={AccountScreen}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="Messages"
           component={Messages}
           options={{ headerShown: false }}
@@ -398,7 +399,7 @@ export default Navigation = () => {
           name="MyProfile"
           component={MyProfile}
           options={{ headerShown: false }}
-        />
+        /> */}
 
       </Stack.Navigator>
     </NavigationContainer>

@@ -31,7 +31,7 @@ const Options = ({
     Location_Bahria,
     Location_DHA_City,
     onSelectValue,
-    propertCategorySelected,
+    propertyCategorySelected,
 }) => {
     const [yardSelected, setYardselected] = useState(false)
     // console.log("selectTypeData", selectTypeData)
@@ -76,7 +76,7 @@ const Options = ({
                     />}
 
                 {/* Rooms */}
-                {propertCategorySelected == "Office" &&
+                {propertyCategorySelected == "Office" &&
                     < ButtonList
                         data={Rooms}
                         titleSale={"Rooms *"}
@@ -176,7 +176,7 @@ const Options = ({
                 <View style={styles.space_line}></View>
 
                 {/* Area Unit */}
-                {propertCategorySelected == "Shop" &&
+                {propertyCategorySelected == "Shop" &&
                     < ButtonList
                         data={Area_Unit}
                         titleSale={"Area Unit *"}
@@ -205,12 +205,14 @@ const Options = ({
                     />
 
                 }
+
                 {/* Main Features */}
                 <CustomTextInp
                     titleEN={"Main Features *"}
                     onChangeText={(txt) => onChangeText(txt, "main_features")}
                 />
 
+                {/* Deatails */}
                 <CustomTextInp
                     numberOfLines={12}
                     titleEN={"details *"}
@@ -233,12 +235,12 @@ export default Options
 
 const styles = StyleSheet.create({
     mainContainer: {
-        width: width - 20,
+        width: width - 40,
         alignItems: "center",
         alignSelf: 'center',
     },
     space_line: {
-        width: width - 20,
+        width: width - 40,
         height: 2,
         backgroundColor: "#bbb",
         marginVertical: 10
