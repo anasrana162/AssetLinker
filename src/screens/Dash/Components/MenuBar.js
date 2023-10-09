@@ -25,7 +25,7 @@ const MenuBar = ({ navProps, logout }) => {
                 )
                 break;
 
-            case "AN":
+            case "Menu":
                 setOpenDropDown(!openDropdown)
                 break;
 
@@ -43,34 +43,37 @@ const MenuBar = ({ navProps, logout }) => {
 
 
     return (
-        <View style={styles.mainContainer}>
+        <View style={styles.componentCont}>
 
-            {/* Magazine */}
-            <TouchableOpacity
-                onPress={() => onPress("magazine")}
-                style={styles.touchable}>
-                <Text style={styles.touchable_text}>Magazine</Text>
-                <MaterialCommunityIcons name={"book-open-page-variant-outline"} size={24} color={"white"} />
-            </TouchableOpacity>
+            <View style={styles.mainContainer}>
 
-            {/* Association News */}
-            <TouchableOpacity style={styles.touchable}>
-                <Text style={styles.touchable_text}>Association News</Text>
-                <MaterialCommunityIcons name={"microphone"} size={24} color={"white"} />
-            </TouchableOpacity>
+                {/* Magazine */}
+                <TouchableOpacity
+                    onPress={() => onPress("magazine")}
+                    style={styles.touchable}>
+                    <Text style={styles.touchable_text}>Magazine</Text>
+                    <MaterialCommunityIcons name={"book-open-page-variant-outline"} size={24} color={"white"} />
+                </TouchableOpacity>
 
-            {/* Notifications */}
-            <TouchableOpacity style={styles.touchable}>
-                <Ionicons name={"notifications-sharp"} size={20} color={"white"} />
-            </TouchableOpacity>
+                {/* Association News */}
+                <TouchableOpacity style={styles.touchable}>
+                    <Text style={styles.touchable_text}>Association News</Text>
+                    <MaterialCommunityIcons name={"microphone"} size={24} color={"white"} />
+                </TouchableOpacity>
 
-            {/* Menu */}
-            <TouchableOpacity
-                onPress={() => onPress("AN")}
-            >
-                <Ionicons name="menu-sharp" size={20} color="#fff" />
-            </TouchableOpacity>
+                {/* Notifications */}
+                <TouchableOpacity style={styles.touchable}>
+                    <Ionicons name={"notifications-sharp"} size={20} color={"white"} />
+                </TouchableOpacity>
 
+                {/* Menu */}
+                <TouchableOpacity
+                    onPress={() => onPress("Menu")}
+                >
+                    <Ionicons name="menu-sharp" size={20} color="#fff" />
+                </TouchableOpacity>
+
+            </View>
             {openDropdown &&
                 <View style={styles.dropdown}>
                     {
@@ -93,10 +96,13 @@ const MenuBar = ({ navProps, logout }) => {
 export default MenuBar
 
 const styles = StyleSheet.create({
-    mainContainer: {
+    componentCont: {
         width: width,
-        // height: 60,
         backgroundColor: Colors.backgroundColor,
+    },
+    mainContainer: {
+        width: "100%",
+        // height: 40,
         flexDirection: "row",
         justifyContent: "space-between",
         paddingHorizontal: 15,
@@ -118,11 +124,13 @@ const styles = StyleSheet.create({
     },
     dropdown: {
         width: 80,
-        // height: 100,
+        //  height: 100,
         backgroundColor: "white",
-        position: "absolute",
-        right: 5,
-        bottom: -61,
+        alignSelf:"flex-end",
+        marginRight:5,
+        // position: "absolute",
+        // right: 5,
+        // bottom: -61,
         zIndex: 200,
         borderWidth: 1
     },
@@ -132,7 +140,8 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderBottomWidth: 1,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor: "white"
     },
     item_text: {
         fontSize: 12,

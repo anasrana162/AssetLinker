@@ -9,7 +9,8 @@ import {
     ScrollView,
     Alert,
     StyleSheet,
-    NativeModules
+    NativeModules,
+    ActivityIndicator
 } from 'react-native';
 import React, { createRef, useState, useEffect, } from 'react';
 
@@ -73,8 +74,8 @@ const Post = (props) => {
     const [propertyCategory, setPropertyCategory] = useState('')
     const [images, setImages] = useState('')
     const [imagesPaths, setImagesPaths] = useState('')
-    const [loader, setLoader] = useState('')
-    const [check, setCheck] = useState(true)
+    const [loader, setLoader] = useState(false)
+    const [check, setCheck] = useState('')
 
     // Functions
     const onCategoryChange = (val) => {
@@ -117,7 +118,7 @@ const Post = (props) => {
     };
 
     const updateImageInGallery = async (path, mime, type) => {
-        console.log("Working Image selector")
+        // console.log("Working Image selector")
         let multipleImages = [];
         let multipleImagePaths = [];
         if (multipleAssetsPost?.length < 5) {
@@ -157,7 +158,7 @@ const Post = (props) => {
                     ...imagesPaths,
                     ...multipleImagePaths,
                 ]
-                console.log("mergeImagesWithExistingGalleryAssetsPaths", mergeImagesWithExistingGalleryAssetsPaths)
+                // console.log("mergeImagesWithExistingGalleryAssetsPaths", mergeImagesWithExistingGalleryAssetsPaths)
                 setImagesPaths(mergeImagesWithExistingGalleryAssetsPaths)
                 // setMultipleAssetsPost(mergeImagesWithExistingGalleryAssets);
                 setImages(mergeImagesWithExistingGalleryAssets)
@@ -273,6 +274,7 @@ const Post = (props) => {
                 setBedrooms(val)
                 break;
             case "bathrooms":
+                console.log("Bathroorms VAL:  ", val)
                 setBathrooms(val)
                 break;
         }
@@ -286,14 +288,41 @@ const Post = (props) => {
         })
 
         const dataForApi = checkCategory()
-        console.log("dataForApi of Category " + category + " " + "dataForApi", dataForApi)
-
+        console.log("")
+        console.log("")
+        console.log("--------------------ffffff2-------------------------")
+        console.log("")
+        console.log("")
+        console.log("dataForApi of Category " + category + " " + "dataForApi", dataForApi?.check)
+        console.log("")
+        console.log("")
+        console.log("--------------------ffffff-------------------------")
+        console.log("")
+        console.log("")
         if (dataForApi?.check == true) {
-
+            console.log("working API")
             AssetLinkers.post("/add_property", dataForApi?.data).then((response) => {
-                console.log("Post Api response:", response)
+                // console.log("Post Api response:", response?.data)
+                if (response?.data) {
+                    setImmediate(() => {
+                        setLoader(false)
+                        setCheck(false)
+                    })
+
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Post Successfully Created!',
+                        visibilityTime: 2000
+                    });
+                    props.navigation.navigate("Dash")
+                }
             }).catch((err) => {
-                console.log("Post Api Error", err?.response)
+                // console.log("Post Api Error", err?.response)
+                setImmediate(() => {
+                    setLoader(false)
+                    setCheck(false)
+                })
+
             })
 
 
@@ -333,7 +362,7 @@ const Post = (props) => {
                     user_id: id,
                     rent_sale: sale_Rent,
                     property_type: category,
-                    // images: images,
+                    images: images,
                     price: price,
                     category: propertyCategory,
                     corner: selected_constructionStatus_corner,
@@ -350,14 +379,14 @@ const Post = (props) => {
                     user_id: id,
                     rent_sale: sale_Rent,
                     property_type: category,
-                    // images: images,
+                    images: images,
                     price: price,
                     yards: yards,
                     corner: selected_constructionStatus_corner,
                     open: selected_constructionStatus_open,
                     furnished: furnished,
-                    bedrooms: bedrooms,
-                    bathrooms: bathrooms,
+                    bedrooms: bedrooms1,
+                    bathrooms: bathrooms1,
                     phase: phase,
                     Location: locationMain,
                     address: address,
@@ -376,30 +405,42 @@ const Post = (props) => {
                 if (id == null || id == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Network Error: Try to login again!")
                 }
                 if (sale_Rent == null || sale_Rent == "") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select either Sale or Rent!")
+                }
+                if (images == null || images == []) {
+                    setImmediate(() => {
+                        setCheck(false)
+                        setLoader(false)
+                    })
+                    return alert("Please select an image")
                 }
                 if (category == null || category == "") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Type!")
                 }
                 if (price == null || price == "") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please enter price!")
                 }
                 if (propertyCategory == null || propertyCategory == "") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select category!")
                 }
@@ -407,36 +448,42 @@ const Post = (props) => {
                 if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Construction Status Corner value!")
                 }
                 if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Construction Status open value!")
                 }
-                if (location == null || location == '') {
+                if (location == null || location == '' || location == "Location") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Location!")
                 }
                 if (address == null || address == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please enter Address!")
                 }
                 if (main_features == null || main_features == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please add Main features!")
                 }
                 if (details == null || details == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please eneter Details!")
                 }
@@ -446,30 +493,35 @@ const Post = (props) => {
                 if (id == null || id == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Network Error: Try to login again!")
                 }
                 if (sale_Rent == null || sale_Rent == "") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select either Sale or Rent!")
                 }
                 if (category == null || category == "") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Type!")
                 }
                 if (price == null || price == "") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please enter price!")
                 }
                 if (propertyCategory == null || propertyCategory == "") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select category!")
                 }
@@ -477,30 +529,35 @@ const Post = (props) => {
                 if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Construction Status Corner value!")
                 }
                 if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Construction Status open value!")
                 }
                 if (location == null || location == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Location!")
                 }
                 if (main_features == null || main_features == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please add Main features!")
                 }
                 if (details == null || details == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please eneter Details!")
                 }
@@ -511,30 +568,35 @@ const Post = (props) => {
                 if (id == null || id == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Network Error: Try to login again!")
                 }
                 if (sale_Rent == null || sale_Rent == "") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select either Sale or Rent!")
                 }
                 if (category == null || category == "") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Type!")
                 }
                 if (price == null || price == "") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please enter Price!")
                 }
                 if (yards == null || yards == "") {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Yards!")
                 }
@@ -542,30 +604,35 @@ const Post = (props) => {
                 if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Construction Status Corner value!")
                 }
                 if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Construction Status open value!")
                 }
                 if (furnished == null || furnished == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Furnished!")
                 }
                 if (bedrooms == null || bedrooms == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select no. of bedrooms!")
                 }
                 if (bathrooms == null || bathrooms == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select no. of bathrooms!")
                 }
@@ -578,35 +645,43 @@ const Post = (props) => {
                 if (location == null || location == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please select Location!")
                 }
                 if (address == null || address == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please enter Address!")
                 }
                 if (main_features == null || main_features == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please add Main features!")
                 }
                 if (details == null || details == '') {
                     setImmediate(() => {
                         setCheck(false)
+                        setLoader(false)
                     })
                     return alert("Please eneter Details!")
                 }
+                if (check == false) {
+                    return false
+                } else {
 
-                return check
+                    setCheck(true)
+                }
         }
     }
 
 
 
-    // console.log("category Post SCreen", category)
+    // console.log("category Post SCreen", images)
     return (
         <View style={styles.mainContainer}>
             {/* {console.log(props)} */}
@@ -678,11 +753,14 @@ const Post = (props) => {
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => onSubmitPress()}
+                    disabled={loader}
                     style={styles.submit_btn}>
-
-                    <Text style={{ fontSize: 15, color: '#fff', fontWeight: '500' }}>
-                        Submit
-                    </Text>
+                    {loader == true ?
+                        <ActivityIndicator size={'small'} color={'white'} />
+                        :
+                        <Text style={{ fontSize: 15, color: '#fff', fontWeight: '500' }}>
+                            Submit
+                        </Text>}
 
                 </TouchableOpacity>
             </ScrollView>

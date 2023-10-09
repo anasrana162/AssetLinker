@@ -49,7 +49,7 @@ const ImageSelector = ({
                                 <View
                                     style={{ position: 'relative', marginHorizontal: 5 }}
                                     key={index + 1}>
-                                 {       console.log("Item in com",item)}
+                                 {/* {       console.log("Item in com",item)} */}
                                     <Image
                                         style={{
                                             height: Dimensions.get('window').height * 0.11,
