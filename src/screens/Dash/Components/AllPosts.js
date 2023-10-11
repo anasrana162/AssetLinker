@@ -10,7 +10,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 // import postApi from '../../../../src1/old screensÏ/redux1/RequestTypes/post';
 import moment from 'moment';
 
-const AllPosts = ({ data, userID, openDeletePostModal, navProps }) => {
+const AllPosts = ({ data, userID, openDeletePostModal, navProps, onFavPress }) => {
 
     // STATES
 
@@ -49,7 +49,7 @@ const AllPosts = ({ data, userID, openDeletePostModal, navProps }) => {
                                 key={String(index)}
                                 disabled={showOption}
                                 style={styles.itemContainer}
-                                onPress={() => navProps.navigate("PostDetail", { postData: item?.item })}
+                                onPress={() => navProps.navigate("PostDetail", { postData: item?.item, location: Location?.location, subLocation: Location?.place })}
                             >
 
                                 {userID == item?.item?.user_id &&
@@ -122,7 +122,7 @@ const AllPosts = ({ data, userID, openDeletePostModal, navProps }) => {
                                     {/* Icons */}
                                     <View style={[styles.location_price_cont, { justifyContent: "space-around", marginTop: 10 }]}>
 
-                                        <TouchableOpacity>
+                                        <TouchableOpacity onPress={() => onFavPress(item?.item?.user_id, item?.item?.id)}>
                                             <AntDesign name="heart" size={20} color={Colors.DarkGrey} />
                                         </TouchableOpacity>
                                         <View>

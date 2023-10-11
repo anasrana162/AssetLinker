@@ -13,6 +13,7 @@ import Post from '../screens/Post/Post';
 import Otp from '../screens/Authentication/Otp';
 import MyProfile from '../screens/Profile/MyProfile';
 import PostDetail from '../screens/Dash/PostDetail';
+import UserProfileDetail from '../screens/Dash/UserProfileDetail';
 
 
 const Stack = createNativeStackNavigator();
@@ -81,6 +82,11 @@ export default Navigation = () => {
         <Stack.Screen
           name="MyProfile"
           component={MyProfile}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="UserProfileDetail"
+          component={UserProfileDetail}
           options={{ headerShown: false }}
         />
 

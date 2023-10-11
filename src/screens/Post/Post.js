@@ -58,7 +58,7 @@ const Post = (props) => {
     const [phase, setPhase] = useState("")
     const [loc_bahria, setLoc_bahria] = useState("")
     const [loc_dha_city, setLoc_dha_city] = useState("")
-    const [area_unit, setArea_Unit] = useState("")
+    const [area_unit, setArea_Unit] = useState("Null")
     const [category, setCategory] = React.useState("Commercial")
     const [multipleAssetsPost, setMultipleAssetsPost] = useState('');
     const [selectTypeData, setSelectTypeData] = useState(sale_rent);
@@ -262,6 +262,7 @@ const Post = (props) => {
                 break;
 
             case 'area_unit':
+                console.log("ARea unit:", val)
                 setArea_Unit(val);
                 break;
 

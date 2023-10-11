@@ -29,6 +29,7 @@ import ImageViewer from './Components/ImageViewer';
 
 import { Colors } from '../../config';
 import moment from 'moment';
+import UserProfileButton from './Components/UserProfileButton';
 
 class PostDetail extends Component {
 
@@ -42,6 +43,7 @@ class PostDetail extends Component {
 
 
     onPress = (key) => {
+        var { postData } = this.props?.route?.params
         switch (key) {
             case "goback":
                 this.props.navigation.goBack()
@@ -50,6 +52,14 @@ class PostDetail extends Component {
                 Linking.openURL(
                     `https://assetslinkers.com`,
                 )
+                break;
+            case "openUserDetail":
+                this.props.navigation.navigate("UserProfileDetail", {
+                    user_id: postData?.user_id,
+                    name: postData?.name,
+                    image: "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/userProfile/" + postData?.image,
+                    member_since: moment(postData?.member_since).format("YYYY-MM-DD"),
+                })
                 break;
         }
     }
@@ -65,6 +75,7 @@ class PostDetail extends Component {
             }, 2000)
         });
     }
+
     componentDidMount = () => {
         this.runSlideShow()
     }
@@ -76,8 +87,21 @@ class PostDetail extends Component {
 
     render() {
 
-        var { postData } = this.props?.route?.params
+        var { postData, location, subLocation } = this.props?.route?.params
 
+        var user_type = ""
+        switch (postData?.user_type) {
+            case "buyer_seller":
+                user_type = "Buyer/Seller"
+                break;
+            case "consultant":
+                user_type = "Consultant"
+                break;
+            case "builder":
+                user_type = "Builder"
+                break;
+        }
+        // console.log("location", subLocation)
         return (
             <View style={styles.mainContainer}>
 
@@ -101,26 +125,159 @@ class PostDetail extends Component {
                     </TouchableOpacity>
                 </View>
 
-                {/* Images Viewer */}
-                <ImageViewer Images={postData?.post_images} position={this.state.position} />
-
-                {/* Information */}
-
-                {/* Property Type */}
-                <Text style={styles.propertyTypeText}>{postData?.property_type}</Text>
-
-                {/* Price */}
-                <Text style={styles.priceText}>Price: {postData?.price} PKR</Text>
-
-                {/* Posted At */}
-                <Text style={styles.posted_at}>Posted: {moment(postData?.created_at).format("YYYY-MM-DD")}</Text>
-
-                {/* Main Features */}
-                <Text style={styles.posted_at}>Main Features:</Text>
-                <Text style={styles.main_features_text}>{postData?.main_features}</Text>
+                <ScrollView>
 
 
-            </View>
+
+                    {/* Images Viewer */}
+                    <ImageViewer Images={postData?.post_images} position={this.state.position} />
+
+                    {/* Information */}
+
+                    {/* Property Type */}
+                    <Text style={styles.propertyTypeText}>{postData?.property_type}</Text>
+
+                    {/* Price */}
+                    <Text style={styles.priceText}>Price: {postData?.price} PKR</Text>
+
+                    {/* Posted At */}
+                    <Text style={styles.posted_at}>Posted: {moment(postData?.created_at).format("YYYY-MM-DD")}</Text>
+
+                    {/* Main Features */}
+                    <Text style={styles.posted_at}>Main Features:</Text>
+                    <Text style={styles.main_features_text}>{postData?.main_features}</Text>
+
+                    {/* Location */}
+                    <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 10, marginTop: 10 }}>
+                        <Ionicons name='location-sharp' color={Colors.blue} size={24} />
+                        < Text style={styles.posted_at}>{location}</Text>
+                    </View>
+
+                    {/* More Detail */}
+
+                    <View style={styles.moreDetailCont}>
+                        {/* More Details Title */}
+                        <Text style={[styles.propertyTypeText, { fontSize: 22, marginBottom: 10 }]}>More Details</Text>
+
+                        {/* GRID */}
+
+                        {/* Plot Category */}
+                        {postData?.category !== "Null" &&
+                            < View style={styles.inner_moreDetailCont}>
+                                <Text style={styles.gridText1}>{postData?.category}</Text>
+                                <Text style={styles.gridText2}>Plot Category</Text>
+                            </View>}
+
+                        {/* Sale/Rent*/}
+                        {postData?.rent_sale !== "Null" &&
+                            < View style={styles.inner_moreDetailCont}>
+                                <Text style={styles.gridText1}>{postData?.rent_sale}</Text>
+                                <Text style={styles.gridText2}>Sale/Rent</Text>
+                            </View>}
+
+                        {/* Area Unit */}
+                        {postData?.area_unit !== "Null" &&
+                            < View style={styles.inner_moreDetailCont}>
+                                <Text style={styles.gridText1}>{postData?.area_unit}</Text>
+                                <Text style={styles.gridText2}>Area Unit</Text>
+                            </View>}
+
+                        {/* Yards*/}
+                        {postData?.area_unit !== "Null" &&
+                            < View style={styles.inner_moreDetailCont}>
+                                <Text style={styles.gridText1}>{postData?.yards}</Text>
+                                <Text style={styles.gridText2}>Yards</Text>
+                            </View>}
+
+                        {/* Location */}
+                        {location !== "Null" &&
+                            < View style={styles.inner_moreDetailCont}>
+                                <Text style={styles.gridText1}>{location}</Text>
+                                <Text style={styles.gridText2}>Location</Text>
+                            </View>}
+
+                        {/* Sub Location */}
+                        {subLocation !== "Null" &&
+                            < View style={styles.inner_moreDetailCont}>
+                                <Text style={styles.gridText1}>{subLocation}</Text>
+                                <Text style={styles.gridText2}>Sub Location</Text>
+                            </View>}
+
+                        {/* Construction Status */}
+
+                        {/* Corner West or east option */}
+
+                        < View style={styles.inner_moreDetailCont}>
+                            <Text numberOfLines={2} style={[styles.gridText1, { width: 100 }]}>{postData?.corner}, {postData?.open}</Text>
+                            <Text style={styles.gridText2}>Construction Staus</Text>
+                        </View>
+
+                        {/* Rooms */}
+                        {postData?.rooms !== "Null" &&
+                            < View style={styles.inner_moreDetailCont}>
+                                <Text style={styles.gridText1}>{postData?.rooms}</Text>
+                                <Text style={styles.gridText2}>Rooms</Text>
+                            </View>}
+
+                        {/* Bedrooms */}
+                        {postData?.bedrooms !== "Null" &&
+                            < View style={styles.inner_moreDetailCont}>
+                                <Text style={styles.gridText1}>{postData?.bedrooms}</Text>
+                                <Text style={styles.gridText2}>Bedrooms</Text>
+                            </View>}
+
+                        {/* Bathrooms */}
+                        {postData?.bathrooms !== "Null" &&
+                            < View style={styles.inner_moreDetailCont}>
+                                <Text style={styles.gridText1}>{postData?.rooms}</Text>
+                                <Text style={styles.gridText2}>Bathrooms</Text>
+                            </View>}
+
+                        {/* Rooms */}
+                        {postData?.phase !== "Null" &&
+                            < View style={styles.inner_moreDetailCont}>
+                                <Text style={styles.gridText1}>{postData?.phase}</Text>
+                                <Text style={styles.gridText2}>Phase</Text>
+                            </View>}
+
+                        {/* Furnished */}
+                        {postData?.furnished !== "Null" &&
+                            < View style={styles.inner_moreDetailCont}>
+                                <Text style={styles.gridText1}>{postData?.furnished}</Text>
+                                <Text style={styles.gridText2}>Furnished</Text>
+                            </View>}
+
+                    </View>
+
+                    {/* Description */}
+                    <Text style={styles.posted_at}>Description:</Text>
+                    <Text style={styles.main_features_text}>{postData?.details}</Text>
+
+                    {/* MSID */}
+                    <Text style={styles.posted_at}>MSID: lnf654</Text>
+
+                    {/* User Type Button */}
+                    <TouchableOpacity
+                        onPress={() => this.onPress("openUserDetail")}
+                        style={styles.user_type_btn}>
+                        <Text style={styles.user_type_btn_text}>{user_type}</Text>
+                    </TouchableOpacity>
+
+                    {/* Address */}
+                    {postData?.address !== "Null" &&
+                        <>
+                            <Text style={styles.posted_at}>Address:</Text>
+                            <Text style={styles.main_features_text}>{postData?.address}</Text>
+                        </>}
+
+                    <UserProfileButton
+                        navProps={this.props.navigation}
+                        data={postData}
+                    />
+
+                </ScrollView>
+
+            </View >
         )
     }
 }
@@ -171,9 +328,54 @@ const styles = StyleSheet.create({
         borderRadius: 30,
 
     },
+    moreDetailCont: {
+        width: width - 40,
+        alignSelf: "center",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        borderWidth: 1,
+        borderTopLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        marginTop: 20,
+        paddingBottom: 10,
+    },
+    inner_moreDetailCont: {
+        width: "90%",
+        flexDirection: "row",
+        alignSelf: "center",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 5,
+
+    },
+    user_type_btn: {
+        width: width - 40,
+        height: 45,
+        justifyContent: "center",
+        alignItems: "center",
+        alignSelf: "center",
+        backgroundColor: Colors.blue,
+        borderRadius: 10,
+        marginVertical: 15
+    },
+    user_type_btn_text: {
+        fontSize: 18,
+        fontWeight: "700",
+        color: "white"
+    },
+    gridText1: {
+        fontSize: 18,
+        fontWeight: "400",
+        color: Colors.black
+    },
+    gridText2: {
+        fontSize: 18,
+        fontWeight: "600",
+        color: Colors.black
+    },
     propertyTypeText: {
         fontSize: 26,
-        fontWeight: "600",
+        fontWeight: "700",
         color: Colors.black,
         marginTop: 20,
         marginLeft: 10,

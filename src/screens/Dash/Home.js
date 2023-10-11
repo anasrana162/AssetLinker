@@ -139,6 +139,25 @@ class Dash extends Component {
 
     }
 
+    addToFavourite = (user_id, postID) => {
+        AssetLinkers.post("https://devstaging.a2zcreatorz.com/assetLinkerProject/api/save/favourite_post", {
+            "user_id": user_id,
+            "post_id": postID,
+        }).then((res) => {
+            if (res?.data) {
+                console.log("Add to favourite api Response:  ", res?.data)
+                Toast.show({
+                    type: 'success',
+                    text1: 'Added to Favourites!',
+                    visibilityTime: 2000
+                });
+
+            }
+        }).catch((err) => {
+            console.log("Add to favourite api  Error:  ", err?.response)
+        })
+    }
+
     runSlideShow = () => {
         this.setState({
             interval: setInterval(() => {
@@ -187,6 +206,8 @@ class Dash extends Component {
                         navProps={this.props.navigation}
                         userID={this.props.userData?.user?.id}
                         openDeletePostModal={(postID) => this.openDeletePostModal(postID)}
+                        onFavPress={(user_id, postID) => this.addToFavourite(user_id, postID)}
+                    // isFav={}
                     />
                 </ScrollView>
 
