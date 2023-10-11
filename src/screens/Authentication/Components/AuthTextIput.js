@@ -4,7 +4,7 @@ import { Colors } from '../../../config'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 const AuthTextIput = ({ placeholder, placeholderTextColor, onChangeText, style, keyboardType, showEye, showPhoneCode }) => {
 
-    const [secureTextEntry, setSecureTextEntry] = React.useState(true)
+    const [secureTextEntry, setSecureTextEntry] = React.useState(false)
     return (
         <View style={[styles.mainContainer, style]}>
             <View style={styles.inner_view}>

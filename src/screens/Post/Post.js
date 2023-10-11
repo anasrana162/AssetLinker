@@ -49,7 +49,7 @@ const Post = (props) => {
 
     // States
     const [sale_Rent, setSale_Rent] = useState("Rent")
-    const [rooms, setRooms] = useState("")
+    const [rooms, setRooms] = useState("Null")
     const [yards, setYards] = useState("")
     const [yardsNumber, setYardsNumber] = useState("")
     const [furnished, setFurnished] = useState("")
@@ -63,7 +63,10 @@ const Post = (props) => {
     const [multipleAssetsPost, setMultipleAssetsPost] = useState('');
     const [selectTypeData, setSelectTypeData] = useState(sale_rent);
     const [locationDropDownOpen, setLocationDropDownOpen] = React.useState(false)
-    const [location, setLocation] = React.useState('Location')
+    const [location, setLocation] = React.useState({
+        "location": "Null",
+        "place": "Null",
+    })
     const [locationMain, setLocationMain] = React.useState('')
     const [selected_constructionStatus_corner, setSelected_constructionStatus_corner] = useState('')
     const [selected_constructionStatus_open, setSelected_constructionStatus_open] = useState('')
@@ -75,24 +78,47 @@ const Post = (props) => {
     const [images, setImages] = useState('')
     const [imagesPaths, setImagesPaths] = useState('')
     const [loader, setLoader] = useState(false)
-    const [check, setCheck] = useState('')
+    const [check, setCheck] = useState(true)
 
     // Functions
     const onCategoryChange = (val) => {
-        switch (val) {
-            case "Commercial":
-                setCategory(val);
-                setSelectTypeData(sale_rent)
-                break;
-            case "Residential":
-                setCategory(val);
-                setSelectTypeData(sale_rent)
-                break;
-            case "Plot":
-                setCategory(val);
-                setSelectTypeData(sale_rent)
-                break;
-        }
+        setCategory(val);
+        setSelectTypeData(sale_rent)
+        setPrice("")
+        setYards("")
+        setSelected_constructionStatus_corner('')
+        setSelected_constructionStatus_open("")
+        setFurnished("")
+        setBathrooms("")
+        setBedrooms("")
+        setArea_Unit("")
+        setAddress("")
+        setLocationMain("")
+        setLocation("Location")
+        setLoc_bahria("")
+        setLoc_dha_city("")
+        setdetails("")
+        setPropertyCategory("")
+        setLoader(false)
+        setCheck(true)
+        setYardsNumber("")
+        setFurnished("")
+        setRooms("Null")
+        // switch (val) {
+        //     case "Commercial":
+        //         setCategory(val);
+        //         setSelectTypeData(sale_rent)
+
+        //         break;
+        //     case "Residential":
+        //         setCategory(val);
+        //         setSelectTypeData(sale_rent)
+        //         break;
+        //     case "Plot":
+        //         setCategory(val);
+        //         setSelectTypeData(sale_rent)
+        //         break;
+        // }
 
     }
 
@@ -238,17 +264,34 @@ const Post = (props) => {
             case 'area_unit':
                 setArea_Unit(val);
                 break;
+
+            case 'location':
+                let obj = {
+                    "location": val,
+                    "place": "Null",
+                }
+                setLocation(obj);
+                console.log("location", location)
+                setLocationMain(JSON.stringify(obj))
+                break;
             case 'loc_bahria':
                 let objj = {
-                    "location": location,
+                    "location": location?.location,
                     "place": val
                 }
                 setLoc_bahria(val);
-                // console.log(objj)
+                console.log("loc_bahria: ", objj)
                 setLocationMain(JSON.stringify(objj))
                 break;
             case 'loc_dha_city':
+                let objjj = {
+                    "location": location?.location,
+                    "place": val
+                }
                 setLoc_dha_city(val);
+                console.log("loc_dha_city: ", objjj)
+                setLocationMain(JSON.stringify(objjj))
+
                 break;
 
             case "commercial_prop_cat":
@@ -288,6 +331,8 @@ const Post = (props) => {
         })
 
         const dataForApi = checkCategory()
+
+
         console.log("")
         console.log("")
         console.log("--------------------ffffff2-------------------------")
@@ -306,7 +351,7 @@ const Post = (props) => {
                 if (response?.data) {
                     setImmediate(() => {
                         setLoader(false)
-                        setCheck(false)
+                        setCheck(true)
                     })
 
                     Toast.show({
@@ -314,18 +359,24 @@ const Post = (props) => {
                         text1: 'Post Successfully Created!',
                         visibilityTime: 2000
                     });
-                    props.navigation.navigate("Dash")
+                    props.navigation.navigate("Dash", { refresh: "refresh" })
                 }
             }).catch((err) => {
                 // console.log("Post Api Error", err?.response)
                 setImmediate(() => {
                     setLoader(false)
-                    setCheck(false)
+                    setCheck(true)
                 })
 
             })
 
 
+        } else {
+            alert("Check feilds")
+            setImmediate(() => {
+                setLoader(false)
+                setCheck(true)
+            })
         }
 
 
@@ -344,15 +395,22 @@ const Post = (props) => {
                     property_type: category,
                     images: images,
                     price: price,
+                    yards: "Null",
                     category: propertyCategory,
                     corner: selected_constructionStatus_corner,
                     open: selected_constructionStatus_open,
+                    furnished: "Null",
+                    bedrooms: "Null",
+                    bathrooms: "Null",
+                    rooms: rooms,
+                    phase: "Null",
                     Location: locationMain,
                     address: address,
                     area_unit: area_unit,
                     main_features: main_features,
                     details: details,
                 }
+                console.log("check:", check)
                 return { "check": check, "data": obj }
 
             case "Residential":
@@ -364,13 +422,22 @@ const Post = (props) => {
                     property_type: category,
                     images: images,
                     price: price,
+                    yards: "Null",
                     category: propertyCategory,
                     corner: selected_constructionStatus_corner,
                     open: selected_constructionStatus_open,
+                    furnished: "Null",
+                    bedrooms: "Null",
+                    bathrooms: "Null",
+                    rooms: rooms,
+                    phase: "Null",
                     Location: locationMain,
+                    address: "Null",
+                    area_unit: "Null",
                     main_features: main_features,
                     details: details,
                 }
+                console.log("check1:", check1)
                 return { "check": check1, "data": obj }
 
             case "Plot":
@@ -382,17 +449,21 @@ const Post = (props) => {
                     images: images,
                     price: price,
                     yards: yards,
+                    category: "Null",
                     corner: selected_constructionStatus_corner,
                     open: selected_constructionStatus_open,
                     furnished: furnished,
                     bedrooms: bedrooms1,
                     bathrooms: bathrooms1,
+                    rooms: rooms,
                     phase: phase,
                     Location: locationMain,
                     address: address,
+                    area_unit: "Null",
                     main_features: main_features,
                     details: details,
                 }
+                console.log("check2:", check2)
                 return { "check": check2, "data": obj }
         }
 
@@ -400,6 +471,7 @@ const Post = (props) => {
 
     const checkCategoryData = () => {
         var { userData: { user: { id } } } = props
+        console.log("Category1", category)
         switch (category) {
             case "Commercial":
                 if (id == null || id == '') {
@@ -491,6 +563,7 @@ const Post = (props) => {
                 return check
             case "Residential":
                 if (id == null || id == '') {
+                    console.log("id is prob,: ", id)
                     setImmediate(() => {
                         setCheck(false)
                         setLoader(false)
@@ -498,6 +571,7 @@ const Post = (props) => {
                     return alert("Network Error: Try to login again!")
                 }
                 if (sale_Rent == null || sale_Rent == "") {
+                    console.log("sale_Rent is prob,: ", sale_Rent)
                     setImmediate(() => {
                         setCheck(false)
                         setLoader(false)
@@ -505,6 +579,7 @@ const Post = (props) => {
                     return alert("Please select either Sale or Rent!")
                 }
                 if (category == null || category == "") {
+                    console.log("category is prob,: ", category)
                     setImmediate(() => {
                         setCheck(false)
                         setLoader(false)
@@ -512,6 +587,7 @@ const Post = (props) => {
                     return alert("Please select Type!")
                 }
                 if (price == null || price == "") {
+                    console.log("price is prob,: ", price)
                     setImmediate(() => {
                         setCheck(false)
                         setLoader(false)
@@ -519,6 +595,7 @@ const Post = (props) => {
                     return alert("Please enter price!")
                 }
                 if (propertyCategory == null || propertyCategory == "") {
+                    console.log("categoryProp is prob,: ", propertyCategory)
                     setImmediate(() => {
                         setCheck(false)
                         setLoader(false)
@@ -668,14 +745,15 @@ const Post = (props) => {
                         setCheck(false)
                         setLoader(false)
                     })
-                    return alert("Please eneter Details!")
+                    return alert("Please enter Details!")
                 }
-                if (check == false) {
-                    return false
-                } else {
-
-                    setCheck(true)
-                }
+                console.log("Check", check)
+                return check
+            // if (check == false) {
+            //     return false
+            // } else {
+            //     return true
+            // }
         }
     }
 
@@ -772,7 +850,9 @@ const Post = (props) => {
                 onDismiss={() => setLocationDropDownOpen(!locationDropDownOpen)}
                 title={"Select Location"}
                 onSelect={(val) => {
-                    setLocation(val)
+                    // setLocation(val)
+                    console.log("location Value Slected:", val)
+                    valueAssigner(val, "location")
                     setLocationDropDownOpen(false)
                 }}
             />

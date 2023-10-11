@@ -31,7 +31,11 @@ const Options = ({
     Location_Bahria,
     Location_DHA_City,
     onSelectValue,
+    typedPrice,
+    typedMain_Features,
+    typedDetails,
     propertyCategorySelected,
+    typedYards,
 }) => {
     const [yardSelected, setYardselected] = useState(false)
     // console.log("selectTypeData", selectTypeData)
@@ -157,9 +161,10 @@ const Options = ({
                 <View style={styles.space_line}></View>
 
                 {/* Location DropDown */}
+                {console.log("locationC:", location)}
                 <LocationDropDown
                     showModal={openLocationDropdown}
-                    title={location}
+                    title={location?.location == "Null" ? "Location" : location?.location}
                 />
 
                 {/* Space Line */}
@@ -186,7 +191,7 @@ const Options = ({
 
                 {/* Location_Bahria */}
                 {
-                    location == "Bahria Town" &&
+                    location?.location == "Bahria Town" &&
                     < ButtonList
                         data={Location_Bahria}
                         titleSale={"Bahria Town *"}
@@ -197,7 +202,7 @@ const Options = ({
 
                 {/* Location_DHA_City */}
                 {
-                    location == "DHA city" &&
+                    location?.location == "DHA city" &&
                     < ButtonList
                         data={Location_DHA_City}
                         titleSale={"DHA City *"}

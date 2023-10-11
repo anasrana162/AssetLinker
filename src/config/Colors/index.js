@@ -1,5 +1,6 @@
 const Colors = {
   backgroundColor: '#000',
+  fadedBackground:"rgba(52,52,52,0.6)",
   background: '#F2F2F2',
   main:"#001645",
   primary: '#023661',

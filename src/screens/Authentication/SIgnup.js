@@ -87,6 +87,9 @@ export default class Signup extends Component {
                                 loader: false,
                             })
                         })
+                        if (this.state.role == "builder") {
+                            alert("Please Contact AssetLinkers to activate your account ")
+                        }
                         this.props.navigation.navigate("Login")
                     }
                 }).catch((err) => {
@@ -675,6 +678,7 @@ export default class Signup extends Component {
 
                         <TouchableOpacity
                             onPress={() => this.onRegisterPress()}
+                            disabled={this.state.loader}
                             style={styles.signup_btn}>
                             {
                                 this.state.loader ?
@@ -744,7 +748,7 @@ const styles = StyleSheet.create({
         height: 40,
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 20,
+        marginBottom: 200,
         backgroundColor: Colors.main,
         alignSelf: "center",
         borderRadius: 10,

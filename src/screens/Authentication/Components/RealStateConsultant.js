@@ -36,12 +36,16 @@ const RealStateConsultant = ({ onChangeFormattedText, onChangeText, selectedLoca
                 containerStyle={styles.PhoneTxtInp_cont}
                 textContainerStyle={{
                     // height: 50,
-                    height: 52,
-                    marginTop:-5,
-                    // borderWidth:1,
+                    height: 45,
+                    // marginTop: -5,
+                    alignItems: "center",
+                    // borderWidth: 1,
                     backgroundColor: 'transparent',
+                    color: "black"
                 }}
-                textInputStyle={{ fontSize: 13, color: 'black' }}
+
+                codeTextStyle={{ height:45,marginTop:20 }}
+                textInputStyle={{ fontSize: 13, color: 'black', width: "100%", height: 45, }}
                 onChangeFormattedText={onChangeFormattedText}
             />
 

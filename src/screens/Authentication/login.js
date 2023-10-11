@@ -76,8 +76,11 @@ class Login extends Component {
         }).then((res) => {
             console.log("response Login Api:", res?.data)
             if (res?.data) {
-               
+
                 if (res?.data?.error !== undefined) {
+                    this.setState({
+                        loader: false
+                    })
                     return alert(res?.data?.error)
                 }
                 // save data in redux
@@ -91,10 +94,13 @@ class Login extends Component {
                         loader: false
                     })
                     this.props.navigation.navigate("Dash")
-                },2000)
+                }, 2000)
 
             }
         }).catch((err) => {
+            this.setState({
+                loader: false
+            })
             console.log("Login Api Error:", err.response)
         })
 
@@ -132,12 +138,16 @@ class Login extends Component {
                             containerStyle={styles.PhoneTxtInp_cont}
                             textContainerStyle={{
                                 // height: 50,
-                                height: 52,
-                                marginTop: -5,
-                                // borderWidth:1,
+                                height: 45,
+                                // marginTop: -5,
+                                alignItems: "center",
+                                // borderWidth: 1,
                                 backgroundColor: 'transparent',
+                                color: "black"
                             }}
-                            textInputStyle={{ fontSize: 13, color: 'black' }}
+
+                            codeTextStyle={{ height:45,marginTop:20 }}
+                            textInputStyle={{ fontSize: 13, color: 'black', width: "100%", height: 45, }}
                             onChangeFormattedText={(txt) => this.onChangeFormattedText(txt)}
                         />
                         <AuthTextIput
@@ -153,6 +163,7 @@ class Login extends Component {
 
                         <TouchableOpacity
                             onPress={() => this.onLoginPress()}
+                            disabled={this.state.loader}
                             style={styles.signup_btn}>
                             {
                                 this.state.loader ?
@@ -251,6 +262,8 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         height: 45,
         borderColor: Colors.black,
+        justifyContent: "flex-start",
+        alignItems: "center",
         borderWidth: 1.5,
         marginTop: 40,
         borderRadius: 10,
