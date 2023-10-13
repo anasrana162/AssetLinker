@@ -13,8 +13,8 @@ const ConstructionStatus = ({
     selected_constructionStatus_open,
 }) => {
 
-    const [cornerDropDown, setCornerDropDown] = useState('Corner')
-    const [openDropDown, setOpenDropDown] = useState('West Open')
+    const [cornerDropDown, setCornerDropDown] = useState('Select Corner')
+    const [openDropDown, setOpenDropDown] = useState('Select Open')
     const [dropDownOpenedOf, setDropDownOpenedOf] = useState('')
     const [cornerDropDownOpen, setCornerDropDownOpen] = useState(false)
     const [openDropDownOpen, setOpenDropDownOpen] = useState(false)
@@ -77,7 +77,7 @@ const ConstructionStatus = ({
         <View style={styles.construction_status_cont}>
             <Text
                 style={styles.construction_status_text}>
-                Construction Status *
+                Construction Status 
             </Text>
             {/* Corner */}
             <View style={styles.construction_status_small_cont}>

@@ -126,7 +126,7 @@ class Dash extends Component {
     getPosts = () => {
 
         AssetLinkers.get("https://devstaging.a2zcreatorz.com/assetLinkerProject/api/get_property").then((res) => {
-            console.log("Get Post api Data:  ", res?.data?.property[0])
+            // console.log("Get Post api Data:  ", res?.data?.property[0])
             if (res?.data) {
                 this.setState({
                     Posts: res?.data?.property
@@ -139,23 +139,52 @@ class Dash extends Component {
 
     }
 
-    addToFavourite = (user_id, postID) => {
-        AssetLinkers.post("https://devstaging.a2zcreatorz.com/assetLinkerProject/api/save/favourite_post", {
-            "user_id": user_id,
-            "post_id": postID,
-        }).then((res) => {
-            if (res?.data) {
-                console.log("Add to favourite api Response:  ", res?.data)
-                Toast.show({
-                    type: 'success',
-                    text1: 'Added to Favourites!',
-                    visibilityTime: 2000
-                });
+    addToFavourite = (user_id, postID, is_favourite) => {
 
-            }
-        }).catch((err) => {
-            console.log("Add to favourite api  Error:  ", err?.response)
-        })
+        switch (is_favourite) {
+            case 0:
+                AssetLinkers.post("https://devstaging.a2zcreatorz.com/assetLinkerProject/api/save/favourite_post", {
+                    "user_id": user_id,
+                    "post_id": postID,
+                }).then((res) => {
+                    if (res?.data) {
+                        console.log("Add to favourite api Response:  ", res?.data)
+                        Toast.show({
+                            type: 'success',
+                            text1: 'Added to Favourites!',
+                            visibilityTime: 2000
+                        });
+                       this.getPosts()
+
+                    }
+                }).catch((err) => {
+                    console.log("Add to favourite api  Error:  ", err?.response)
+                })
+                break;
+
+            case 1:
+                console.log("remove like",user_id, postID)
+              
+                AssetLinkers.post("https://devstaging.a2zcreatorz.com/assetLinkerProject/api/remove/favourite_post", {
+                    "user_id": user_id,
+                    "post_id": postID,
+                }).then((res) => {
+                    if (res?.data) {
+                        console.log("Add to favourite api Response:  ", res?.data)
+                        Toast.show({
+                            type: 'success',
+                            text1: 'Removed From Favourites!',
+                            visibilityTime: 2000
+                        });
+                        this.getPosts()
+
+                    }
+                }).catch((err) => {
+                    console.log("Add to favourite api  Error:  ", err?.response)
+                })
+                break;
+        }
+
     }
 
     runSlideShow = () => {
@@ -206,7 +235,7 @@ class Dash extends Component {
                         navProps={this.props.navigation}
                         userID={this.props.userData?.user?.id}
                         openDeletePostModal={(postID) => this.openDeletePostModal(postID)}
-                        onFavPress={(user_id, postID) => this.addToFavourite(user_id, postID)}
+                        onFavPress={(user_id, postID, is_favourite) => this.addToFavourite(user_id, postID, is_favourite)}
                     // isFav={}
                     />
                 </ScrollView>

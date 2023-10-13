@@ -35,7 +35,7 @@ import AssetLinkers, * as Api from '../../api/AssetLinkers'
 // Data Arrays
 import {
     Property_Types, sale_rent, PropertyCommercialCategories, listOfArea, ResidentialCategories, Yards,
-    Phase, Area_unit, Rooms, Location_Bahria, Location_DHA_City, furnishes, bedrooms, bathrooms, Plots, Plots1
+    Phase, Area_unit, Area_unit1, Rooms, Location_Bahria, Location_DHA_City, furnishes, bedrooms, bathrooms, Plots, Plots1
 } from './DataArrays';
 
 {/* {---------------Redux Imports------------} */ }
@@ -52,12 +52,12 @@ const Post = (props) => {
     const [rooms, setRooms] = useState("Null")
     const [yards, setYards] = useState("")
     const [yardsNumber, setYardsNumber] = useState("")
-    const [furnished, setFurnished] = useState("")
-    const [bedrooms1, setBedrooms] = useState('')
-    const [bathrooms1, setBathrooms] = useState('')
+    const [furnished, setFurnished] = useState("Null")
+    const [bedrooms1, setBedrooms] = useState("Null")
+    const [bathrooms1, setBathrooms] = useState("Null")
     const [phase, setPhase] = useState("")
     const [loc_bahria, setLoc_bahria] = useState("")
-    const [loc_dha_city, setLoc_dha_city] = useState("")
+    const [loc_dha, setLoc_dha] = useState("")
     const [area_unit, setArea_Unit] = useState("Null")
     const [category, setCategory] = React.useState("Commercial")
     const [multipleAssetsPost, setMultipleAssetsPost] = useState('');
@@ -66,10 +66,11 @@ const Post = (props) => {
     const [location, setLocation] = React.useState({
         "location": "Null",
         "place": "Null",
+        "valueToShow": "Null"
     })
     const [locationMain, setLocationMain] = React.useState('')
-    const [selected_constructionStatus_corner, setSelected_constructionStatus_corner] = useState('')
-    const [selected_constructionStatus_open, setSelected_constructionStatus_open] = useState('')
+    const [selected_constructionStatus_corner, setSelected_constructionStatus_corner] = useState('Null')
+    const [selected_constructionStatus_open, setSelected_constructionStatus_open] = useState('Null')
     const [price, setPrice] = useState('')
     const [address, setAddress] = useState('')
     const [main_features, setMain_features] = useState('')
@@ -79,6 +80,8 @@ const Post = (props) => {
     const [imagesPaths, setImagesPaths] = useState('')
     const [loader, setLoader] = useState(false)
     const [check, setCheck] = useState(true)
+    const [dropdownDataChange, setDropdownDataChange] = useState(false)
+    const [dropdownSV, setDropdownSV] = useState("")
 
     // Functions
     const onCategoryChange = (val) => {
@@ -96,7 +99,7 @@ const Post = (props) => {
         setLocationMain("")
         setLocation("Location")
         setLoc_bahria("")
-        setLoc_dha_city("")
+        setLoc_dha("")
         setdetails("")
         setPropertyCategory("")
         setLoader(false)
@@ -270,27 +273,32 @@ const Post = (props) => {
                 let obj = {
                     "location": val,
                     "place": "Null",
+                    "valueToShow": val
                 }
                 setLocation(obj);
-                console.log("location", location)
+                console.log("location recieved", val)
                 setLocationMain(JSON.stringify(obj))
                 break;
             case 'loc_bahria':
                 let objj = {
                     "location": location?.location,
-                    "place": val
+                    "place": val,
+                    "valueToShow": location?.location + ", " + val
                 }
                 setLoc_bahria(val);
+                setLocation(objj);
                 console.log("loc_bahria: ", objj)
                 setLocationMain(JSON.stringify(objj))
                 break;
-            case 'loc_dha_city':
+            case 'loc_dha':
                 let objjj = {
                     "location": location?.location,
-                    "place": val
+                    "place": val,
+                    "valueToShow": location?.location + ", " + val
                 }
-                setLoc_dha_city(val);
-                console.log("loc_dha_city: ", objjj)
+                setLoc_dha(val);
+                setLocation(objjj);
+                console.log("loc_dha: ", objjj)
                 setLocationMain(JSON.stringify(objjj))
 
                 break;
@@ -346,30 +354,35 @@ const Post = (props) => {
         console.log("")
         console.log("")
         if (dataForApi?.check == true) {
+            setImmediate(() => {
+                            setLoader(false)
+                            setCheck(true)
+                        })
             console.log("working API")
-            AssetLinkers.post("/add_property", dataForApi?.data).then((response) => {
-                // console.log("Post Api response:", response?.data)
-                if (response?.data) {
-                    setImmediate(() => {
-                        setLoader(false)
-                        setCheck(true)
-                    })
+            console.log("bathrooms Final",dataForApi?.data?.bathrooms)
+            // AssetLinkers.post("/add_property", dataForApi?.data).then((response) => {
+            //     // console.log("Post Api response:", response?.data)
+            //     if (response?.data) {
+            //         setImmediate(() => {
+            //             setLoader(false)
+            //             setCheck(true)
+            //         })
 
-                    Toast.show({
-                        type: 'success',
-                        text1: 'Post Successfully Created!',
-                        visibilityTime: 2000
-                    });
-                    props.navigation.navigate("Dash", { refresh: "refresh" })
-                }
-            }).catch((err) => {
-                // console.log("Post Api Error", err?.response)
-                setImmediate(() => {
-                    setLoader(false)
-                    setCheck(true)
-                })
+            //         Toast.show({
+            //             type: 'success',
+            //             text1: 'Post Successfully Created!',
+            //             visibilityTime: 2000
+            //         });
+            //         props.navigation.navigate("Dash", { refresh: "refresh" })
+            //     }
+            // }).catch((err) => {
+            //     // console.log("Post Api Error", err?.response)
+            //     setImmediate(() => {
+            //         setLoader(false)
+            //         setCheck(true)
+            //     })
 
-            })
+            // })
 
 
         } else {
@@ -416,7 +429,7 @@ const Post = (props) => {
 
             case "Residential":
                 const check1 = checkCategoryData()
-                console.log("location Main", locationMain)
+                console.log("location Main", bathrooms1)
                 obj = {
                     user_id: id,
                     rent_sale: sale_Rent,
@@ -427,14 +440,14 @@ const Post = (props) => {
                     category: propertyCategory,
                     corner: selected_constructionStatus_corner,
                     open: selected_constructionStatus_open,
-                    furnished: "Null",
-                    bedrooms: "Null",
-                    bathrooms: "Null",
+                    furnished: furnished,
+                    bedrooms: bedrooms1,
+                    bathrooms: bathrooms1,
                     rooms: rooms,
                     phase: "Null",
                     Location: locationMain,
                     address: "Null",
-                    area_unit: "Null",
+                    area_unit: area_unit,
                     main_features: main_features,
                     details: details,
                 }
@@ -453,9 +466,9 @@ const Post = (props) => {
                     category: "Null",
                     corner: selected_constructionStatus_corner,
                     open: selected_constructionStatus_open,
-                    furnished: furnished,
-                    bedrooms: bedrooms1,
-                    bathrooms: bathrooms1,
+                    furnished: "Null",
+                    bedrooms: "Null",
+                    bathrooms: "Null",
                     rooms: rooms,
                     phase: phase,
                     Location: locationMain,
@@ -518,20 +531,20 @@ const Post = (props) => {
                     return alert("Please select category!")
                 }
 
-                if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
-                    setImmediate(() => {
-                        setCheck(false)
-                        setLoader(false)
-                    })
-                    return alert("Please select Construction Status Corner value!")
-                }
-                if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
-                    setImmediate(() => {
-                        setCheck(false)
-                        setLoader(false)
-                    })
-                    return alert("Please select Construction Status open value!")
-                }
+                // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select Construction Status Corner value!")
+                // }
+                // if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select Construction Status open value!")
+                // }
                 if (location == null || location == '' || location == "Location") {
                     setImmediate(() => {
                         setCheck(false)
@@ -562,6 +575,7 @@ const Post = (props) => {
                 }
 
                 return check
+
             case "Residential":
                 if (id == null || id == '') {
                     console.log("id is prob,: ", id)
@@ -604,20 +618,41 @@ const Post = (props) => {
                     return alert("Please select category!")
                 }
 
-                if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
-                    setImmediate(() => {
-                        setCheck(false)
-                        setLoader(false)
-                    })
-                    return alert("Please select Construction Status Corner value!")
-                }
-                if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
-                    setImmediate(() => {
-                        setCheck(false)
-                        setLoader(false)
-                    })
-                    return alert("Please select Construction Status open value!")
-                }
+                // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select Construction Status Corner value!")
+                // }
+                // if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select Construction Status open value!")
+                // }
+                // if (furnished == null || furnished == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select Furnished!")
+                // }
+                // if (bedrooms == null || bedrooms == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select no. of bedrooms!")
+                // }
+                // if (bathrooms == null || bathrooms == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select no. of bathrooms!")
+                // }
                 if (location == null || location == '') {
                     setImmediate(() => {
                         setCheck(false)
@@ -679,41 +714,21 @@ const Post = (props) => {
                     return alert("Please select Yards!")
                 }
 
-                if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
-                    setImmediate(() => {
-                        setCheck(false)
-                        setLoader(false)
-                    })
-                    return alert("Please select Construction Status Corner value!")
-                }
-                if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
-                    setImmediate(() => {
-                        setCheck(false)
-                        setLoader(false)
-                    })
-                    return alert("Please select Construction Status open value!")
-                }
-                if (furnished == null || furnished == '') {
-                    setImmediate(() => {
-                        setCheck(false)
-                        setLoader(false)
-                    })
-                    return alert("Please select Furnished!")
-                }
-                if (bedrooms == null || bedrooms == '') {
-                    setImmediate(() => {
-                        setCheck(false)
-                        setLoader(false)
-                    })
-                    return alert("Please select no. of bedrooms!")
-                }
-                if (bathrooms == null || bathrooms == '') {
-                    setImmediate(() => {
-                        setCheck(false)
-                        setLoader(false)
-                    })
-                    return alert("Please select no. of bathrooms!")
-                }
+                // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select Construction Status Corner value!")
+                // }
+                // if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select Construction Status open value!")
+                // }
+
                 if (phase == null || phase == '') {
                     setImmediate(() => {
                         setCheck(false)
@@ -817,7 +832,7 @@ const Post = (props) => {
                     constructionStatus_open={Plots} //data  west/east open
                     PlotYards={Yards} //data 
                     PlotPhase={Phase} //data
-                    Area_Unit={Area_unit}  //data
+                    Area_Unit={propertyCategory == "Apartment" ? Area_unit1 : Area_unit}  //data
                     Rooms={Rooms} // data
                     furnishes={furnishes} // data
                     bedrooms={bedrooms} // data
@@ -846,15 +861,35 @@ const Post = (props) => {
 
             {/* Dropdown for Location */}
             <DropDown
-                data={listOfArea}
+                data={dropdownDataChange == false ? listOfArea : dropdownSV == "DHA" ? Location_DHA_City : Location_Bahria}
                 show={locationDropDownOpen}
                 onDismiss={() => setLocationDropDownOpen(!locationDropDownOpen)}
                 title={"Select Location"}
                 onSelect={(val) => {
                     // setLocation(val)
-                    console.log("location Value Slected:", val)
-                    valueAssigner(val, "location")
-                    setLocationDropDownOpen(false)
+                    if (dropdownDataChange == false) {
+                        console.log("location Value Slected:", val)
+                        setDropdownSV(val)
+                        if (val == "Bahria Town" || val == "DHA") {
+                            setDropdownDataChange(true)
+                        }
+                        valueAssigner(val, "location")
+                        if (val == "Clifton" || val == "MDA") {
+                        setLocationDropDownOpen(false)
+                        }
+                    }
+                    if (dropdownSV == "Bahria Town") {
+                        valueAssigner(val, "loc_bahria")
+                        setDropdownDataChange(false)
+                        setDropdownSV('')
+                        setLocationDropDownOpen(false)
+                    }
+                    if (dropdownSV == "DHA") {
+                        valueAssigner(val, "loc_dha")
+                        setDropdownDataChange(false)
+                        setDropdownSV('')
+                        setLocationDropDownOpen(false)
+                    }
                 }}
             />
 

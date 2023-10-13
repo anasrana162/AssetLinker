@@ -3,10 +3,10 @@ import React from 'react'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Colors, size, WP } from '../../../config';
 import CustomImagePicker from '../../../components/CustomImagePicker';
-const ImageSelector = ({ imagePath }) => {
+const ImageSelector = ({ imagePath,style }) => {
     const [path, setPath] = React.useState('')
     return (
-        <View style={styles.mainContainer}>
+        <View style={[styles.mainContainer,style]}>
             <CustomImagePicker
                 style={styles.imagePicker_cont}
                 // onImageChange={(path, mime) => {

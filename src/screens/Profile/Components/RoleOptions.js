@@ -1,0 +1,101 @@
+import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native'
+import React from 'react'
+import CustomTextInp from '../../Post/Components/CustomTextInp'
+const width = Dimensions.get("screen").width
+import LocationDropDown from '../../Post/Components/LocationDropDown'
+
+const RoleOptions = ({
+    Role,
+    userNameValue,
+    emailValue,
+    addressValue,
+    detailsValue,
+    prevWorkValue,
+    expValue,
+    officeNameValue,
+    firmNameValue,
+    realEstateNameValue,
+    areaValue,
+    onChangeText,
+    openLocationDropdown,
+    location,
+}) => {
+    console.log("Role in RoleOptions:", Role)
+    return (
+        <View style={styles.mainContainer}>
+            {Role == "buyer_seller" &&
+                <>
+
+                    {/* User Name */}
+                    <CustomTextInp
+                        value={userNameValue}
+                        titleEN={"User Name "}
+                        onChangeText={(txt) => onChangeText(txt, "user_name")}
+                    />
+
+                    {/* Email */}
+                    <CustomTextInp
+                        value={emailValue}
+                        titleEN={"Email "}
+                        onChangeText={(txt) => onChangeText(txt, "email")}
+                    />
+
+                    {/* Previous Work */}
+                    <CustomTextInp
+                        value={prevWorkValue}
+                        titleEN={"Previous Work "}
+                        onChangeText={(txt) => onChangeText(txt, "prevWork")}
+                    />
+
+                    {/* Experience */}
+                    <CustomTextInp
+                        value={prevWorkValue}
+                        titleEN={"Experience "}
+                        onChangeText={(txt) => onChangeText(txt, "exp")}
+                    />
+
+                    {/* Office Name */}
+                    <CustomTextInp
+                        value={prevWorkValue}
+                        titleEN={"Office Name "}
+                        onChangeText={(txt) => onChangeText(txt, "office_name")}
+                    />
+
+                    {/* Address */}
+                    <CustomTextInp
+                        value={prevWorkValue}
+                        titleEN={"Address "}
+                        onChangeText={(txt) => onChangeText(txt, "address")}
+                    />
+
+                    {/* Description */}
+                    <CustomTextInp
+                        value={prevWorkValue}
+                        titleEN={"Description "}
+                        multiline={true}
+                        numberOfLines={8}
+                        onChangeText={(txt) => onChangeText(txt, "desc")}
+                    />
+
+                    {/* Area */}
+                    <LocationDropDown
+                        titleMain={"Area"}
+                        showModal={openLocationDropdown}
+                        title={location?.location == "Null" ? "Area" : location?.valueToShow}
+                    />
+                </>
+            }
+        </View>
+    )
+}
+
+export default RoleOptions
+
+const styles = StyleSheet.create({
+    mainContainer: {
+        width: width,
+        alignItems: "flex-start",
+        marginTop: 30,
+        paddingLeft: 15,
+    },
+})

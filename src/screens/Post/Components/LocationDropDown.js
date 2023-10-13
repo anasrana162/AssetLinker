@@ -7,12 +7,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 
-const LocationDropDown = ({ showModal, title }) => {
+const LocationDropDown = ({ showModal, title,titleMain }) => {
 
     return (
         <>
             <View style={styles.mainContainer}>
-                <Text style={styles.title}>Location *</Text>
+                <Text style={styles.title}>{titleMain}</Text>
                 <TouchableOpacity
                     onPress={showModal}
                     style={styles.dropdown_cont}>

@@ -24,7 +24,7 @@ import Feather from "react-native-vector-icons/Feather"
 import { Colors } from '../../config';
 import AssetLinkers from '../../api/AssetLinkers';
 import AllPosts from './Components/AllPosts';
-
+import Toast from 'react-native-toast-message';
 {/* {---------------Redux Imports------------} */ }
 import { connect } from 'react-redux';
 import * as userActions from "../../redux/actions/user"
@@ -60,6 +60,54 @@ class UserProfileDetail extends Component {
         })
     }
 
+    addToFavourite = (user_id, postID, is_favourite) => {
+
+        switch (is_favourite) {
+            case 0:
+                AssetLinkers.post("https://devstaging.a2zcreatorz.com/assetLinkerProject/api/save/favourite_post", {
+                    "user_id": user_id,
+                    "post_id": postID,
+                }).then((res) => {
+                    if (res?.data) {
+                        console.log("Add to favourite api Response:  ", res?.data)
+                        Toast.show({
+                            type: 'success',
+                            text1: 'Added to Favourites!',
+                            visibilityTime: 2000
+                        });
+                        this.getUserPosts()
+
+                    }
+                }).catch((err) => {
+                    console.log("Add to favourite api  Error:  ", err?.response)
+                })
+                break;
+
+            case 1:
+                console.log("remove like", user_id, postID)
+
+                AssetLinkers.post("https://devstaging.a2zcreatorz.com/assetLinkerProject/api/remove/favourite_post", {
+                    "user_id": user_id,
+                    "post_id": postID,
+                }).then((res) => {
+                    if (res?.data) {
+                        console.log("Add to favourite api Response:  ", res?.data)
+                        Toast.show({
+                            type: 'success',
+                            text1: 'Added to Favourites!',
+                            visibilityTime: 2000
+                        });
+                        this.getUserPosts()
+
+                    }
+                }).catch((err) => {
+                    console.log("Add to favourite api  Error:  ", err?.response)
+                })
+                break;
+        }
+
+    }
+
     onPress = (key) => {
         switch (key) {
             case "goback":
@@ -81,6 +129,31 @@ class UserProfileDetail extends Component {
                 postID: postID
             })
         })
+    }
+    deletePost = () => {
+        var { userData: { user: { id } } } = this.props
+        AssetLinkers.post("/delete_property", {
+            user_id: id,
+            post_id: this.state.postID
+        }).then((res) => {
+            if (res?.data) {
+                this.getPosts()
+                this.setState({
+                    openDeletePostModal: false,
+                    Posts: null,
+                })
+                Toast.show({
+                    type: 'success',
+                    text1: 'Post Deleted Successfully!',
+                    visibilityTime: 3000
+                });
+                console.log("Delete Post API Response", res?.data)
+            }
+        }).catch((err) => {
+            alert("Post Deletion Unsuccessful please try again")
+            console.log("Delete Post API Error", err?.response)
+        })
+
     }
 
     render() {
@@ -141,6 +214,7 @@ class UserProfileDetail extends Component {
                         navProps={this.props.navigation}
                         userID={user_id}
                         openDeletePostModal={(postID) => this.openDeletePostModal(postID)}
+                        onFavPress={(user_id, postID, is_favourite) => this.addToFavourite(user_id, postID, is_favourite)}
                     />
 
                 </ScrollView>

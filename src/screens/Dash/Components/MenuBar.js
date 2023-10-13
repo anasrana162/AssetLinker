@@ -30,10 +30,12 @@ const MenuBar = ({ navProps, logout }) => {
                 break;
 
             case "Profile":
+                setOpenDropDown(false)
                 navProps.navigate('MyProfile')
                 break;
 
             case "Logout":
+                setOpenDropDown(false)
                 logout()
                 break;
 

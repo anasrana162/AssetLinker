@@ -12,6 +12,7 @@ import {
     StyleSheet,
     NativeModules,
     Modal,
+    Platform,
 } from 'react-native';
 import React, { Component } from 'react'
 
@@ -30,6 +31,8 @@ import ImageViewer from './Components/ImageViewer';
 import { Colors } from '../../config';
 import moment from 'moment';
 import UserProfileButton from './Components/UserProfileButton';
+import BottomBar from './Components/BottomBar';
+import AssetLinkers from '../../api/AssetLinkers';
 
 class PostDetail extends Component {
 
@@ -46,7 +49,7 @@ class PostDetail extends Component {
         var { postData } = this.props?.route?.params
         switch (key) {
             case "goback":
-                this.props.navigation.goBack()
+                this.props.navigation.navigate("Dash",{refresh:"refresh"})
                 break;
             case "share":
                 Linking.openURL(
@@ -64,6 +67,12 @@ class PostDetail extends Component {
         }
     }
 
+
+    componentDidMount = () => {
+        this.runSlideShow()
+        this.AddView()
+    }
+
     runSlideShow = () => {
         var { postData } = this.props?.route?.params
 
@@ -76,10 +85,24 @@ class PostDetail extends Component {
         });
     }
 
-    componentDidMount = () => {
-        this.runSlideShow()
-    }
+    AddView = () => {
+        var { postData: { id, user_id } } = this.props?.route?.params
+        var { userData: { user } } = this.props
 
+        if (user_id !== user?.id) {
+            AssetLinkers.post("postViews", {
+                post_id: id
+            }).then((res) => {
+                console.log("View Added")
+            }).catch((err) => {
+                console.log("Add Views Api Error", err?.response)
+            })
+        } else {
+            console.log("The user is the post creator no view added")
+        }
+
+
+    }
     componentWillUnmount = () => {
         clearInterval(this.state.interval);
     }
@@ -113,7 +136,7 @@ class PostDetail extends Component {
                         style={[styles.headerBtn, { marginLeft: 5, }]}
                         onPress={() => this.onPress("goback")}
                     >
-                        <Ionicons name="chevron-back" size={35} color="white" />
+                        <Ionicons name="chevron-back" size={30} color="white" />
                     </TouchableOpacity>
 
                     {/* Share Button */}
@@ -121,13 +144,13 @@ class PostDetail extends Component {
                         style={[styles.headerBtn, { marginRight: 15, }]}
                         onPress={() => this.onPress("share")}
                     >
-                        <Ionicons name="share-social" size={35} color="white" />
+                        <Ionicons name="share-social" size={30} color="white" />
                     </TouchableOpacity>
                 </View>
 
-                <ScrollView>
-
-
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                >
 
                     {/* Images Viewer */}
                     <ImageViewer Images={postData?.post_images} position={this.state.position} />
@@ -149,8 +172,8 @@ class PostDetail extends Component {
 
                     {/* Location */}
                     <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 10, marginTop: 10 }}>
-                        <Ionicons name='location-sharp' color={Colors.blue} size={24} />
-                        < Text style={styles.posted_at}>{location}</Text>
+                        <Ionicons name='location-sharp' color={Colors.blue} size={22} style={{ marginTop: 7 }} />
+                        < Text style={[styles.posted_at, { marginLeft: 0 }]}>{location}</Text>
                     </View>
 
                     {/* More Detail */}
@@ -183,7 +206,7 @@ class PostDetail extends Component {
                             </View>}
 
                         {/* Yards*/}
-                        {postData?.area_unit !== "Null" &&
+                        {postData?.yards !== "Null" &&
                             < View style={styles.inner_moreDetailCont}>
                                 <Text style={styles.gridText1}>{postData?.yards}</Text>
                                 <Text style={styles.gridText2}>Yards</Text>
@@ -229,7 +252,7 @@ class PostDetail extends Component {
                         {/* Bathrooms */}
                         {postData?.bathrooms !== "Null" &&
                             < View style={styles.inner_moreDetailCont}>
-                                <Text style={styles.gridText1}>{postData?.rooms}</Text>
+                                <Text style={styles.gridText1}>{postData?.bathrooms}</Text>
                                 <Text style={styles.gridText2}>Bathrooms</Text>
                             </View>}
 
@@ -276,6 +299,8 @@ class PostDetail extends Component {
                     />
 
                 </ScrollView>
+
+                <BottomBar navProps={this.props.navigation} user_cellno={postData?.phone} />
 
             </View >
         )
@@ -328,6 +353,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
 
     },
+
     moreDetailCont: {
         width: width - 40,
         alignSelf: "center",
@@ -364,12 +390,12 @@ const styles = StyleSheet.create({
         color: "white"
     },
     gridText1: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: "400",
         color: Colors.black
     },
     gridText2: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: "600",
         color: Colors.black
     },

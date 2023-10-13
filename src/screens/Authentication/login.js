@@ -42,6 +42,20 @@ class Login extends Component {
         })
     }
 
+    cancelRequest = () => {
+        const controller = new AbortController();
+        setTimeout(() => {
+
+            controller.abort()
+            setImmediate(() => {
+                this.setState({
+                    loader: false,
+                })
+            })
+            //  alert("Network Error PLease Try again")
+        }, 6000)
+    }
+
     onLoginPress = async () => {
         var { actions } = this.props
         var { mobile, password } = this.state
@@ -61,7 +75,7 @@ class Login extends Component {
             return alert("Enter mobile number")
         }
 
-        if (/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password) == false) {
+        if (password.length <= 6 || password == null) {
             setImmediate(() => {
                 this.setState({
                     loader: false
@@ -69,7 +83,7 @@ class Login extends Component {
             })
             return alert("Enter correct password")
         }
-
+        this.cancelRequest()
         await AssetLinkers.post("/loginApi", {
             "phone": mobile,
             "password": password
@@ -146,7 +160,7 @@ class Login extends Component {
                                 color: "black"
                             }}
 
-                            codeTextStyle={{ height:45,marginTop:20 }}
+                            codeTextStyle={{ height: 45, marginTop: 20 }}
                             textInputStyle={{ fontSize: 13, color: 'black', width: "100%", height: 45, }}
                             onChangeFormattedText={(txt) => this.onChangeFormattedText(txt)}
                         />

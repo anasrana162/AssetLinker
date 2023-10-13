@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, NativeModules, Dimensions, TouchableOpacity, Linking, FlatList, Image } from 'react-native'
+import { StyleSheet, Text, View, NativeModules, Dimensions, TouchableOpacity, Linking, FlatList, Image, Platform } from 'react-native'
 import React, { useState } from 'react'
 const { StatusBarManager: { HEIGHT } } = NativeModules;
 const width = Dimensions.get("screen").width
@@ -34,11 +34,13 @@ const AllPosts = ({ data, userID, openDeletePostModal, navProps, onFavPress }) =
                 <FlatList
                     data={data}
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingBottom: 100, marginTop: 20, }}
+                    contentContainerStyle={{ paddingBottom: 100, marginTop: 5 }}
                     numColumns={2}
                     scrollEnabled={false}
                     columnWrapperStyle={styles.inner_main}
                     renderItem={(item, index) => {
+                        // console.log("ID", userID," ",item?.item?.user_id)
+
                         var Location = ""
                         if (item?.item?.Location !== "Null" || item?.item?.Location !== "") {
                             Location = JSON.parse(item?.item?.Location)
@@ -99,7 +101,7 @@ const AllPosts = ({ data, userID, openDeletePostModal, navProps, onFavPress }) =
                                 <Text style={styles.plotCategory}>Plot Category: {item?.item?.category}</Text>
 
                                 {/* Description (details) */}
-                                <Text numberOfLines={2} style={styles.description}>{item?.item?.details}</Text>
+                                {/* <Text numberOfLines={2} style={styles.description}>{item?.item?.details}</Text> */}
 
                                 {/* Location and Price */}
                                 <View style={styles.location_price_cont}>
@@ -120,13 +122,14 @@ const AllPosts = ({ data, userID, openDeletePostModal, navProps, onFavPress }) =
                                     <View style={styles.line}></View>
 
                                     {/* Icons */}
-                                    <View style={[styles.location_price_cont, { justifyContent: "space-around", marginTop: 10 }]}>
+                                    <View style={[styles.location_price_cont, { justifyContent: "space-around", marginTop: 5 }]}>
 
-                                        <TouchableOpacity onPress={() => onFavPress(item?.item?.user_id, item?.item?.id)}>
-                                            <AntDesign name="heart" size={20} color={Colors.DarkGrey} />
+                                        <TouchableOpacity onPress={() => onFavPress(item?.item?.user_id, item?.item?.id, item?.item?.is_favourite)}>
+                                            <AntDesign name="heart" size={20} color={(item?.item?.is_favourite == 1 || item?.item?.is_favourite == undefined) ? "red" : Colors.DarkGrey} />
                                         </TouchableOpacity>
-                                        <View>
+                                        <View style={{ flexDirection: "row", alignItems: "center" }}>
                                             <Entypo name="eye" size={20} color={Colors.DarkGrey} />
+                                            <Text style={[styles.posted_at,{marginTop:0}]}>{item?.item?.views}</Text>
                                         </View>
                                         <TouchableOpacity>
                                             <AntDesign name="staro" size={20} color={Colors.DarkGrey} />
@@ -221,21 +224,22 @@ const styles = StyleSheet.create({
         color: "crimson"
     },
     itemContainer: {
-        width: 180,
-        height: 300,
+        width: width / 2.15,
+        height: 225,
         backgroundColor: "white",
         borderRadius: 10,
-        // borderWidth: 1,
-        marginHorizontal: 10,
+        borderWidth: 1,
+        borderColor: Colors.blue,
+        marginHorizontal: 5,
         justifyContent: "flex-start",
         alignItems: "flex-start",
-        marginVertical: 12,
+        marginVertical: 5,
         elevation: 4,
         overflow: "hidden"
     },
     itemImage: {
         width: '100%',
-        height: 120,
+        height: 100,
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
     },

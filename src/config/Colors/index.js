@@ -1,8 +1,8 @@
 const Colors = {
   backgroundColor: '#000',
-  fadedBackground:"rgba(52,52,52,0.6)",
+  fadedBackground: "rgba(52,52,52,0.6)",
   background: '#F2F2F2',
-  main:"#001645",
+  main: "#001645",
   primary: '#023661',
   google: '#DB4437',
   facebook: '#4267B2',
@@ -16,6 +16,7 @@ const Colors = {
   textHeading: '#000000',
   textColor: '#000000',
   blue: '#001645',
+  light_blue: "#3081bf",
   blackOpacity: o => 'rgba(0, 0, 0, ' + o + ')',
   color1: '#FFC434',
   color2: '#C2802A',

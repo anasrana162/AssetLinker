@@ -59,9 +59,6 @@ export const listOfArea = [
         name: 'Bahria Town',
     },
     {
-        name: 'DHA city',
-    },
-    {
         name: 'DHA',
     },
     {
@@ -73,10 +70,10 @@ export const listOfArea = [
 ];
 export const ResidentialCategories = [
     { id: 1, name: 'Bangalow' },
-    { id: 2, name: 'FramHouse' },
-    { id: 3, name: 'TownHouse' },
+    { id: 2, name: 'Farm House' },
+    { id: 3, name: 'Town House' },
     { id: 4, name: 'Apartment' },
-    { id: 5, name: 'PentHouse' },
+    { id: 5, name: 'Pent House' },
     { id: 6, name: 'Others' },
 ];
 export const Yards = [
@@ -97,6 +94,13 @@ export const Area_unit = [
     { id: 1, name: 'Sq. Feet' },
     { id: 2, name: 'Sq. Yard' },
 ]
+export const Area_unit1 = [
+    { id: 1, name: 'ACRE' },
+    { id: 2, name: 'KANAL' },
+    { id: 2, name: 'MARLA' },
+    { id: 1, name: 'SQ. FEET' },
+    { id: 2, name: 'SQ. YARD' },
+]
 export const Rooms = [
     { id: 1, name: '1' },
     { id: 2, name: '2' },
@@ -106,10 +110,10 @@ export const Rooms = [
     { id: 6, name: '6+' },
 ]
 export const Location_Bahria = [
-    { id: 1, name: 'Bahria Karachi' },
-    { id: 2, name: 'Bahria Lahore' },
-    { id: 3, name: 'Bahria Pindi' },
-    { id: 4, name: 'Bahria Industrial' },
+    { id: 1, name: 'Karachi' },
+    { id: 2, name: 'Lahore' },
+    { id: 3, name: 'Pindi' },
+    { id: 4, name: 'Industrial' },
 ]
 export const Location_DHA_City = [
     { id: 1, name: 'Bhawalpur' },

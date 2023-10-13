@@ -80,12 +80,12 @@ const Options = ({
                     />}
 
                 {/* Rooms */}
-                {propertyCategorySelected == "Office" &&
+                {/* {propertyCategorySelected == "Office" &&
                     < ButtonList
                         data={Rooms}
                         titleSale={"Rooms *"}
                         onSelectValue={(val) => onSelectValue(val, "rooms")}
-                    />}
+                    />} */}
 
                 {/* Yards for plots */}
                 {Category_Selected == "Plot" &&
@@ -117,32 +117,32 @@ const Options = ({
                 />
 
                 {/* Furnished for plots */}
-                {Category_Selected == "Plot" &&
+                {Category_Selected == "Residential" &&
                     < ButtonList
                         data={furnishes}
-                        titleSale={"Furnished*"}
+                        titleSale={"Furnished"}
                         onSelectValue={(val) => onSelectValue(val, "furnishes")}
                     />}
 
                 {/* Space Line */}
-                <View style={styles.space_line}></View>
+                {Category_Selected == "Residential" && <View style={styles.space_line}></View>}
 
                 {/* bedrooms for plots */}
-                {Category_Selected == "Plot" &&
+                {Category_Selected == "Residential" &&
                     < ButtonList
                         data={bedrooms}
-                        titleSale={"Bedrooms*"}
+                        titleSale={"Bedrooms"}
                         onSelectValue={(val) => onSelectValue(val, "bedrooms")}
                     />}
 
                 {/* Space Line */}
-                {Category_Selected == "Plot" && <View style={styles.space_line}></View>}
+                {Category_Selected == "Residential" && <View style={styles.space_line}></View>}
 
                 {/* Furnished for plots */}
-                {Category_Selected == "Plot" &&
+                {Category_Selected == "Residential" &&
                     < ButtonList
                         data={bathrooms}
-                        titleSale={"Bathrooms*"}
+                        titleSale={"Bathrooms"}
                         onSelectValue={(val) => onSelectValue(val, "bathrooms")}
                     />}
 
@@ -161,14 +161,15 @@ const Options = ({
                 <View style={styles.space_line}></View>
 
                 {/* Location DropDown */}
-                {console.log("locationC:", location)}
+                {/* {console.log("locationC:", location)} */}
                 <LocationDropDown
+                    titleMain={"Location *"}
                     showModal={openLocationDropdown}
-                    title={location?.location == "Null" ? "Location" : location?.location}
+                    title={location?.location == "Null" ? "Location" : location?.valueToShow}
                 />
 
                 {/* Space Line */}
-                <View style={styles.space_line}></View>
+                {<View style={styles.space_line}></View>}
 
                 {/* Address */}
                 {Category_Selected !== "Residential" &&
@@ -178,10 +179,10 @@ const Options = ({
                     />}
 
                 {/* Space Line */}
-                <View style={styles.space_line}></View>
+                {/* <View style={styles.space_line}></View> */}
 
                 {/* Area Unit */}
-                {propertyCategorySelected == "Shop" &&
+                {propertyCategorySelected == "Shop" || propertyCategorySelected == "Apartment" &&
                     < ButtonList
                         data={Area_Unit}
                         titleSale={"Area Unit *"}
@@ -190,7 +191,7 @@ const Options = ({
 
 
                 {/* Location_Bahria */}
-                {
+                {/* {
                     location?.location == "Bahria Town" &&
                     < ButtonList
                         data={Location_Bahria}
@@ -198,18 +199,18 @@ const Options = ({
                         onSelectValue={(val) => onSelectValue(val, "loc_bahria")}
                     />
 
-                }
+                } */}
 
-                {/* Location_DHA_City */}
-                {
-                    location?.location == "DHA city" &&
+                {/* Location_DHA */}
+                {/* {
+                    location?.location == "DHA" &&
                     < ButtonList
                         data={Location_DHA_City}
-                        titleSale={"DHA City *"}
-                        onSelectValue={(val) => onSelectValue(val, "loc_dha_city")}
+                        titleSale={"DHA *"}
+                        onSelectValue={(val) => onSelectValue(val, "loc_dha")}
                     />
 
-                }
+                } */}
 
                 {/* Main Features */}
                 <CustomTextInp

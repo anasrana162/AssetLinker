@@ -4,7 +4,7 @@ import AssetLinkers, * as Api from '../../api/AssetLinkers'
 const { StatusBarManager: { HEIGHT } } = NativeModules;
 const width = Dimensions.get("screen").width
 const height = Dimensions.get("screen").height - HEIGHT
-
+import axios from 'axios';
 // imports
 import { Colors, size, WP } from '../../config';
 
@@ -62,6 +62,20 @@ export default class Signup extends Component {
         this.getRoles()
     }
 
+    cancelRequest = () => {
+        const controller = new AbortController();
+        setTimeout(() => {
+
+            controller.abort()
+            setImmediate(() => {
+                this.setState({
+                    loader: false,
+                })
+            })
+            // alert("Network Error PLease Try again")
+        }, 6000)
+    }
+
     onRegisterPress = async () => {
 
         setImmediate(() => {
@@ -77,30 +91,38 @@ export default class Signup extends Component {
         console.log("Check Value", check)
 
         if (check?.check == true) {
-
-            await AssetLinkers.post('/register/user?user_type=' + this.state.role, check?.obj)
-                .then((res) => {
-                    console.log("Response SignUp Api: ", res?.data)
-                    if (res?.data) {
+            this.cancelRequest()
+                await AssetLinkers.post('/register/user?user_type=' + this.state.role, check?.obj)
+                    .then((res) => {
+                        console.log("Response SignUp Api: ", res?.data)
+                        if (res?.data) {
+                            setImmediate(() => {
+                                this.setState({
+                                    loader: false,
+                                })
+                            })
+                            if (this.state.role == "builder") {
+                                alert("Please Contact AssetLinkers to activate your account ")
+                            }
+                            this.props.navigation.navigate("Login")
+                        }
+                        if(res.data?.email){
+                            setImmediate(() => {
+                                this.setState({
+                                    loader: false,
+                                })
+                            })
+                            alert("Email Already taken ")
+                        }
+                    }).catch((err) => {
                         setImmediate(() => {
                             this.setState({
                                 loader: false,
                             })
                         })
-                        if (this.state.role == "builder") {
-                            alert("Please Contact AssetLinkers to activate your account ")
-                        }
-                        this.props.navigation.navigate("Login")
-                    }
-                }).catch((err) => {
-                    setImmediate(() => {
-                        this.setState({
-                            loader: false,
-                        })
+                        console.log("Signup API Error: ", err?.response)
+                        alert("Network Error: #SU1")
                     })
-                    console.log("Signup API Error: ", err?.response)
-                    alert("Network Error: #SU1")
-                })
         }
 
     }
