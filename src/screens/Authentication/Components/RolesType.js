@@ -9,7 +9,7 @@ const RolesType = ({ data, onSelectUserRole,defaultSelected }) => {
 
     const selected = (val, key) => {
         switch (key) {
-            case 'consultant':
+            case 'estate_agent':
                 onSelectUserRole(val?.role)
                 setChecked(val.id)
                 break;

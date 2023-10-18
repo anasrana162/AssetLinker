@@ -16,6 +16,7 @@ const RoleOptions = ({
     firmNameValue,
     realEstateNameValue,
     areaValue,
+    designationValue,
     onChangeText,
     openLocationDropdown,
     location,
@@ -49,28 +50,28 @@ const RoleOptions = ({
 
                     {/* Experience */}
                     <CustomTextInp
-                        value={prevWorkValue}
+                        value={expValue}
                         titleEN={"Experience "}
                         onChangeText={(txt) => onChangeText(txt, "exp")}
                     />
 
                     {/* Office Name */}
                     <CustomTextInp
-                        value={prevWorkValue}
+                        value={officeNameValue}
                         titleEN={"Office Name "}
                         onChangeText={(txt) => onChangeText(txt, "office_name")}
                     />
 
                     {/* Address */}
                     <CustomTextInp
-                        value={prevWorkValue}
+                        value={addressValue}
                         titleEN={"Address "}
                         onChangeText={(txt) => onChangeText(txt, "address")}
                     />
 
                     {/* Description */}
                     <CustomTextInp
-                        value={prevWorkValue}
+                        value={detailsValue}
                         titleEN={"Description "}
                         multiline={true}
                         numberOfLines={8}
@@ -85,6 +86,108 @@ const RoleOptions = ({
                     />
                 </>
             }
+
+            {Role == "builder" &&
+                <>
+
+                    {/* User Name */}
+                    <CustomTextInp
+                        value={userNameValue}
+                        titleEN={"User Name "}
+                        onChangeText={(txt) => onChangeText(txt, "user_name")}
+                    />
+
+                    {/* Email */}
+                    <CustomTextInp
+                        value={emailValue}
+                        titleEN={"Email "}
+                        onChangeText={(txt) => onChangeText(txt, "email")}
+                    />
+
+                    {/* Firm Name */}
+                    <CustomTextInp
+                        value={firmNameValue}
+                        titleEN={"Firm Name "}
+                        onChangeText={(txt) => onChangeText(txt, "firm_name")}
+                    />
+
+                    {/* Address */}
+                    <CustomTextInp
+                        value={addressValue}
+                        titleEN={"Address "}
+                        onChangeText={(txt) => onChangeText(txt, "address")}
+                    />
+
+                    {/* Description */}
+                    <CustomTextInp
+                        value={detailsValue}
+                        titleEN={"Description "}
+                        multiline={true}
+                        numberOfLines={8}
+                        onChangeText={(txt) => onChangeText(txt, "desc")}
+                    />
+
+                    {/* Designation */}
+                    <CustomTextInp
+                        value={designationValue}
+                        titleEN={"Designation "}
+                        onChangeText={(txt) => onChangeText(txt, "designation")}
+                    />
+
+
+                </>
+            }
+            {Role == "estate_agent" &&
+                <>
+
+                    {/* User Name */}
+                    <CustomTextInp
+                        value={userNameValue}
+                        titleEN={"User Name "}
+                        onChangeText={(txt) => onChangeText(txt, "user_name")}
+                    />
+
+                    {/* Email */}
+                    <CustomTextInp
+                        value={emailValue}
+                        titleEN={"Email "}
+                        onChangeText={(txt) => onChangeText(txt, "email")}
+                    />
+
+                      {/* Real Estate Name */}
+                      <CustomTextInp
+                        value={realEstateNameValue}
+                        titleEN={"Real Estate Name "}
+                        onChangeText={(txt) => onChangeText(txt, "real_estate_name")}
+                    />
+
+                    {/* Address */}
+                    <CustomTextInp
+                        value={addressValue}
+                        titleEN={"Address "}
+                        onChangeText={(txt) => onChangeText(txt, "address")}
+                    />
+
+                    {/* Description */}
+                    <CustomTextInp
+                        // value={detailsValue}
+                        titleEN={"Description "}
+                        multiline={true}
+                        numberOfLines={8}
+                        onChangeText={(txt) => onChangeText(txt, "desc")}
+                    />
+
+                    {/* Designation */}
+                    <CustomTextInp
+                        value={designationValue}
+                        titleEN={"Designation "}
+                        onChangeText={(txt) => onChangeText(txt, "designation")}
+                    />
+
+
+                </>
+            }
+
         </View>
     )
 }

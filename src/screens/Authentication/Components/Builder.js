@@ -44,6 +44,14 @@ const Builder = ({ onChangeFormattedText, onChangeText, selectedLocation, onLocB
                 onChangeFormattedText={onChangeFormattedText}
             />
 
+            {/* <AuthTextIput
+                placeholder={"Phone"}
+                placeholderTextColor={Colors.secondary}
+                onChangeText={onChangeFormattedText}
+                // style={{ marginBottom: 20 }}
+            // showEye={true}
+            /> */}
+
             {/* Landline Number */}
             <AuthTextIput
                 placeholder={"Landline Number*"}

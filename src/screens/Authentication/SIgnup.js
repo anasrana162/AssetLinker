@@ -42,7 +42,7 @@ export default class Signup extends Component {
             landline: null,
             image: null,
             mime: null,
-            role: 'consultant',
+            role: 'estate_agent',
             userName: null,
             address: null,
             userRoles: null, // new
@@ -50,7 +50,7 @@ export default class Signup extends Component {
             defaultSelectedRoleType: {
                 id: 1,
                 name: "Real Estate Consultant",
-                role: "consultant",
+                role: "estate_agent",
             }, // new
             loader: false, // new
             continueSignUp: true, // new
@@ -92,44 +92,52 @@ export default class Signup extends Component {
 
         if (check?.check == true) {
             this.cancelRequest()
-                await AssetLinkers.post('/register/user?user_type=' + this.state.role, check?.obj)
-                    .then((res) => {
-                        console.log("Response SignUp Api: ", res?.data)
-                        if (res?.data) {
-                            setImmediate(() => {
-                                this.setState({
-                                    loader: false,
-                                })
-                            })
-                            if (this.state.role == "builder") {
-                                alert("Please Contact AssetLinkers to activate your account ")
-                            }
-                            this.props.navigation.navigate("Login")
-                        }
-                        if(res.data?.email){
-                            setImmediate(() => {
-                                this.setState({
-                                    loader: false,
-                                })
-                            })
-                            alert("Email Already taken ")
-                        }
-                    }).catch((err) => {
+            await AssetLinkers.post('/register/user?user_type=' + this.state.role, check?.obj)
+                .then((res) => {
+                    console.log("Response SignUp Api: ", res?.data)
+                    if (res?.data) {
                         setImmediate(() => {
                             this.setState({
                                 loader: false,
                             })
                         })
-                        console.log("Signup API Error: ", err?.response)
-                        alert("Network Error: #SU1")
+                        if (this.state.role == "builder") {
+                            alert("Please Contact AssetLinkers to activate your account ")
+                        }
+                        this.props.navigation.navigate("Login")
+                    }
+                    if (res.data?.email) {
+                        setImmediate(() => {
+                            this.setState({
+                                loader: false,
+                            })
+                        })
+                        alert("Email Already taken ")
+                    }
+                    if (res.data?.phone) {
+                        setImmediate(() => {
+                            this.setState({
+                                loader: false,
+                            })
+                        })
+                        alert("Phone Already taken ")
+                    }
+                }).catch((err) => {
+                    setImmediate(() => {
+                        this.setState({
+                            loader: false,
+                        })
                     })
+                    console.log("Signup API Error: ", err?.response)
+                    alert("Network Error: #SU1")
+                })
         }
 
     }
 
     checkRoleBeforeSignUp = (role) => {
         switch (role) {
-            case "consultant":
+            case "estate_agent":
                 return this.checkConditionsForConsultant()
             // break;
 
@@ -469,7 +477,7 @@ export default class Signup extends Component {
             {
                 id: 1,
                 name: "Real Estate Consultant",
-                role: "consultant",
+                role: "estate_agent",
             },
             {
                 id: 2,
@@ -554,7 +562,7 @@ export default class Signup extends Component {
             case "email":
                 setImmediate(() => {
                     this.setState({
-                        email: text
+                        email: text.toLowerCase()
                     })
                 })
                 break;
@@ -666,7 +674,7 @@ export default class Signup extends Component {
                         {/* Real Estate Consultant Role */}
 
                         {
-                            this.state.role == "consultant" &&
+                            this.state.role == "estate_agent" &&
                             <RealStateConsultant
                                 onChangeFormattedText={(text) => this.phoneNumberUsed(text)}
                                 onChangeText={(text, key) => this.onChangeText(text, key)}

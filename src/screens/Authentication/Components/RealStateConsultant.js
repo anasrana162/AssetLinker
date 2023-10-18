@@ -48,6 +48,14 @@ const RealStateConsultant = ({ onChangeFormattedText, onChangeText, selectedLoca
                 textInputStyle={{ fontSize: 13, color: 'black', width: "100%", height: 45, }}
                 onChangeFormattedText={onChangeFormattedText}
             />
+{/* 
+            <AuthTextIput
+                placeholder={"Phone"}
+                placeholderTextColor={Colors.secondary}
+                onChangeText={onChangeFormattedText}
+                // style={{ marginBottom: 20 }}
+            // showEye={true}
+            /> */}
 
             {/* Email */}
             <AuthTextIput
@@ -140,6 +148,6 @@ const styles = StyleSheet.create({
         width: width - 96,
         alignSelf: "center",
         marginTop: 10,
-        marginBottom:-5
+        marginBottom: -5
     }
 })

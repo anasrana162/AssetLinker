@@ -7,7 +7,7 @@ const { StatusBarManager: { HEIGHT } } = NativeModules;
 const width = Dimensions.get("screen").width
 const height = Dimensions.get("screen").height - HEIGHT
 
-const Buyer_Seller = ({ onChangeFormattedText, onChangeText,  }) => {
+const Buyer_Seller = ({ onChangeFormattedText, onChangeText, }) => {
     return (
         <View style={styles.mainContainer}>
             {/* Name */}
@@ -37,6 +37,13 @@ const Buyer_Seller = ({ onChangeFormattedText, onChangeText,  }) => {
                 textInputStyle={{ fontSize: 13, color: 'black', width: "100%", height: 45, }}
                 onChangeFormattedText={onChangeFormattedText}
             />
+            {/* <AuthTextIput
+                placeholder={"Phone"}
+                placeholderTextColor={Colors.secondary}
+                onChangeText={onChangeFormattedText}
+                // style={{ marginBottom: 20 }}
+            // showEye={true}
+            /> */}
 
 
             {/* Email */}
@@ -64,7 +71,7 @@ const Buyer_Seller = ({ onChangeFormattedText, onChangeText,  }) => {
                 showEye={true}
             />
 
-    
+
         </View>
     )
 }

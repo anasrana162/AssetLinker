@@ -31,12 +31,14 @@ class Login extends Component {
     }
 
     onChangeFormattedText = (no) => {
+        console.log("Phone Number:", no)
         setImmediate(() => {
             this.setState({ mobile: no })
         })
     }
 
     onChangeText = (val) => {
+        console.log("Password:", val)
         setImmediate(() => {
             this.setState({ password: val })
         })
@@ -75,7 +77,7 @@ class Login extends Component {
             return alert("Enter mobile number")
         }
 
-        if (password.length <= 6 || password == null) {
+        if (password.length <= 1 || password == null) {
             setImmediate(() => {
                 this.setState({
                     loader: false
@@ -83,10 +85,12 @@ class Login extends Component {
             })
             return alert("Enter correct password")
         }
+
+       // console.log("Mobile NUmber Fianl", "0" + mobile.slice(3))
         this.cancelRequest()
         await AssetLinkers.post("/loginApi", {
-            "phone": mobile,
-            "password": password
+            "phone": mobile.trim(),
+            "password": password.trim()
         }).then((res) => {
             console.log("response Login Api:", res?.data)
             if (res?.data) {
@@ -164,6 +168,13 @@ class Login extends Component {
                             textInputStyle={{ fontSize: 13, color: 'black', width: "100%", height: 45, }}
                             onChangeFormattedText={(txt) => this.onChangeFormattedText(txt)}
                         />
+                        {/* <AuthTextIput
+                            placeholder={"Phone"}
+                            placeholderTextColor={Colors.secondary}
+                            onChangeText={(text) => this.onChangeFormattedText(text)}
+                            // style={{ marginBottom: 20 }}
+                            // showEye={true}
+                        /> */}
                         <AuthTextIput
                             placeholder={"Password"}
                             placeholderTextColor={Colors.secondary}

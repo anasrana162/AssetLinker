@@ -117,7 +117,7 @@ class PostDetail extends Component {
             case "buyer_seller":
                 user_type = "Buyer/Seller"
                 break;
-            case "consultant":
+            case "estate_agent":
                 user_type = "Consultant"
                 break;
             case "builder":

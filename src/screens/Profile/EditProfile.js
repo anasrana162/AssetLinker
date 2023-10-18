@@ -23,6 +23,7 @@ const width = Dimensions.get("screen").width
 const height = Dimensions.get("screen").height - HEIGHT
 import { listOfArea, Location_DHA_City, Location_Bahria } from '../Post/DataArrays';
 import DropDown from '../Post/Components/DropDown';
+import Toast from 'react-native-toast-message';
 
 {/* {---------------Redux Imports------------} */ }
 import { connect } from 'react-redux';
@@ -34,14 +35,19 @@ class EditProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            image: "NUll",
+            user_id: this.props?.userData?.user?.id,
+            image: this.props?.userData?.user?.image,
+            isImageUpdated: false,
             user_name: this.props?.userData?.user?.name,
             email: this.props?.userData?.user?.email,
-            prevWork: "",
-            experience: "",
-            office_name: "",
-            address: "",
-            description: "",
+            prevWork: this.props?.userData?.user?.detail[0]?.previous_work,
+            experience: this.props?.userData?.user?.detail[0]?.experience,
+            office_name: this.props?.userData?.user?.detail[0]?.office_name,
+            firm_name: this.props?.userData?.user?.detail[0]?.frim_name,
+            designation: this.props?.userData?.user?.detail[0]?.designation,
+            real_estate_name: this.props?.userData?.user?.detail[0]?.real_estate_name,
+            address: this.props?.userData?.user?.detail[0]?.address,
+            description: this.props?.userData?.user?.detail[0]?.description,
             location: {
                 "location": "Null",
                 "place": "Null",
@@ -61,15 +67,136 @@ class EditProfile extends Component {
                 this.props.navigation.pop()
                 break;
             case "save":
+                this.updateProfile()
                 // this.props.navigation.navigate("EditProfile")
                 break;
         }
     }
 
+    updateProfile = () => {
+        var { user_name, user_id, email, image, prevWork, experience, address, designation, description, office_name, real_estate_name, firm_name, locationMain } = this.state
+        var { userData: { user } } = this.props
+        // checking role
+        var obj = {}
+        if (user?.user_type == "buyer_seller") {
+            if (this.state.isImageUpdated == true) {
+
+                obj = {
+                    "user_id": user_id,
+                    "name": user_name,
+                    "email": email,
+                    "image": image,
+                    "office_name": office_name,
+                    "previous_work": prevWork,
+                    "experience": experience,
+                    "description": description,
+                    "address": address,
+                    "area": locationMain, //err
+                }
+            } else {
+                obj = {
+                    "user_id": user_id,
+                    "name": user_name,
+                    "email": email,
+                    "office_name": office_name,
+                    "previous_work": prevWork,
+                    "experience": experience,
+                    "description": description,
+                    "address": address,
+                    "area": locationMain, //err
+                }
+            }
+        }
+
+
+        if (user?.user_type == "estate_agent") {
+
+            if (this.state.isImageUpdated == true) {
+                obj = {
+                    "user_id": user_id,
+                    "name": user_name,
+                    "email": email,
+                    "image": image,
+                    "real_estate_name": real_estate_name,
+                    "description": description,
+                    "address": address,
+                    "designation": designation,
+                }
+            } else {
+                obj = {
+                    "user_id": user_id,
+                    "name": user_name,
+                    "email": email,
+                    // "image": image,
+                    "real_estate_name": real_estate_name,
+                    "description": description,
+                    "address": address,
+                    "designation": designation,
+                }
+            }
+        }
+
+        if (user?.user_type == "builder") {
+            if (this.state.isImageUpdated == true) {
+
+                obj = {
+                    "user_id": user_id,
+                    "name": user_name,
+                    "email": email,
+                    "image": image,
+                    "frim_name": firm_name,
+                    "description": description,
+                    "address": address,
+                    "designation": designation,
+                }
+            } else {
+                obj = {
+                    "user_id": user_id,
+                    "name": user_name,
+                    "email": email,
+                    "frim_name": firm_name,
+                    "description": description,
+                    "address": address,
+                    "designation": designation,
+                }
+            }
+        }
+        // var obj = {
+        //     "user_id": user_id,
+        //     "name": user_name,
+
+        //     "image": image,
+
+        //     "office_name": office_name,
+
+        //     "previous_work": prevWork,
+        //     "experience": experience,
+        //     "description": description,
+        //     "address": address,
+
+        // }
+        console.log("Final OBJ", obj)
+
+        AssetLinkers.post("update/user", obj).then((res) => {
+            if (res?.data) {
+                console.log("User Update Api Res: ", res?.data)
+                Toast.show({
+                    type: 'success',
+                    text1: 'User Updated Successfully',
+                    visibilityTime: 2000
+                });
+            }
+        }).catch((err) => {
+            console.log("USER UPDATE API ERROR:   ", err?.response)
+        })
+
+
+    }
+
     imageSelected = (uri) => {
         console.log("uri", uri)
         setImmediate(() => {
-            this.setState({ image: uri })
+            this.setState({ image: uri, isImageUpdated: true })
         })
     }
 
@@ -98,6 +225,22 @@ class EditProfile extends Component {
             case "office_name":
                 setImmediate(() => {
                     this.setState({ office_name: val })
+                })
+                break;
+            case "real_estate_name":
+                setImmediate(() => {
+                    this.setState({ real_estate_name: val })
+                })
+                break;
+
+            case "firm_name":
+                setImmediate(() => {
+                    this.setState({ firm_name: val })
+                })
+                break;
+            case "designation":
+                setImmediate(() => {
+                    this.setState({ designation: val })
                 })
                 break;
             case "address":
@@ -206,6 +349,11 @@ class EditProfile extends Component {
                         userNameValue={this.state.user_name}
                         emailValue={this.state.email}
                         prevWorkValue={this.state.prevWork}
+                        addressValue={this.state.address}
+                        officeNameValue={this.state.office_name}
+                        realEstateNameValue={this.state.real_estate_name}
+                        designationValue={this.state.designation}
+                        detailsValue={this.state.description}
                         expValue={this.state.experience}
                         openLocationDropdown={() => this.setState({ locationDropDownOpen: !this.state.locationDropDownOpen })}
                         location={this.state.location}
