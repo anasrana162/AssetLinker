@@ -106,7 +106,7 @@ class EditProfile extends Component {
         obj = {
           user_id: user_id,
           name: user_name,
-          //   email: email,
+          // email: email,
           image: image,
           office_name: office_name,
           previous_work: prevWork,
@@ -119,7 +119,7 @@ class EditProfile extends Component {
         obj = {
           user_id: user_id,
           name: user_name,
-          //   email: email,
+          // email: email,
           office_name: office_name,
           previous_work: prevWork,
           experience: experience,
@@ -135,7 +135,7 @@ class EditProfile extends Component {
         obj = {
           user_id: user_id,
           name: user_name,
-          //   email: email,
+          // email: email,
           image: image,
           real_estate_name: real_estate_name,
           description: description,
@@ -146,8 +146,8 @@ class EditProfile extends Component {
         obj = {
           user_id: user_id,
           name: user_name,
-          email: email,
-          // "image": image,
+          // email: email,
+          image: image,
           real_estate_name: real_estate_name,
           description: description,
           address: address,
@@ -161,7 +161,7 @@ class EditProfile extends Component {
         obj = {
           user_id: user_id,
           name: user_name,
-          //   email: email,
+          // email: email,
           image: image,
           frim_name: firm_name,
           description: description,
@@ -172,7 +172,7 @@ class EditProfile extends Component {
         obj = {
           user_id: user_id,
           name: user_name,
-          //   email: email,
+          // email: email,
           frim_name: firm_name,
           description: description,
           address: address,
@@ -210,7 +210,7 @@ class EditProfile extends Component {
         }
       })
       .catch((err) => {
-        console.log("USER UPDATE API ERROR:   ", err?.response);
+        console.log("USER UPDATE API ERROR:   ", err);
       });
   };
 

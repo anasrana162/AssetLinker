@@ -19,12 +19,12 @@ import Post from "../screens/Post/Post";
 import Otp from "../screens/Authentication/Otp";
 import MyProfile from "../screens/Profile/MyProfile";
 import PostDetail from "../screens/Dash/PostDetail";
-import UserProfileDetail from "../screens/Dash/UserProfileDetail";
 import EditProfile from "../screens/Profile/EditProfile";
 import Favourite from "../screens/Favourite/Favourite";
 import Account from "../screens/Account/Account";
 import { Colors } from "../config";
 import AccountsList from "../screens/Account/AccountsList";
+import AccountDetail from "../screens/Account/AccountDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,11 +56,11 @@ export default Navigation = () => {
         <Stack.Screen name="Post" component={Post} />
         <Stack.Screen name="PostDetail" component={PostDetail} />
         <Stack.Screen name="MyProfile" component={MyProfile} />
-        <Stack.Screen name="UserProfileDetail" component={UserProfileDetail} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="Favourite" component={Favourite} />
         <Stack.Screen name="AccountsList" component={AccountsList} />
         <Stack.Screen name="Account" component={Account} />
+        <Stack.Screen name="AccountDetail" component={AccountDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

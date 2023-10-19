@@ -11,6 +11,9 @@ import { Colors } from "../../config";
 import { Image } from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
 import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { FlatList } from "react-native";
+import { ImagePath } from "../../api/AssetLinkers";
 
 const {
   StatusBarManager: { HEIGHT },
@@ -18,13 +21,20 @@ const {
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height - HEIGHT;
 
-const AccountsList = () => {
+const AccountsList = ({ route }) => {
+  const data = route.params.data;
+  // console.log(data, "~~~~~~~~~~~~~");
+
   return (
     <View style={styles.mainContainer}>
       <SearchBar />
-      <CustomerContainer />
-      <CustomerContainer />
-      <CustomerContainer />
+      <FlatList
+        data={data}
+        renderItem={({ item, index }) => {
+          console.log(item, "~~~~~~ITEM~~~~~~~");
+          return <CustomerContainer data={item} key={index} />;
+        }}
+      />
     </View>
   );
 };
@@ -42,80 +52,44 @@ const SearchBar = ({ onChangeText }) => (
   </View>
 );
 
-const CustomerContainer = () => (
-  <View
-    style={{
-      width: width - 20,
-      height: 80,
-      borderBottomColor: "#ddd",
-      borderBottomWidth: 1,
-      // borderRadius: 10,
-      // elevation: 3,
-      // backgroundColor: "#eee",
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-      paddingHorizontal: 10,
-    }}
-  >
-    <View style={{ width: "22%" }}>
-      <Image
-        source={require("../../../assets/profile.jpg")}
-        style={{ width: 60, height: 60, borderRadius: 10 }}
-      />
-    </View>
+const CustomerContainer = ({ data }) => {
+  const navigation = useNavigation();
+  return (
+    <View style={styles.customerMain}>
+      <View style={{ width: "22%" }}>
+        <Image
+          source={
+            data?.image
+              ? { uri: `${ImagePath}/${data?.image}` }
+              : require("../../../assets/placeholder.jpeg")
+          }
+          style={styles.img}
+        />
+      </View>
 
-    <View style={{ width: "48%", rowGap: 10 }}>
-      <Text style={{ color: "#000", fontWeight: "300", fontSize: 18 }}>
-        Mansoor Akhter
-      </Text>
-      <View
-        style={{
-          backgroundColor: Colors.blue,
-          borderRadius: 20,
-          width: 120,
-        }}
-      >
-        <Text
-          style={{
-            color: "#fff",
-            textTransform: "capitalize",
-            // paddingHorizontal: 15,
-            paddingVertical: 3,
-            textAlign: "center",
-          }}
+      <View style={styles.box2}>
+        <Text style={styles.name}>{data?.name}</Text>
+        <View style={styles.tagContainer}>
+          <Text style={styles.tagLabel}>
+            {data?.user_type.replace("_", " ")}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.box3}>
+        <Text style={styles.msID}>MS #{data?.ms_id}</Text>
+        <TouchableOpacity
+          onPress={() => navigation.push("AccountDetail", { data })}
+          activeOpacity={0.5}
+          style={styles.viewBTN}
         >
-          buyer / seller
-        </Text>
+          <Text style={styles.viewBTNlabel}>View Project</Text>
+          <Entypo name="chevron-thin-right" size={14} color={Colors.blue} />
+        </TouchableOpacity>
       </View>
     </View>
-
-    <View style={{ width: "30%", rowGap: 10 }}>
-      <Text style={{ color: "#0008", fontWeight: "600", fontSize: 16 }}>
-        MS #05989
-      </Text>
-      <TouchableOpacity
-        activeOpacity={0.5}
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text
-          style={{
-            color: Colors.blue,
-            fontWeight: "400",
-            fontSize: 14,
-          }}
-        >
-          View Project
-        </Text>
-        <Entypo name="chevron-thin-right" size={14} color={Colors.blue} />
-      </TouchableOpacity>
-    </View>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -139,5 +113,45 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 50,
     paddingHorizontal: 20,
+  },
+  customerMain: {
+    width: width - 20,
+    height: 80,
+    borderBottomColor: "#ddd",
+    borderBottomWidth: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 10,
+  },
+  img: { width: 60, height: 60, borderRadius: 10 },
+  name: { color: "#000", fontWeight: "600", fontSize: 16 },
+  tagContainer: {
+    backgroundColor: Colors.blue,
+    borderRadius: 20,
+    width: 100,
+  },
+  tagLabel: {
+    color: "#fff",
+    fontSize: 12,
+    textTransform: "capitalize",
+    paddingVertical: 3,
+    textAlign: "center",
+  },
+  msID: {
+    color: "#0005",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  box2: { width: "48%", rowGap: 15 },
+  box3: { width: "30%", rowGap: 15, paddingLeft: 15 },
+  viewBTN: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  viewBTNlabel: {
+    color: Colors.blue,
+    fontWeight: "400",
+    fontSize: 14,
   },
 });
