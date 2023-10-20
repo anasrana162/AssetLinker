@@ -1,433 +1,504 @@
 import {
-    Text,
-    View,
-    Dimensions,
-    StatusBar,
-    Image,
-    FlatList,
-    TouchableOpacity,
-    ScrollView,
-    Linking,
-    RefreshControl,
-    StyleSheet,
-    NativeModules,
-    Modal,
-    Platform,
-} from 'react-native';
-import React, { Component } from 'react'
+  Text,
+  View,
+  Dimensions,
+  StatusBar,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+  Linking,
+  RefreshControl,
+  StyleSheet,
+  NativeModules,
+  Modal,
+  Platform,
+} from "react-native";
+import React, { Component } from "react";
 
-const { StatusBarManager: { HEIGHT } } = NativeModules;
-const width = Dimensions.get("screen").width
-const height = Dimensions.get("screen").height - HEIGHT
+const {
+  StatusBarManager: { HEIGHT },
+} = NativeModules;
+const width = Dimensions.get("screen").width;
+const height = Dimensions.get("screen").height - HEIGHT;
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-{/* {---------------Redux Imports------------} */ }
-import { connect } from 'react-redux';
-import * as userActions from "../../redux/actions/user"
-import { bindActionCreators } from 'redux';
-import ImageViewer from './Components/ImageViewer';
+{
+  /* {---------------Redux Imports------------} */
+}
+import { connect } from "react-redux";
+import * as userActions from "../../redux/actions/user";
+import { bindActionCreators } from "redux";
+import ImageViewer from "./Components/ImageViewer";
 
-import { Colors } from '../../config';
-import moment from 'moment';
-import UserProfileButton from './Components/UserProfileButton';
-import BottomBar from './Components/BottomBar';
-import AssetLinkers from '../../api/AssetLinkers';
+import { Colors } from "../../config";
+import moment from "moment";
+import UserProfileButton from "./Components/UserProfileButton";
+import BottomBar from "./Components/BottomBar";
+import AssetLinkers from "../../api/AssetLinkers";
 
 class PostDetail extends Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props);
+    this.state = {
+      position: 0,
+    };
+  }
 
-        this.state = {
-            position: 0,
-        };
-    }
-
-
-    onPress = (key) => {
-        var { postData } = this.props?.route?.params
-        switch (key) {
-            case "goback":
-                this.props.navigation.navigate("Dash",{refresh:"refresh"})
-                break;
-            case "share":
-                Linking.openURL(
-                    `https://assetslinkers.com`,
-                )
-                break;
-            case "openUserDetail":
-                this.props.navigation.navigate("UserProfileDetail", {
-                    user_id: postData?.user_id,
-                    name: postData?.name,
-                    image: "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/userProfile/" + postData?.image,
-                    member_since: moment(postData?.member_since).format("YYYY-MM-DD"),
-                })
-                break;
-        }
-    }
-
-
-    componentDidMount = () => {
-        this.runSlideShow()
-        this.AddView()
-    }
-
-    runSlideShow = () => {
-        var { postData } = this.props?.route?.params
-
-        this.setState({
-            interval: setInterval(() => {
-                this.setState({
-                    position: this.state.position === postData?.post_images.length ? 0 : this.state.position + 1
-                });
-            }, 2000)
+  onPress = (key) => {
+    var { image, name, member_since, user_id } =
+      this.props?.route?.params?.data;
+    switch (key) {
+      case "goback":
+        this.props.navigation.navigate("Dash", { refresh: "refresh" });
+        break;
+      case "share":
+        Linking.openURL(`https://assetslinkers.com`);
+        break;
+      case "openUserDetail":
+        this.props.navigation.navigate("AccountDetail", {
+          user_id: user_id,
+          created_at: member_since,
+          image: image,
+          name: name,
         });
+        break;
+    }
+  };
+
+  componentDidMount = () => {
+    this.runSlideShow();
+    this.AddView();
+  };
+
+  runSlideShow = () => {
+    var { data } = this.props?.route?.params;
+
+    this.setState({
+      interval: setInterval(() => {
+        this.setState({
+          position:
+            this.state.position === data?.post_images.length
+              ? 0
+              : this.state.position + 1,
+        });
+      }, 2000),
+    });
+  };
+
+  AddView = () => {
+    var {
+      data: { id, user_id },
+    } = this.props?.route?.params;
+    var {
+      userData: { user },
+    } = this.props;
+
+    if (user_id !== user?.id) {
+      AssetLinkers.post("postViews", {
+        post_id: id,
+      })
+        .then((res) => {
+          console.log("View Added");
+        })
+        .catch((err) => {
+          console.log("Add Views Api Error", err?.response);
+        });
+    } else {
+      console.log("The user is the post creator no view added");
+    }
+  };
+
+  componentWillUnmount = () => {
+    clearInterval(this.state.interval);
+  };
+
+  render() {
+    var { data, location, subLocation } = this.props?.route?.params;
+
+    var user_type = "";
+    switch (data?.user_type) {
+      case "buyer_seller":
+        user_type = "Buyer/Seller";
+        break;
+      case "estate_agent":
+        user_type = "Consultant";
+        break;
+      case "builder":
+        user_type = "Builder";
+        break;
     }
 
-    AddView = () => {
-        var { postData: { id, user_id } } = this.props?.route?.params
-        var { userData: { user } } = this.props
+    console.log(
+      "==============================>>>>",
+      this.props?.route?.params?.data.images
+    );
 
-        if (user_id !== user?.id) {
-            AssetLinkers.post("postViews", {
-                post_id: id
-            }).then((res) => {
-                console.log("View Added")
-            }).catch((err) => {
-                console.log("Add Views Api Error", err?.response)
-            })
-        } else {
-            console.log("The user is the post creator no view added")
-        }
+    return (
+      <View style={styles.mainContainer}>
+        {/* Header */}
+        <View style={styles.headerCont}>
+          {/* Go back */}
+          <TouchableOpacity
+            style={[styles.headerBtn, { marginLeft: 5 }]}
+            onPress={() => this.onPress("goback")}
+          >
+            <Ionicons name="chevron-back" size={30} color="white" />
+          </TouchableOpacity>
 
+          {/* Share Button */}
+          <TouchableOpacity
+            style={[styles.headerBtn, { marginRight: 15 }]}
+            onPress={() => this.onPress("share")}
+          >
+            <Ionicons name="share-social" size={30} color="white" />
+          </TouchableOpacity>
+        </View>
 
-    }
-    componentWillUnmount = () => {
-        clearInterval(this.state.interval);
-    }
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Images Viewer */}
+          <ImageViewer
+            Images={data?.post_images}
+            position={this.state.position}
+          />
 
+          {/* Information */}
 
-    render() {
+          {/* Property Type */}
+          <Text style={styles.propertyTypeText}>{data?.property_type}</Text>
 
-        var { postData, location, subLocation } = this.props?.route?.params
+          {/* Price */}
+          <Text style={styles.priceText}>Price: {data?.price} PKR</Text>
 
-        var user_type = ""
-        switch (postData?.user_type) {
-            case "buyer_seller":
-                user_type = "Buyer/Seller"
-                break;
-            case "estate_agent":
-                user_type = "Consultant"
-                break;
-            case "builder":
-                user_type = "Builder"
-                break;
-        }
-        // console.log("location", subLocation)
-        return (
-            <View style={styles.mainContainer}>
+          {/* Main Features */}
+          <Text style={styles.posted_at}>Main Features:</Text>
+          <Text
+            style={[
+              styles.main_features_text,
+              { fontWeight: "300", fontSize: 15 },
+            ]}
+          >
+            {data?.main_features}
+          </Text>
 
-                {/* Header */}
-                <View style={styles.headerCont}>
+          {/* Location */}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginTop: 10,
+              paddingHorizontal: 10,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                width: "60%",
+              }}
+            >
+              <Ionicons
+                name="location-sharp"
+                color={Colors.black}
+                size={22}
+                style={{ marginTop: 7 }}
+              />
+              <Text
+                style={[
+                  styles.posted_at,
+                  { marginLeft: 0, fontWeight: "400", fontSize: 14 },
+                ]}
+              >
+                {location}
+              </Text>
+            </View>
 
-                    {/* Go back */}
-                    <TouchableOpacity
-                        style={[styles.headerBtn, { marginLeft: 5, }]}
-                        onPress={() => this.onPress("goback")}
-                    >
-                        <Ionicons name="chevron-back" size={30} color="white" />
-                    </TouchableOpacity>
+            {/* Posted At */}
+            <Text
+              style={[styles.posted_at, { fontWeight: "400", fontSize: 14 }]}
+            >
+              Posted: {moment(data?.created_at).format("YYYY-MM-DD")}
+            </Text>
+          </View>
 
-                    {/* Share Button */}
-                    <TouchableOpacity
-                        style={[styles.headerBtn, { marginRight: 15, }]}
-                        onPress={() => this.onPress("share")}
-                    >
-                        <Ionicons name="share-social" size={30} color="white" />
-                    </TouchableOpacity>
-                </View>
+          {/* More Detail */}
+          <View style={styles.moreDetailCont}>
+            {/* More Details Title */}
+            <Text
+              style={[
+                styles.propertyTypeText,
+                { fontSize: 22, marginBottom: 10 },
+              ]}
+            >
+              More Details
+            </Text>
 
-                <ScrollView
-                    showsVerticalScrollIndicator={false}
-                >
+            {/* GRID */}
 
-                    {/* Images Viewer */}
-                    <ImageViewer Images={postData?.post_images} position={this.state.position} />
+            {/* Plot Category */}
+            {data?.category !== "Null" && (
+              <View style={styles.inner_moreDetailCont}>
+                <Text style={styles.gridText1}>{data?.category}</Text>
+                <Text style={styles.gridText2}>Plot Category</Text>
+              </View>
+            )}
 
-                    {/* Information */}
+            {/* Sale/Rent*/}
+            {data?.rent_sale !== "Null" && (
+              <View style={styles.inner_moreDetailCont}>
+                <Text style={styles.gridText1}>{data?.rent_sale}</Text>
+                <Text style={styles.gridText2}>Sale/Rent</Text>
+              </View>
+            )}
 
-                    {/* Property Type */}
-                    <Text style={styles.propertyTypeText}>{postData?.property_type}</Text>
+            {/* Area Unit */}
+            {data?.area_unit !== "Null" && (
+              <View style={styles.inner_moreDetailCont}>
+                <Text style={styles.gridText1}>{data?.area_unit}</Text>
+                <Text style={styles.gridText2}>Area Unit</Text>
+              </View>
+            )}
 
-                    {/* Price */}
-                    <Text style={styles.priceText}>Price: {postData?.price} PKR</Text>
+            {/* Yards*/}
+            {data?.yards !== "Null" && (
+              <View style={styles.inner_moreDetailCont}>
+                <Text style={styles.gridText1}>{data?.yards}</Text>
+                <Text style={styles.gridText2}>Yards</Text>
+              </View>
+            )}
 
-                    {/* Posted At */}
-                    <Text style={styles.posted_at}>Posted: {moment(postData?.created_at).format("YYYY-MM-DD")}</Text>
+            {/* Location */}
+            {location !== "Null" && (
+              <View style={styles.inner_moreDetailCont}>
+                <Text style={styles.gridText1}>{location}</Text>
+                <Text style={styles.gridText2}>Location</Text>
+              </View>
+            )}
 
-                    {/* Main Features */}
-                    <Text style={styles.posted_at}>Main Features:</Text>
-                    <Text style={styles.main_features_text}>{postData?.main_features}</Text>
+            {/* Sub Location */}
+            {subLocation !== "Null" && (
+              <View style={styles.inner_moreDetailCont}>
+                <Text style={styles.gridText1}>{subLocation}</Text>
+                <Text style={styles.gridText2}>Sub Location</Text>
+              </View>
+            )}
 
-                    {/* Location */}
-                    <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 10, marginTop: 10 }}>
-                        <Ionicons name='location-sharp' color={Colors.blue} size={22} style={{ marginTop: 7 }} />
-                        < Text style={[styles.posted_at, { marginLeft: 0 }]}>{location}</Text>
-                    </View>
+            {/* Construction Status */}
 
-                    {/* More Detail */}
+            {/* Corner West or east option */}
 
-                    <View style={styles.moreDetailCont}>
-                        {/* More Details Title */}
-                        <Text style={[styles.propertyTypeText, { fontSize: 22, marginBottom: 10 }]}>More Details</Text>
+            <View style={styles.inner_moreDetailCont}>
+              <Text
+                numberOfLines={2}
+                style={[styles.gridText1, { width: 100 }]}
+              >
+                {data?.corner}, {data?.open}
+              </Text>
+              <Text style={styles.gridText2}>Construction Staus</Text>
+            </View>
 
-                        {/* GRID */}
+            {/* Rooms */}
+            {data?.rooms !== "Null" && (
+              <View style={styles.inner_moreDetailCont}>
+                <Text style={styles.gridText1}>{data?.rooms}</Text>
+                <Text style={styles.gridText2}>Rooms</Text>
+              </View>
+            )}
 
-                        {/* Plot Category */}
-                        {postData?.category !== "Null" &&
-                            < View style={styles.inner_moreDetailCont}>
-                                <Text style={styles.gridText1}>{postData?.category}</Text>
-                                <Text style={styles.gridText2}>Plot Category</Text>
-                            </View>}
+            {/* Bedrooms */}
+            {data?.bedrooms !== "Null" && (
+              <View style={styles.inner_moreDetailCont}>
+                <Text style={styles.gridText1}>{data?.bedrooms}</Text>
+                <Text style={styles.gridText2}>Bedrooms</Text>
+              </View>
+            )}
 
-                        {/* Sale/Rent*/}
-                        {postData?.rent_sale !== "Null" &&
-                            < View style={styles.inner_moreDetailCont}>
-                                <Text style={styles.gridText1}>{postData?.rent_sale}</Text>
-                                <Text style={styles.gridText2}>Sale/Rent</Text>
-                            </View>}
+            {/* Bathrooms */}
+            {data?.bathrooms !== "Null" && (
+              <View style={styles.inner_moreDetailCont}>
+                <Text style={styles.gridText1}>{data?.bathrooms}</Text>
+                <Text style={styles.gridText2}>Bathrooms</Text>
+              </View>
+            )}
 
-                        {/* Area Unit */}
-                        {postData?.area_unit !== "Null" &&
-                            < View style={styles.inner_moreDetailCont}>
-                                <Text style={styles.gridText1}>{postData?.area_unit}</Text>
-                                <Text style={styles.gridText2}>Area Unit</Text>
-                            </View>}
+            {/* Rooms */}
+            {data?.phase !== "Null" && (
+              <View style={styles.inner_moreDetailCont}>
+                <Text style={styles.gridText1}>{data?.phase}</Text>
+                <Text style={styles.gridText2}>Phase</Text>
+              </View>
+            )}
 
-                        {/* Yards*/}
-                        {postData?.yards !== "Null" &&
-                            < View style={styles.inner_moreDetailCont}>
-                                <Text style={styles.gridText1}>{postData?.yards}</Text>
-                                <Text style={styles.gridText2}>Yards</Text>
-                            </View>}
+            {/* Furnished */}
+            {data?.furnished !== "Null" && (
+              <View style={styles.inner_moreDetailCont}>
+                <Text style={styles.gridText1}>{data?.furnished}</Text>
+                <Text style={styles.gridText2}>Furnished</Text>
+              </View>
+            )}
+          </View>
 
-                        {/* Location */}
-                        {location !== "Null" &&
-                            < View style={styles.inner_moreDetailCont}>
-                                <Text style={styles.gridText1}>{location}</Text>
-                                <Text style={styles.gridText2}>Location</Text>
-                            </View>}
+          {/* Description */}
+          <Text style={styles.posted_at}>Description:</Text>
+          <Text style={styles.main_features_text}>{data?.details}</Text>
 
-                        {/* Sub Location */}
-                        {subLocation !== "Null" &&
-                            < View style={styles.inner_moreDetailCont}>
-                                <Text style={styles.gridText1}>{subLocation}</Text>
-                                <Text style={styles.gridText2}>Sub Location</Text>
-                            </View>}
+          {/* MSID */}
+          <Text style={styles.posted_at}>MSID: lnf654</Text>
 
-                        {/* Construction Status */}
+          {/* User Type Button */}
+          <TouchableOpacity
+            onPress={() => this.onPress("openUserDetail")}
+            style={styles.user_type_btn}
+          >
+            <Text style={styles.user_type_btn_text}>{user_type}</Text>
+          </TouchableOpacity>
 
-                        {/* Corner West or east option */}
+          {/* Address */}
+          {data?.address !== "Null" && (
+            <>
+              <Text style={styles.posted_at}>Address:</Text>
+              <Text
+                style={[
+                  styles.main_features_text,
+                  { fontWeight: "400", fontSize: 15 },
+                ]}
+              >
+                {data?.address}
+              </Text>
+            </>
+          )}
 
-                        < View style={styles.inner_moreDetailCont}>
-                            <Text numberOfLines={2} style={[styles.gridText1, { width: 100 }]}>{postData?.corner}, {postData?.open}</Text>
-                            <Text style={styles.gridText2}>Construction Staus</Text>
-                        </View>
+          <UserProfileButton navProps={this.props.navigation} data={data} />
+        </ScrollView>
 
-                        {/* Rooms */}
-                        {postData?.rooms !== "Null" &&
-                            < View style={styles.inner_moreDetailCont}>
-                                <Text style={styles.gridText1}>{postData?.rooms}</Text>
-                                <Text style={styles.gridText2}>Rooms</Text>
-                            </View>}
-
-                        {/* Bedrooms */}
-                        {postData?.bedrooms !== "Null" &&
-                            < View style={styles.inner_moreDetailCont}>
-                                <Text style={styles.gridText1}>{postData?.bedrooms}</Text>
-                                <Text style={styles.gridText2}>Bedrooms</Text>
-                            </View>}
-
-                        {/* Bathrooms */}
-                        {postData?.bathrooms !== "Null" &&
-                            < View style={styles.inner_moreDetailCont}>
-                                <Text style={styles.gridText1}>{postData?.bathrooms}</Text>
-                                <Text style={styles.gridText2}>Bathrooms</Text>
-                            </View>}
-
-                        {/* Rooms */}
-                        {postData?.phase !== "Null" &&
-                            < View style={styles.inner_moreDetailCont}>
-                                <Text style={styles.gridText1}>{postData?.phase}</Text>
-                                <Text style={styles.gridText2}>Phase</Text>
-                            </View>}
-
-                        {/* Furnished */}
-                        {postData?.furnished !== "Null" &&
-                            < View style={styles.inner_moreDetailCont}>
-                                <Text style={styles.gridText1}>{postData?.furnished}</Text>
-                                <Text style={styles.gridText2}>Furnished</Text>
-                            </View>}
-
-                    </View>
-
-                    {/* Description */}
-                    <Text style={styles.posted_at}>Description:</Text>
-                    <Text style={styles.main_features_text}>{postData?.details}</Text>
-
-                    {/* MSID */}
-                    <Text style={styles.posted_at}>MSID: lnf654</Text>
-
-                    {/* User Type Button */}
-                    <TouchableOpacity
-                        onPress={() => this.onPress("openUserDetail")}
-                        style={styles.user_type_btn}>
-                        <Text style={styles.user_type_btn_text}>{user_type}</Text>
-                    </TouchableOpacity>
-
-                    {/* Address */}
-                    {postData?.address !== "Null" &&
-                        <>
-                            <Text style={styles.posted_at}>Address:</Text>
-                            <Text style={styles.main_features_text}>{postData?.address}</Text>
-                        </>}
-
-                    <UserProfileButton
-                        navProps={this.props.navigation}
-                        data={postData}
-                    />
-
-                </ScrollView>
-
-                <BottomBar navProps={this.props.navigation} user_cellno={postData?.phone} />
-
-            </View >
-        )
-    }
+        <BottomBar navProps={this.props.navigation} user_cellno={data?.phone} />
+      </View>
+    );
+  }
 }
 
-
-{/* {---------------redux State ------------} */ }
-const mapStateToProps = state => ({
-    userData: state.userData
+{
+  /* {---------------redux State ------------} */
+}
+const mapStateToProps = (state) => ({
+  userData: state.userData,
 });
 
-{/* {---------------redux Actions ------------} */ }
-const ActionCreators = Object.assign(
-    {},
-    userActions,
-);
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
+{
+  /* {---------------redux Actions ------------} */
+}
+const ActionCreators = Object.assign({}, userActions);
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(ActionCreators, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostDetail)
+export default connect(mapStateToProps, mapDispatchToProps)(PostDetail);
 
 const styles = StyleSheet.create({
-    mainContainer: {
-        flex: 1,
-        width: width,
-        height: height,
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-        backgroundColor: "white"
-    },
-    headerCont: {
-        width: width,
-        height: 45,
-        paddingVertical: 5,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        position: "absolute",
-        top: 0,
-        zIndex: 200,
-        backgroundColor: Colors.fadedBackground
-    },
-    headerBtn: {
-        width: 45,
-        height: 45,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 30,
+  mainContainer: {
+    flex: 1,
+    width: width,
+    height: height,
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    backgroundColor: "white",
+  },
+  headerCont: {
+    width: width,
+    height: 45,
+    paddingVertical: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    position: "absolute",
+    top: 0,
+    zIndex: 200,
+    backgroundColor: Colors.fadedBackground,
+  },
+  headerBtn: {
+    width: 45,
+    height: 45,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
+  },
 
-    },
+  moreDetailCont: {
+    width: width - 40,
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    borderWidth: 1,
+    borderTopLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    marginTop: 20,
+    paddingBottom: 10,
+  },
+  inner_moreDetailCont: {
+    width: "90%",
+    flexDirection: "row",
+    alignSelf: "center",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 5,
+  },
+  user_type_btn: {
+    width: width - 40,
+    height: 45,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    backgroundColor: Colors.blue,
+    borderRadius: 10,
+    marginVertical: 15,
+  },
+  user_type_btn_text: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "white",
+  },
+  gridText1: {
+    fontSize: 16,
+    fontWeight: "400",
+    color: Colors.black,
+  },
+  gridText2: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.black,
+  },
+  propertyTypeText: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: Colors.black,
+    marginTop: 20,
+    marginLeft: 10,
+  },
+  priceText: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: Colors.black,
+    marginTop: 10,
+    marginLeft: 10,
+  },
 
-    moreDetailCont: {
-        width: width - 40,
-        alignSelf: "center",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        borderWidth: 1,
-        borderTopLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        marginTop: 20,
-        paddingBottom: 10,
-    },
-    inner_moreDetailCont: {
-        width: "90%",
-        flexDirection: "row",
-        alignSelf: "center",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 5,
+  posted_at: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: Colors.black,
+    marginTop: 10,
+    marginLeft: 10,
+  },
 
-    },
-    user_type_btn: {
-        width: width - 40,
-        height: 45,
-        justifyContent: "center",
-        alignItems: "center",
-        alignSelf: "center",
-        backgroundColor: Colors.blue,
-        borderRadius: 10,
-        marginVertical: 15
-    },
-    user_type_btn_text: {
-        fontSize: 18,
-        fontWeight: "700",
-        color: "white"
-    },
-    gridText1: {
-        fontSize: 16,
-        fontWeight: "400",
-        color: Colors.black
-    },
-    gridText2: {
-        fontSize: 16,
-        fontWeight: "600",
-        color: Colors.black
-    },
-    propertyTypeText: {
-        fontSize: 26,
-        fontWeight: "700",
-        color: Colors.black,
-        marginTop: 20,
-        marginLeft: 10,
-    },
-    priceText: {
-        fontSize: 20,
-        fontWeight: "600",
-        color: Colors.black,
-        marginTop: 10,
-        marginLeft: 10,
-    },
-
-    posted_at: {
-        fontSize: 18,
-        fontWeight: "600",
-        color: Colors.black,
-        marginTop: 10,
-        marginLeft: 10,
-    },
-
-    main_features_text: {
-        fontSize: 18,
-        fontWeight: "500",
-        color: Colors.black,
-        marginTop: 5,
-        marginLeft: 10,
-        width: width - 40,
-    }
-})
+  main_features_text: {
+    fontSize: 15,
+    fontWeight: "400",
+    color: Colors.black,
+    marginTop: 5,
+    marginBottom: 10,
+    marginLeft: 10,
+    width: width - 40,
+  },
+});

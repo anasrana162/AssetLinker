@@ -48,9 +48,9 @@ class AccountDetail extends Component {
 
   getUserPosts = async () => {
     console.log("Working");
-    const { id } = this.props?.route?.params?.data;
+    const { user_id } = this.props?.route?.params;
     try {
-      const res = await AssetLinkers.get(`get_property/${id}`);
+      const res = await AssetLinkers.get(`get_property/${user_id}`);
       if (res?.data) {
         console.log("Get User Post api Data:  ", res?.data?.property);
         this.setState({
@@ -153,7 +153,7 @@ class AccountDetail extends Component {
         if (res?.data) {
           this.getPosts();
           this.setState({
-            openDeletePostModal: false,
+            // openDeletePostModal: false,
             Posts: null,
           });
           Toast.show({
@@ -175,14 +175,13 @@ class AccountDetail extends Component {
   };
 
   render() {
-    var { user_id, id, name, image, created_at } =
-      this.props?.route?.params?.data;
-    const memberSince = moment(created_at).format("DD/MM/YYYY");
+    var { user_id, name, image, created_at } = this.props?.route?.params;
+    const memberSince = moment(created_at).format("YYYY/MM/DD");
 
     console.log(memberSince);
 
-    console.log(id, "~~~~~~~~~~~~~");
-
+    console.log(user_id, "~~~~~~~~~~~~~", memberSince);
+    console.log("-----------+_+_+_+_+-------------", this.props?.route?.params);
     return (
       <View style={styles.mainContainer}>
         <ScrollView>
@@ -209,13 +208,23 @@ class AccountDetail extends Component {
             />
             <View style={styles.inner_cont}>
               <Text style={styles.text}>{name}</Text>
-              <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  columnGap: 5,
+                }}
+              >
                 <Text
-                  style={[styles.text, { fontSize: 15, fontWeight: "300" }]}
+                  style={[styles.text, { fontSize: 13, fontWeight: "300" }]}
                 >
                   Member Since:
                 </Text>
-                <Text style={styles.text}>{memberSince}</Text>
+                <Text
+                  style={[styles.text, { fontSize: 13, fontWeight: "300" }]}
+                >
+                  {memberSince}
+                </Text>
               </View>
             </View>
           </View>
@@ -225,12 +234,11 @@ class AccountDetail extends Component {
             {/* Title */}
             <Text style={styles.headerTitle}>Projects</Text>
           </View>
-
           {/* Posts Component */}
           <AllPosts
+            userID={user_id}
             data={this.state.Posts}
             navProps={this.props.navigation}
-            userID={id}
             openDeletePostModal={(postID) => this.openDeletePostModal(postID)}
             onFavPress={(id, postID, is_favourite) =>
               this.addToFavourite(id, postID, is_favourite)

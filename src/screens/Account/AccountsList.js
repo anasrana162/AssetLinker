@@ -54,6 +54,7 @@ const SearchBar = ({ onChangeText }) => (
 
 const CustomerContainer = ({ data }) => {
   const navigation = useNavigation();
+  const { user_id, created_at } = data?.detail[0];
   return (
     <View style={styles.customerMain}>
       <View style={{ width: "22%" }}>
@@ -79,7 +80,14 @@ const CustomerContainer = ({ data }) => {
       <View style={styles.box3}>
         <Text style={styles.msID}>MS #{data?.ms_id}</Text>
         <TouchableOpacity
-          onPress={() => navigation.push("AccountDetail", { data })}
+          onPress={() =>
+            navigation.push("AccountDetail", {
+              user_id: user_id,
+              created_at: created_at,
+              image: data?.image,
+              name: data?.name,
+            })
+          }
           activeOpacity={0.5}
           style={styles.viewBTN}
         >
