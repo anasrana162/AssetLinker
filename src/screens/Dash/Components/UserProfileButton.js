@@ -20,14 +20,7 @@ const UserProfileButton = ({ navProps, data }) => {
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={() =>
-        navProps.navigate("UserProfileDetail", {
-          user_id: data?.user_id,
-          name: data?.name,
-          image:
-            "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/userProfile/" +
-            data?.image,
-          member_since: moment(data?.member_since).format("YYYY-MM-DD"),
-        })
+        navProps.navigate("UserProfileDetail", { user_id: data?.user_id })
       }
       style={styles.mainContainer}
     >

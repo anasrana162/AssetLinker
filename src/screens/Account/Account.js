@@ -10,6 +10,7 @@ import React, { Component } from "react";
 import Colors from "../../config/Colors";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AssetLinkers from "../../api/AssetLinkers";
+import LoadingModal from "../../components/LoadingModal";
 
 const {
   StatusBarManager: { HEIGHT },
@@ -91,12 +92,16 @@ export default class Account extends Component {
       </TouchableOpacity>
     );
 
+    const loading = this.state.all.length > 0 ? false : true;
     return (
-      <View style={styles.mainContainer}>
-        {accountCategory.map((catName, index) => (
-          <LongButton label={catName} key={index} />
-        ))}
-      </View>
+      <>
+        <LoadingModal loading={loading} />
+        <View style={styles.mainContainer}>
+          {accountCategory.map((catName, index) => (
+            <LongButton label={catName} key={index} />
+          ))}
+        </View>
+      </>
     );
   }
 }

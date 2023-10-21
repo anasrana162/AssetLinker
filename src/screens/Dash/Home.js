@@ -36,6 +36,7 @@ import Slideshow from "react-native-image-slider-show";
 import TabNavigator from "../../components/TabNavigator";
 import AllPosts from "./Components/AllPosts";
 import Toast from "react-native-toast-message";
+import { ActivityIndicator } from "react-native";
 
 class Dash extends Component {
   constructor(props) {
@@ -245,16 +246,24 @@ class Dash extends Component {
           />
 
           {/* Posts Component */}
-          <AllPosts
-            data={this.state.Posts}
-            navProps={this.props.navigation}
-            userID={this.props.userData?.user?.id}
-            openDeletePostModal={(postID) => this.openDeletePostModal(postID)}
-            onFavPress={(user_id, postID, is_favourite) =>
-              this.addToFavourite(user_id, postID, is_favourite)
-            }
-            // isFav={}
-          />
+          {this?.state?.Posts ? (
+            <AllPosts
+              data={this.state.Posts}
+              navProps={this.props.navigation}
+              userID={this.props.userData?.user?.id}
+              openDeletePostModal={(postID) => this.openDeletePostModal(postID)}
+              onFavPress={(user_id, postID, is_favourite) =>
+                this.addToFavourite(user_id, postID, is_favourite)
+              }
+              // isFav={}
+            />
+          ) : (
+            <ActivityIndicator
+              size="large"
+              color={Colors.blue}
+              style={{ marginTop: 90 }}
+            />
+          )}
         </ScrollView>
 
         {/* Modal Delete Post */}

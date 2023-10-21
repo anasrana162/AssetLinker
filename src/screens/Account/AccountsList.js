@@ -5,15 +5,16 @@ import {
   View,
   NativeModules,
   Dimensions,
+  Image,
+  TouchableOpacity,
+  FlatList,
 } from "react-native";
 import React from "react";
 import { Colors } from "../../config";
-import { Image } from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
-import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { FlatList } from "react-native";
 import { ImagePath } from "../../api/AssetLinkers";
+import LoadingModal from "../../components/LoadingModal";
 
 const {
   StatusBarManager: { HEIGHT },
@@ -22,20 +23,23 @@ const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height - HEIGHT;
 
 const AccountsList = ({ route }) => {
-  const data = route.params.data;
-  // console.log(data, "~~~~~~~~~~~~~");
+  const data = route?.params?.data;
+  console.log(data.length, "~~~~~~~~~~~~~");
 
   return (
-    <View style={styles.mainContainer}>
-      <SearchBar />
-      <FlatList
-        data={data}
-        renderItem={({ item, index }) => {
-          console.log(item, "~~~~~~ITEM~~~~~~~");
-          return <CustomerContainer data={item} key={index} />;
-        }}
-      />
-    </View>
+    <>
+      {/* <LoadingModal loading={loading} /> */}
+      <View style={styles.mainContainer}>
+        <SearchBar />
+        <FlatList
+          data={data}
+          renderItem={({ item, index }) => {
+            console.log(item, "~~~~~~ITEM~~~~~~~");
+            return <CustomerContainer data={item} key={index} />;
+          }}
+        />
+      </View>
+    </>
   );
 };
 

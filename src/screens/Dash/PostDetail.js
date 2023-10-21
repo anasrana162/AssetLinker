@@ -15,14 +15,13 @@ import {
   Platform,
 } from "react-native";
 import React, { Component } from "react";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const {
   StatusBarManager: { HEIGHT },
 } = NativeModules;
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height - HEIGHT;
-
-import Ionicons from "react-native-vector-icons/Ionicons";
 
 {
   /* {---------------Redux Imports------------} */
@@ -131,10 +130,7 @@ class PostDetail extends Component {
         break;
     }
 
-    console.log(
-      "==============================>>>>",
-      this.props?.route?.params?.data.images
-    );
+    // console.log("=================>>>>", this.props?.route?.params?.data);
 
     return (
       <View style={styles.mainContainer}>

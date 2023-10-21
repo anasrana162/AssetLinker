@@ -34,6 +34,7 @@ import { connect } from "react-redux";
 import * as userActions from "../../redux/actions/user";
 import { bindActionCreators } from "redux";
 import moment from "moment";
+import { ActivityIndicator } from "react-native-paper";
 
 class AccountDetail extends Component {
   constructor(props) {
@@ -179,9 +180,9 @@ class AccountDetail extends Component {
     const memberSince = moment(created_at).format("YYYY/MM/DD");
 
     console.log(memberSince);
-
     console.log(user_id, "~~~~~~~~~~~~~", memberSince);
     console.log("-----------+_+_+_+_+-------------", this.props?.route?.params);
+
     return (
       <View style={styles.mainContainer}>
         <ScrollView>
@@ -235,15 +236,23 @@ class AccountDetail extends Component {
             <Text style={styles.headerTitle}>Projects</Text>
           </View>
           {/* Posts Component */}
-          <AllPosts
-            userID={user_id}
-            data={this.state.Posts}
-            navProps={this.props.navigation}
-            openDeletePostModal={(postID) => this.openDeletePostModal(postID)}
-            onFavPress={(id, postID, is_favourite) =>
-              this.addToFavourite(id, postID, is_favourite)
-            }
-          />
+          {this?.state?.Posts ? (
+            <AllPosts
+              userID={user_id}
+              data={this.state.Posts}
+              navProps={this.props.navigation}
+              openDeletePostModal={(postID) => this.openDeletePostModal(postID)}
+              onFavPress={(id, postID, is_favourite) =>
+                this.addToFavourite(id, postID, is_favourite)
+              }
+            />
+          ) : (
+            <ActivityIndicator
+              size="small"
+              color={Colors.blue}
+              style={{ marginTop: 75 }}
+            />
+          )}
         </ScrollView>
 
         {/* Modal Delete Post */}
