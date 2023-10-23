@@ -9,12 +9,12 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import React from "react";
+import { useState } from "react";
 import { Colors } from "../../config";
 import Entypo from "react-native-vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
 import { ImagePath } from "../../api/AssetLinkers";
-import LoadingModal from "../../components/LoadingModal";
+import { useEffect } from "react";
 
 const {
   StatusBarManager: { HEIGHT },
@@ -23,23 +23,47 @@ const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height - HEIGHT;
 
 const AccountsList = ({ route }) => {
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
   const data = route?.params?.data;
-  console.log(data.length, "~~~~~~~~~~~~~");
+
+  // console.log(searchInput, "~~~~~~~~~~~~~", filteredData.length);
+  const delay = setTimeout(() => {
+    const normalizedInput = searchInput.toLowerCase();
+
+    const filteredUser = data.filter((user) => {
+      const matchesName = user?.name?.toLowerCase().includes(normalizedInput);
+
+      const matchesDetail = user?.detail.some((detail) => {
+        return (
+          detail?.real_estate_name?.toLowerCase().includes(normalizedInput) ||
+          detail?.frim_name?.toLowerCase().includes(normalizedInput)
+        );
+      });
+
+      return matchesName || matchesDetail;
+    });
+
+    if (filteredUser.length > 0) {
+      setFilteredData(filteredUser);
+    }
+  }, 300);
+
+  useEffect(() => {
+    return () => clearTimeout(delay);
+  }, [searchInput]);
 
   return (
-    <>
-      {/* <LoadingModal loading={loading} /> */}
-      <View style={styles.mainContainer}>
-        <SearchBar />
-        <FlatList
-          data={data}
-          renderItem={({ item, index }) => {
-            console.log(item, "~~~~~~ITEM~~~~~~~");
-            return <CustomerContainer data={item} key={index} />;
-          }}
-        />
-      </View>
-    </>
+    <View style={styles.mainContainer}>
+      <SearchBar onChangeText={(i) => setSearchInput(i)} />
+      <FlatList
+        data={filteredData}
+        renderItem={({ item, index }) => {
+          // console.log(item, "~~~~~~ITEM~~~~~~~");
+          return <CustomerContainer data={item} key={index} />;
+        }}
+      />
+    </View>
   );
 };
 
@@ -73,7 +97,11 @@ const CustomerContainer = ({ data }) => {
       </View>
 
       <View style={styles.box2}>
-        <Text style={styles.name}>{data?.name}</Text>
+        <Text style={styles.name}>
+          {data?.detail[0]?.real_estate_name ||
+            data?.detail[0]?.frim_name ||
+            data?.name}
+        </Text>
         <View style={styles.tagContainer}>
           <Text style={styles.tagLabel}>
             {data?.user_type.replace("_", " ")}
@@ -81,6 +109,7 @@ const CustomerContainer = ({ data }) => {
         </View>
       </View>
 
+      {/* View Project Button */}
       <View style={styles.box3}>
         <Text style={styles.msID}>MS #{data?.ms_id}</Text>
         <TouchableOpacity
@@ -167,3 +196,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+// frim_name
+// real_estate_name
+// name

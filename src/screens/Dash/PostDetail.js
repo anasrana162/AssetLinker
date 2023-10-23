@@ -341,7 +341,7 @@ class PostDetail extends Component {
           <Text style={styles.main_features_text}>{data?.details}</Text>
 
           {/* MSID */}
-          <Text style={styles.posted_at}>MSID: lnf654</Text>
+          <Text style={styles.posted_at}>MSID: {data?.ms_id}</Text>
 
           {/* User Type Button */}
           <TouchableOpacity

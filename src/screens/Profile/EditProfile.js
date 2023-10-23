@@ -75,6 +75,7 @@ class EditProfile extends Component {
         break;
       case "save":
         this.updateProfile();
+
         // this.props.navigation.navigate("EditProfile")
         break;
     }
@@ -147,7 +148,6 @@ class EditProfile extends Component {
           user_id: user_id,
           name: user_name,
           // email: email,
-          image: image,
           real_estate_name: real_estate_name,
           description: description,
           address: address,
@@ -210,7 +210,7 @@ class EditProfile extends Component {
         }
       })
       .catch((err) => {
-        console.log("USER UPDATE API ERROR:   ", err);
+        console.log("USER UPDATE API ERROR:   ", err.response);
       });
   };
 
