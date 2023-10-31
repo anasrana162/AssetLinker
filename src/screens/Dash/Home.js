@@ -37,6 +37,8 @@ import TabNavigator from "../../components/TabNavigator";
 import AllPosts from "./Components/AllPosts";
 import Toast from "react-native-toast-message";
 import { ActivityIndicator } from "react-native";
+import SearchBar from "./Components/SearchBar";
+import FilterModal from "./Components/FilterModal";
 
 class Dash extends Component {
   constructor(props) {
@@ -57,6 +59,10 @@ class Dash extends Component {
       openDeletePostModal: false,
       postID: "",
       Posts: null,
+      FilteredPosts: null,
+      openSearchBar: false,
+      openPreFilterModal: false,
+      searched: ''
     };
   }
 
@@ -142,6 +148,7 @@ class Dash extends Component {
         if (res?.data) {
           this.setState({
             Posts: res?.data?.property,
+            FilteredPosts: res?.data?.property,
           });
         }
       })
@@ -221,13 +228,81 @@ class Dash extends Component {
     clearInterval(this.state.interval);
   }
 
+  onSearchOpen = (key) => {
+
+    switch (key) {
+      case 'search bar':
+        setImmediate(() => {
+          this.setState({
+            openSearchBar: !this.state.openSearchBar,
+          })
+        })
+        break;
+
+      case 'filter':
+        setImmediate(() => {
+          this.setState({
+            openPreFilterModal: !this.state.openPreFilterModal,
+          })
+        })
+        break;
+    }
+
+  }
+
+  onSearch = (txt) => {
+    var { Posts } = this.state
+
+    const filterData = Posts.filter((data) => {
+
+      const matches_property_type = data?.property_type.toLowerCase().includes(txt.toLowerCase());
+      const matches_category = data?.category.toLowerCase().includes(txt.toLowerCase());
+      const matches_rent_sale = data?.rent_sale.toLowerCase().includes(txt?.toLowerCase())
+      const matches_open = data?.open.toLowerCase().includes(txt?.toLowerCase())
+      const matches_price = data?.price.toLowerCase().includes(txt?.toLowerCase())
+      const matches_location = JSON.parse(data?.Location).location.toLowerCase().includes(txt?.toLowerCase())
+      const matches_place = JSON.parse(data?.Location).place.toLowerCase().includes(txt?.toLowerCase())
+      //  console.log("data?.open",data?.open.replace(/\s/g, ""))
+      // console.log(".toLowerCase().includes(txt?.toLowerCase())", JSON.parse(data?.Location).location.toLowerCase())
+      return matches_property_type || matches_category || matches_rent_sale || matches_open || matches_price || matches_location || matches_place
+      // || matches_rent_sale | matches_price 
+
+
+    })
+
+    setImmediate(() => {
+      this.setState({
+        FilteredPosts: filterData
+      })
+    })
+
+    // console.log("filterData", filterData)
+    // console.log("filterData LEngth", filterData?.length)
+  }
+
   render() {
     // console.log("Props:  ",this.props?.userData?.user?.detail[0])
 
     return (
       <View style={styles.mainContainer}>
         {/* Header */}
-        <Header />
+        <Header onSearchOpen={() => this.onSearchOpen("search bar")} />
+
+        {/* Search Bar */}
+        {this.state.openSearchBar && <SearchBar
+          onCancelSearch={() => this.onSearchOpen("search bar")}
+          onChangeText={(txt) => this.onSearch(txt)}
+          onFilterPress={() => this.onSearchOpen("filter")}
+        />}
+
+        {/* Search Bar Filter Modal */}
+
+        <FilterModal
+          visible={this.state.openPreFilterModal}
+          onFilterPress={() => this.onSearchOpen("filter")}
+          onSearch={(txt) => this.onSearch(txt)}
+        />
+
 
         {/* Menu Bar */}
         <MenuBar
@@ -248,14 +323,14 @@ class Dash extends Component {
           {/* Posts Component */}
           {this?.state?.Posts ? (
             <AllPosts
-              data={this.state.Posts}
+              data={this.state.openSearchBar ? this.state.FilteredPosts : this.state.Posts}
               navProps={this.props.navigation}
               userID={this.props.userData?.user?.id}
               openDeletePostModal={(postID) => this.openDeletePostModal(postID)}
               onFavPress={(user_id, postID, is_favourite) =>
                 this.addToFavourite(user_id, postID, is_favourite)
               }
-              // isFav={}
+            // isFav={}
             />
           ) : (
             <ActivityIndicator

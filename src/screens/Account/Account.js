@@ -9,6 +9,7 @@ import {
 import React, { Component } from "react";
 import Colors from "../../config/Colors";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import AssetLinkers from "../../api/AssetLinkers";
 import LoadingModal from "../../components/LoadingModal";
 
@@ -97,6 +98,18 @@ export default class Account extends Component {
       <>
         <LoadingModal loading={loading} />
         <View style={styles.mainContainer}>
+          <TouchableOpacity
+            onPress={() => this.props?.navigation.pop()}
+            style={{
+              alignSelf: "flex-start",
+              flexDirection: "row",
+              alignItems: "center",
+              marginLeft:10,
+              marginBottom:20
+            }}>
+            <AntDesign name="leftcircleo" size={30} color="black" />
+            <Text style={{ fontSize: 14, color: "black", fontWeight: "500", marginLeft: 5, }}>Go Back</Text>
+          </TouchableOpacity>
           {accountCategory.map((catName, index) => (
             <LongButton label={catName} key={index} />
           ))}

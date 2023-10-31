@@ -15,17 +15,17 @@ import Entypo from "react-native-vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
 import { ImagePath } from "../../api/AssetLinkers";
 import { useEffect } from "react";
-
+import AntDesign from 'react-native-vector-icons/AntDesign'
 const {
   StatusBarManager: { HEIGHT },
 } = NativeModules;
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height - HEIGHT;
 
-const AccountsList = ({ route }) => {
+const AccountsList = (props) => {
   const [searchInput, setSearchInput] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const data = route?.params?.data;
+  const data = props.route?.params?.data;
 
   // console.log(searchInput, "~~~~~~~~~~~~~", filteredData.length);
   const delay = setTimeout(() => {
@@ -55,7 +55,7 @@ const AccountsList = ({ route }) => {
 
   return (
     <View style={styles.mainContainer}>
-      <SearchBar onChangeText={(i) => setSearchInput(i)} />
+      <SearchBar onChangeText={(i) => setSearchInput(i)} navProps={props?.navigation} />
       <FlatList
         data={filteredData}
         renderItem={({ item, index }) => {
@@ -69,8 +69,18 @@ const AccountsList = ({ route }) => {
 
 export default AccountsList;
 
-const SearchBar = ({ onChangeText }) => (
+const SearchBar = ({ onChangeText, navProps }) => (
   <View style={styles.searchbar}>
+    {/* Back Button */}
+    <TouchableOpacity
+      onPress={() => navProps?.pop()}
+      style={{
+        position: "absolute",
+        top: 10,
+        left: 10,
+      }}>
+      <AntDesign name="leftcircleo" size={30} color="black" />
+    </TouchableOpacity>
     <TextInput
       style={styles.searchTextInput}
       placeholder="Search here..."
@@ -144,16 +154,22 @@ const styles = StyleSheet.create({
   },
   searchbar: {
     width: width,
-    height: 52,
+    height: 50,
     backgroundColor: Colors.apple,
     padding: 5,
     paddingHorizontal: 10,
+    paddingTop: 30
   },
   searchTextInput: {
     color: "#000",
+    width: "85%",
+    height: 30,
     backgroundColor: "#fff",
     borderRadius: 50,
     paddingHorizontal: 20,
+    position: "absolute",
+    top: 10,
+    right: 10
   },
   customerMain: {
     width: width - 20,

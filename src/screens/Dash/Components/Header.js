@@ -5,11 +5,13 @@ const width = Dimensions.get("screen").width
 const height = Dimensions.get("screen").height - HEIGHT
 import { Colors } from '../../../config';
 import Feather from "react-native-vector-icons/Feather"
-const Header = () => {
+const Header = ({ onSearchOpen }) => {
     return (
         <View style={styles.mainContainer}>
             <Text style={styles.title}>Assets Linkers</Text>
-            <TouchableOpacity style={styles.touchable}>
+            <TouchableOpacity
+                onPress={onSearchOpen}
+                style={styles.touchable}>
                 <Feather name="search" size={24} color={"white"} />
             </TouchableOpacity>
         </View>
@@ -27,8 +29,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         paddingHorizontal: 15,
         alignItems: "center",
-        paddingTop:5,
-        paddingBottom:10
+        paddingTop: 5,
+        paddingBottom: 10
     },
     title: {
         fontSize: 25,

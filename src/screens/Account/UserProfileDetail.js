@@ -5,6 +5,7 @@ import {
   Image,
   Dimensions,
   NativeModules,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import AssetLinkers, { ImagePath } from "../../api/AssetLinkers";
@@ -12,17 +13,18 @@ import { Colors } from "../../config";
 import moment from "moment";
 import { ScrollView } from "react-native";
 import LoadingModal from "../../components/LoadingModal";
-
+import AntDesign from 'react-native-vector-icons/AntDesign'
 const {
   StatusBarManager: { HEIGHT },
 } = NativeModules;
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height - HEIGHT;
 
-const UserProfileDetail = ({ route }) => {
+const UserProfileDetail = (props) => {
   const [profile, setProfile] = useState();
   const detail = profile?.detail[0];
-  const id = route?.params?.user_id;
+  const id = props.route?.params?.user_id;
+  // console.log("ID",props.route?.params?.user_id)
   const memberSince = moment(profile?.created_at).format("YYYY/MM/DD");
 
   useEffect(() => {
@@ -45,6 +47,18 @@ const UserProfileDetail = ({ route }) => {
         <>
           {/* Banner */}
           <View style={styles.banner}>
+
+            {/* Back Button */}
+            <TouchableOpacity
+              onPress={() => props.navigation.pop()}
+              style={{
+                position: "absolute",
+                top: 5,
+                right: 10,
+              }}>
+              <AntDesign name="rightcircleo" size={30} color="white" />
+            </TouchableOpacity>
+
             <Image
               source={{ uri: `${ImagePath}/${profile?.image}` }}
               style={styles.img}
@@ -65,17 +79,22 @@ const UserProfileDetail = ({ route }) => {
             <TextBox
               title="User Type"
               label={
-                profile?.user_type === "estate_agent"
+                (profile?.user_type === "estate_agent"
                   ? "Consultant"
-                  : profile?.user_type
+                  :
+                  profile?.user_type === "buyer_seller"
+                    ? "Buyer/Seller"
+                    : profile?.user_type
+                )
               }
             />
+
             <TextBox title="MS ID" label={profile?.ms_id} />
             <TextBox title="Phone" label={profile?.phone} />
             <TextBox title="Email" label={profile?.email} />
-            <TextBox title="Address" label={detail?.address} />
-            <TextBox title="Location" label={detail?.location} />
-            <TextBox title="About Us" label={detail?.description} />
+            {detail?.address !== undefined && <TextBox title="Address" label={detail?.address} />}
+            {detail?.location !== undefined && <TextBox title="Location" label={detail?.location} />}
+            {detail?.description !== undefined && <TextBox title="About Us" label={detail?.description} />}
             {/* <TextBox
               title="About Us"
               label="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus quam sed nibh suscipit, quis vulputate tellus tempor. Nullam gravida diam massa, ac viverra odio rutrum id. Maecenas et fermentum urna, sed maximus lacus. Pellentesque ornare massa nisi, a rhoncus magna luctus vitae. Praesent enim elit, dignissim eu nisl eget, suscipit placerat tellus. Etiam non dui eget nunc blandit tempor rhoncus ut metus. Fusce efficitur orci suscipit ullamcorper ultricies."

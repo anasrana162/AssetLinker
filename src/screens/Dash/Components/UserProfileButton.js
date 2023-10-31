@@ -16,6 +16,7 @@ const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 const UserProfileButton = ({ navProps, data }) => {
+  console.log("data",data?.user_id)
   return (
     <TouchableOpacity
       activeOpacity={0.7}

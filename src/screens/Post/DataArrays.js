@@ -9,6 +9,20 @@ export const Property_Types = [
         type: "Plot"
     },
 ]
+export const Property_Types1 = [
+    {
+        id: 1,
+        name: "Commercial"
+    },
+    {
+        id: 2,
+        name: "Residential"
+    },
+    {
+        id: 3,
+        name: "Plot"
+    },
+]
 export const sale_rent = [
     {
         id: 1,

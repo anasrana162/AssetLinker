@@ -88,7 +88,7 @@ export default class Signup extends Component {
             return alert("Please select a role")
         }
         const check = this.checkRoleBeforeSignUp(this.state.role)
-        console.log("Check Value", check)
+        console.log("Check Value", check?.name, check?.email, check.password)
 
         if (check?.check == true) {
             this.cancelRequest()
@@ -256,7 +256,7 @@ export default class Signup extends Component {
                 "name": name,
                 "real_estate_name": realEstateName,
                 "phone": mobile,
-                "email": email,
+                "email": email.toLowerCase(),
                 "password": password,
                 "password_confirmation": confirmPassword,
                 "location": selectArea,
@@ -528,7 +528,7 @@ export default class Signup extends Component {
         })
     }
     imageSelected = (uri) => {
-        console.log("uri", uri)
+        // console.log("uri", uri)
         setImmediate(() => {
             this.setState({ image: uri })
         })

@@ -3,10 +3,10 @@ import React from 'react'
 
 const width = Dimensions.get("screen").width
 
-const CustomTextInp = ({ placeholder, onChangeText, value, keyboardType, titleEN, titleAR, numberOfLines, multiline }) => {
+const CustomTextInp = ({ style,placeholder, onChangeText, value, keyboardType, titleEN, titleAR, numberOfLines, multiline,onEndEditing }) => {
     // console.log("numoflines", numberOfLines)
     return (
-        <View style={styles.mainContainer}>
+        <View style={[styles.mainContainer,style]}>
             <Text style={styles.title}>{titleEN}</Text>
             <TextInput
                 value={value}
@@ -15,6 +15,7 @@ const CustomTextInp = ({ placeholder, onChangeText, value, keyboardType, titleEN
                 placeholder={placeholder}
                 onChangeText={onChangeText}
                 keyboardType={keyboardType}
+                onEndEditing={onEndEditing}
                 style={[styles.textinp_cont, {
                     height: numberOfLines !== undefined ? 100 : 40,
                 }]}
