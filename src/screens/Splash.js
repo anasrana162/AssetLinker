@@ -21,34 +21,34 @@ const Splash = (props, { navigation }) => {
         currentValue = value;
     });
 
-    useEffect(()=>{
+    useEffect(() => {
         checkUserExist()
-    },[])
+    }, [])
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     // console.log("currentValue", animatedValue)
-    //     if (currentValue >= 90) {
-    //         Animated.spring(animatedValue, {
-    //             toValue: 0,
-    //             tension: 5,
-    //             friction: 5,
-    //             duration: 5000,
-    //             useNativeDriver: false,
-    //         }).start();
-    //     } else {
-    //         Animated.spring(animatedValue, {
-    //             toValue: 180,
-    //             tension: .1,
-    //             friction: .5,
-    //             duration: 5000,
+        // console.log("currentValue", animatedValue)
+        if (currentValue >= 90) {
+            Animated.spring(animatedValue, {
+                toValue: 0,
+                tension: 5,
+                friction: 10,
+                duration: 5000,
+                useNativeDriver: false,
+            }).start();
+        } else {
+            Animated.spring(animatedValue, {
+                toValue: 180,
+                tension: .1,
+                friction: .5,
+                duration: 5000,
 
-    //             useNativeDriver: false,
-    //         }).start();
-    //     }
+                useNativeDriver: false,
+            }).start();
+        }
 
-      
-    // });
+
+    });
 
     const checkUserExist = async () => {
         var { actions } = props
@@ -70,31 +70,31 @@ const Splash = (props, { navigation }) => {
         }, 3000)
     }
 
-    // const setInterpolate = animatedValue.interpolate({
-    //     inputRange: [0, 180],
-    //     outputRange: ['360deg', '0deg'],
+    const setInterpolate = animatedValue.interpolate({
+        inputRange: [0, 180],
+        outputRange: ['360deg', '0deg'],
 
-    // });
-    // // console.log("setInterpolate", setInterpolate)
-    // const rotateYAnimatedStyle = {
-    //     // width:width-50,
+    });
+    // console.log("setInterpolate", setInterpolate)
+    const rotateYAnimatedStyle = {
+        // width:width-50,
 
-    //     transform: [{ rotateY: setInterpolate }],
-    // };
+        transform: [{ rotateY: setInterpolate }],
+    };
 
     return (
         <View style={styles.container}>
             <ImageBackground
                 source={require('../../assets/watermark2.jpg')}
                 style={[styles.backgroundImage]}>
-                <Image
+                <Animated.Image
 
                     // source={{
                     //     uri: 'https://www.nicesnippets.com/image/imgpsh_fullsize.png',
                     // }}
                     source={require('../../assets/logo.png')}
                     style={[
-                        // rotateYAnimatedStyle,
+                        rotateYAnimatedStyle,
                         styles.logoImageSignIn]}
                 />
 
@@ -152,7 +152,8 @@ const styles = StyleSheet.create({
     logoImageSignIn: {
         width: width - 40,
         height: 120,
-        marginBottom: 170
+        marginBottom: 170,
+        zIndex:700
     },
 });
 
