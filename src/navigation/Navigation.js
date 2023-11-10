@@ -26,6 +26,7 @@ import { Colors } from "../config";
 import AccountsList from "../screens/Account/AccountsList";
 import AccountDetail from "../screens/Account/AccountDetail";
 import UserProfileDetail from "../screens/Account/UserProfileDetail";
+import ChatScreen from "../screens/Chat/ChatScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,8 +44,7 @@ export default Navigation = () => {
           //   headerTintColor: "#fff",
           //   animation: "slide_from_right",
           // },
-        }}
-      >
+        }}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="GetStarted" component={GetStarted} />
         <Stack.Screen name="Login" component={Login} />
@@ -63,6 +63,7 @@ export default Navigation = () => {
         <Stack.Screen name="Account" component={Account} />
         <Stack.Screen name="AccountDetail" component={AccountDetail} />
         <Stack.Screen name="UserProfileDetail" component={UserProfileDetail} />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

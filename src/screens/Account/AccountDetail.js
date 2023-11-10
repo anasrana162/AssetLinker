@@ -35,6 +35,8 @@ import * as userActions from "../../redux/actions/user";
 import { bindActionCreators } from "redux";
 import moment from "moment";
 import { ActivityIndicator } from "react-native-paper";
+import axios from "axios";
+import { resolveScrollRef } from "react-native-actions-sheet/dist/src/hooks/use-scroll-handlers";
 
 class AccountDetail extends Component {
   constructor(props) {
@@ -191,8 +193,7 @@ class AccountDetail extends Component {
             {/* Back Button */}
             <TouchableOpacity
               style={{ position: "absolute", left: 10 }}
-              onPress={() => this.onPress("goback")}
-            >
+              onPress={() => this.onPress("goback")}>
               <Feather name="chevron-left" size={30} color="white" />
             </TouchableOpacity>
 
@@ -214,16 +215,13 @@ class AccountDetail extends Component {
                   flexDirection: "row",
                   alignItems: "center",
                   columnGap: 5,
-                }}
-              >
+                }}>
                 <Text
-                  style={[styles.text, { fontSize: 13, fontWeight: "300" }]}
-                >
+                  style={[styles.text, { fontSize: 13, fontWeight: "300" }]}>
                   Member Since:
                 </Text>
                 <Text
-                  style={[styles.text, { fontSize: 13, fontWeight: "300" }]}
-                >
+                  style={[styles.text, { fontSize: 13, fontWeight: "300" }]}>
                   {memberSince}
                 </Text>
               </View>
@@ -259,12 +257,12 @@ class AccountDetail extends Component {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={this.state.openDeletePostModal}
-        >
+          visible={this.state.openDeletePostModal}>
           <TouchableOpacity
             style={styles.deletePostModal}
-            onPress={() => this.setState({ openDeletePostModal: false })}
-          ></TouchableOpacity>
+            onPress={() =>
+              this.setState({ openDeletePostModal: false })
+            }></TouchableOpacity>
           <View style={styles.deletePost_mainCont}>
             <Text style={styles.deletePost_title}>
               Are you Sure you want to delete this Post? , this can't be undone!
@@ -273,14 +271,12 @@ class AccountDetail extends Component {
             <View style={styles.flex_direc}>
               <TouchableOpacity
                 onPress={() => this.deletePost()}
-                style={styles.yes_no_btn}
-              >
+                style={styles.yes_no_btn}>
                 <Text style={styles.yes_no_text}>Yes</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => this.setState({ openDeletePostModal: false })}
-                style={styles.yes_no_btn}
-              >
+                style={styles.yes_no_btn}>
                 <Text style={styles.yes_no_text}>NO</Text>
               </TouchableOpacity>
             </View>
