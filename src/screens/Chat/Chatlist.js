@@ -6,22 +6,30 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import firestore from "@react-native-firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Colors } from "../../config";
 
 const Chatlist = () => {
+  const [users, setUsers] = useState([]);
+
   const getUsers = async () => {
     const res = await AsyncStorage.getItem("@assetlinker_userData");
     const data = JSON.parse(res);
-
+    const tempData = [];
     firestore()
       .collection("users")
       .where("email", "!=", data?.email)
       .get()
       .then((res) => {
-        console.log(JSON.stringify(res.docs[0].data()));
+        if (res?.docs != []) {
+          res.docs.map((item) => {
+            tempData.push(item.data());
+          });
+        }
+        setUsers(tempData);
+        // console.log(JSON.stringify(res.docs[0].data()));
       })
       .catch((error) => {
         console.log("ERROR: ", error.message);
@@ -35,20 +43,10 @@ const Chatlist = () => {
   return (
     <View style={styles.main}>
       <ScrollView>
-        <User />
-        <User />
-        <User />
-        <User />
-        <User />
-        <User />
-        <User />
-        <User />
-        <User />
-        <User />
-        <User />
-        <User />
-        <User />
-        <User />
+        {users.map((item, index) => {
+          console.log(item);
+          return <User name={item?.name} />;
+        })}
       </ScrollView>
     </View>
   );
@@ -56,7 +54,7 @@ const Chatlist = () => {
 
 export default Chatlist;
 
-const User = () => (
+const User = ({ name }) => (
   <TouchableOpacity
     activeOpacity={0.8}
     style={{
@@ -79,7 +77,9 @@ const User = () => (
       }}>
       <Text style={{ color: "#fff", fontSize: 18, fontWeight: "500" }}>R</Text>
     </View>
-    <Text style={{ color: "#000", fontSize: 18, fontWeight: "600" }}>Name</Text>
+    <Text style={{ color: "#000", fontSize: 18, fontWeight: "600" }}>
+      {name}
+    </Text>
   </TouchableOpacity>
 );
 
