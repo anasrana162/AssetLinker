@@ -27,7 +27,7 @@ export default TabNavigator = ({ navProps, screenName }) => {
     {
       id: 2,
       label: "Chat",
-      navName: "Chat",
+      navName: "Chatlist",
       iconName: "message-outline",
     },
     {
@@ -57,8 +57,7 @@ export default TabNavigator = ({ navProps, screenName }) => {
           <TouchableOpacity
             key={String(item?.id)}
             style={styles.item}
-            onPress={() => navProps.navigate(item?.navName)}
-          >
+            onPress={() => navProps.navigate(item?.navName)}>
             <MaterialCommunityIcons
               name={item?.iconName}
               size={22}
@@ -70,8 +69,7 @@ export default TabNavigator = ({ navProps, screenName }) => {
                 {
                   color: screenName == item?.navName ? "#FFB100" : "white",
                 },
-              ]}
-            >
+              ]}>
               {item?.label}
             </Text>
           </TouchableOpacity>

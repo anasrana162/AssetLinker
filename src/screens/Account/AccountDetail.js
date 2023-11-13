@@ -181,9 +181,9 @@ class AccountDetail extends Component {
     var { user_id, name, image, created_at } = this.props?.route?.params;
     const memberSince = moment(created_at).format("YYYY/MM/DD");
 
-    console.log(memberSince);
-    console.log(user_id, "~~~~~~~~~~~~~", memberSince);
-    console.log("-----------+_+_+_+_+-------------", this.props?.route?.params);
+    // console.log(memberSince);
+    // console.log(user_id, "~~~~~~~~~~~~~", memberSince);
+    // console.log("-----------+_+_+_+_+-------------", this.props?.route?.params);
 
     return (
       <View style={styles.mainContainer}>

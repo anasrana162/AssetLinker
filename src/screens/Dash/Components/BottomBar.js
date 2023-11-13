@@ -15,12 +15,12 @@ import { useNavigation } from "@react-navigation/native";
 
 const width = Dimensions.get("screen").width;
 
-const BottomBar = ({ navProps, user_cellno }) => {
+const BottomBar = ({ data, user_cellno }) => {
   const navigation = useNavigation(0);
   const onPress = (key) => {
     switch (key) {
       case "chat":
-        navigation.navigate("ChatScreen");
+        navigation.navigate("ChatScreen", { data });
         break;
 
       case "whatsapp":

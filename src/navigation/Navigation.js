@@ -27,6 +27,7 @@ import AccountsList from "../screens/Account/AccountsList";
 import AccountDetail from "../screens/Account/AccountDetail";
 import UserProfileDetail from "../screens/Account/UserProfileDetail";
 import ChatScreen from "../screens/Chat/ChatScreen";
+import Chatlist from "../screens/Chat/Chatlist";
 
 const Stack = createNativeStackNavigator();
 
@@ -64,6 +65,7 @@ export default Navigation = () => {
         <Stack.Screen name="AccountDetail" component={AccountDetail} />
         <Stack.Screen name="UserProfileDetail" component={UserProfileDetail} />
         <Stack.Screen name="ChatScreen" component={ChatScreen} />
+        <Stack.Screen name="Chatlist" component={Chatlist} />
       </Stack.Navigator>
     </NavigationContainer>
   );

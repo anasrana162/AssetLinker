@@ -16,15 +16,14 @@ const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 const UserProfileButton = ({ navProps, data }) => {
-  console.log("data",data?.user_id)
+  // console.log("data",data?.user_id)
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={() =>
         navProps.navigate("UserProfileDetail", { user_id: data?.user_id })
       }
-      style={styles.mainContainer}
-    >
+      style={styles.mainContainer}>
       <Image
         source={{
           uri:

@@ -130,7 +130,7 @@ class PostDetail extends Component {
         break;
     }
 
-    // console.log("=================>>>>", this.props?.route?.params?.data);
+    // console.log("=================>>>>", data);
 
     return (
       <View style={styles.mainContainer}>
@@ -139,16 +139,14 @@ class PostDetail extends Component {
           {/* Go back */}
           <TouchableOpacity
             style={[styles.headerBtn, { marginLeft: 5 }]}
-            onPress={() => this.onPress("goback")}
-          >
+            onPress={() => this.onPress("goback")}>
             <Ionicons name="chevron-back" size={30} color="white" />
           </TouchableOpacity>
 
           {/* Share Button */}
           <TouchableOpacity
             style={[styles.headerBtn, { marginRight: 15 }]}
-            onPress={() => this.onPress("share")}
-          >
+            onPress={() => this.onPress("share")}>
             <Ionicons name="share-social" size={30} color="white" />
           </TouchableOpacity>
         </View>
@@ -174,8 +172,7 @@ class PostDetail extends Component {
             style={[
               styles.main_features_text,
               { fontWeight: "300", fontSize: 15 },
-            ]}
-          >
+            ]}>
             {data?.main_features}
           </Text>
 
@@ -187,14 +184,12 @@ class PostDetail extends Component {
               justifyContent: "space-between",
               marginTop: 10,
               paddingHorizontal: 10,
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: "row",
                 width: "60%",
-              }}
-            >
+              }}>
               <Ionicons
                 name="location-sharp"
                 color={Colors.black}
@@ -205,16 +200,14 @@ class PostDetail extends Component {
                 style={[
                   styles.posted_at,
                   { marginLeft: 0, fontWeight: "400", fontSize: 14 },
-                ]}
-              >
+                ]}>
                 {location}
               </Text>
             </View>
 
             {/* Posted At */}
             <Text
-              style={[styles.posted_at, { fontWeight: "400", fontSize: 14 }]}
-            >
+              style={[styles.posted_at, { fontWeight: "400", fontSize: 14 }]}>
               Posted: {moment(data?.created_at).format("YYYY-MM-DD")}
             </Text>
           </View>
@@ -226,8 +219,7 @@ class PostDetail extends Component {
               style={[
                 styles.propertyTypeText,
                 { fontSize: 22, marginBottom: 10 },
-              ]}
-            >
+              ]}>
               More Details
             </Text>
 
@@ -288,8 +280,7 @@ class PostDetail extends Component {
             <View style={styles.inner_moreDetailCont}>
               <Text
                 numberOfLines={2}
-                style={[styles.gridText1, { width: 100 }]}
-              >
+                style={[styles.gridText1, { width: 100 }]}>
                 {data?.corner}, {data?.open}
               </Text>
               <Text style={styles.gridText2}>Construction Staus</Text>
@@ -346,8 +337,7 @@ class PostDetail extends Component {
           {/* User Type Button */}
           <TouchableOpacity
             onPress={() => this.onPress("openUserDetail")}
-            style={styles.user_type_btn}
-          >
+            style={styles.user_type_btn}>
             <Text style={styles.user_type_btn_text}>{user_type}</Text>
           </TouchableOpacity>
 
@@ -359,8 +349,7 @@ class PostDetail extends Component {
                 style={[
                   styles.main_features_text,
                   { fontWeight: "400", fontSize: 15 },
-                ]}
-              >
+                ]}>
                 {data?.address}
               </Text>
             </>
@@ -369,7 +358,7 @@ class PostDetail extends Component {
           <UserProfileButton navProps={this.props.navigation} data={data} />
         </ScrollView>
 
-        <BottomBar navProps={this.props.navigation} user_cellno={data?.phone} />
+        <BottomBar data={data} user_cellno={data?.phone} />
       </View>
     );
   }
