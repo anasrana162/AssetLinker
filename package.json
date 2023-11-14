@@ -37,6 +37,7 @@
     "react-native-fb-image-grid": "^0.0.5",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.13.1",
+    "react-native-gifted-chat": "^2.4.0",
     "react-native-grid-image-viewer": "^1.3.0",
     "react-native-image-crop-picker": "^0.40.0",
     "react-native-image-slider-show": "^1.0.3",

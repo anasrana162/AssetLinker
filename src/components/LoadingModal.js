@@ -8,7 +8,7 @@ import {
 import React from "react";
 import { Colors } from "../config";
 
-const LoadingModal = ({ loading }) => {
+const LoadingModal = ({ bgc, loading }) => {
   return (
     <Modal
       animationType="fade"
@@ -17,8 +17,16 @@ const LoadingModal = ({ loading }) => {
       // onRequestClose={() => {}}
     >
       <StatusBar backgroundColor={"transparent"} />
-      <View style={styles.overlay}>
-        <ActivityIndicator size="large" color={Colors.apple} />
+      <View
+        style={[
+          styles.overlay,
+          { backgroundColor: bgc || "rgba(0, 0, 0, 0.5)" },
+        ]}>
+        <ActivityIndicator
+          size="large"
+          color={Colors.apple}
+          style={{ backgroundColor: "#000", padding: 8, borderRadius: 50 }}
+        />
       </View>
     </Modal>
   );
@@ -31,6 +39,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
   },
 });

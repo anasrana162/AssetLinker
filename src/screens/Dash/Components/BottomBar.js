@@ -15,12 +15,12 @@ import { useNavigation } from "@react-navigation/native";
 
 const width = Dimensions.get("screen").width;
 
-const BottomBar = ({ data, user_cellno }) => {
+const BottomBar = ({ data, id, user_cellno }) => {
   const navigation = useNavigation(0);
   const onPress = (key) => {
     switch (key) {
       case "chat":
-        navigation.navigate("ChatScreen", { data });
+        navigation.navigate("ChatScreen", { data, id });
         break;
 
       case "whatsapp":
@@ -32,14 +32,18 @@ const BottomBar = ({ data, user_cellno }) => {
     }
   };
 
+  console.log(typeof id, typeof data.user_id);
+
   return (
     <View style={styles.bottomView}>
-      <TouchableOpacity
-        onPress={() => onPress("chat")}
-        style={styles.touchable}>
-        <MaterialIcons name="email" size={22} color="white" />
-        <Text style={styles.text_touchable}>Chat</Text>
-      </TouchableOpacity>
+      {data?.user_id != id && (
+        <TouchableOpacity
+          onPress={() => onPress("chat")}
+          style={styles.touchable}>
+          <MaterialIcons name="email" size={22} color="white" />
+          <Text style={styles.text_touchable}>Chat</Text>
+        </TouchableOpacity>
+      )}
 
       <TouchableOpacity
         onPress={() => onPress("whatsapp")}

@@ -36,6 +36,7 @@ import moment from "moment";
 import UserProfileButton from "./Components/UserProfileButton";
 import BottomBar from "./Components/BottomBar";
 import AssetLinkers from "../../api/AssetLinkers";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class PostDetail extends Component {
   constructor(props) {
@@ -43,6 +44,7 @@ class PostDetail extends Component {
 
     this.state = {
       position: 0,
+      localUserID: "",
     };
   }
 
@@ -67,9 +69,16 @@ class PostDetail extends Component {
     }
   };
 
+  getLocaluser = async () => {
+    const res = await AsyncStorage.getItem("@assetlinker_userData");
+    const data = JSON.parse(res);
+    this.setState({ localUserID: data?.detail[0].user_id });
+  };
+
   componentDidMount = () => {
     this.runSlideShow();
     this.AddView();
+    this.getLocaluser();
   };
 
   runSlideShow = () => {
@@ -358,7 +367,11 @@ class PostDetail extends Component {
           <UserProfileButton navProps={this.props.navigation} data={data} />
         </ScrollView>
 
-        <BottomBar data={data} user_cellno={data?.phone} />
+        <BottomBar
+          data={data}
+          id={this.state.localUserID}
+          user_cellno={data?.phone}
+        />
       </View>
     );
   }
