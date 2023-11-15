@@ -19,15 +19,20 @@ const ChatScreen = ({ route }) => {
   // const [input, setInput] = useState("");
   const [messageList, setMessageList] = useState([]);
 
-  const { user_id, name, email } = route?.params?.data;
+  const { user_id, name, email, id } = route?.params?.data;
+  const db = firestore();
+
   const receiverID = JSON.stringify(user_id);
   const senderID = JSON.stringify(route?.params?.id);
+  const postID = JSON.stringify(id);
   // const receiverID = uuid.v4();
+
   console.log(senderID, "   ", receiverID);
+  console.log(route?.params?.data, "route?.params?.data");
 
   const onSend = useCallback((messages = []) => {
-    // firestore()
-    //   .collection("users")
+    // Get already signup user
+    // db.collection("users")
     //   .where("receiverID", "==", receiverID)
     //   .get()
     //   .then((res) => {
@@ -40,20 +45,21 @@ const ChatScreen = ({ route }) => {
     //     console.log("FAILED GET ID: ", error.message);
     //   });
 
-    // firestore()
-    //   .collection("users")
-    //   .doc(receiverID)
-    //   .set({
-    //     name: name,
-    //     email: email,
-    //     receiverID: receiverID,
-    //   })
-    //   .then((res) => {
-    //     console.log(res, "==========firebase SUCCESS");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error, "==========firebase ERROR");
-    //   });
+    // Signup User
+    db.collection("users")
+      .doc(receiverID + postID)
+      .set({
+        name: name,
+        postTitle: postID,
+        email: email,
+        receiverID: receiverID,
+      })
+      .then((res) => {
+        console.log(res, "==========firebase SUCCESS");
+      })
+      .catch((error) => {
+        console.log(error, "==========firebase ERROR");
+      });
 
     const msg = messages[0];
     const myMsg = {
@@ -68,24 +74,26 @@ const ChatScreen = ({ route }) => {
     );
 
     // Access For Sender
-    firestore()
-      .collection("chats")
+    db.collection("chats")
       .doc("" + senderID + receiverID)
+      .collection("post")
+      .doc("" + postID)
       .collection("messages")
       .add(myMsg);
 
     // Access For Receiver
-    // firestore()
-    //   .collection("chats")
+    // db.collection("chats")
     //   .doc("" + receiverID + senderID)
     //   .collection("messages")
     //   .add(myMsg);
   }, []);
 
   useEffect(() => {
-    const subscriber = firestore()
+    const subscriber = db
       .collection("chats")
-      .doc(senderID + receiverID)
+      .doc("" + senderID + receiverID)
+      .collection("post")
+      .doc("" + postID)
       .collection("messages")
       .orderBy("createdAt", "desc");
 
@@ -105,6 +113,8 @@ const ChatScreen = ({ route }) => {
       <GiftedChat
         messages={messageList}
         onSend={(messages) => onSend(messages)}
+        textInputStyle={styles.chatInput}
+        multi
         user={{
           _id: senderID,
         }}
@@ -135,6 +145,15 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     columnGap: 8,
     paddingHorizontal: 20,
+  },
+  chatInput: {
+    color: "#000",
+    marginBottom: -1,
+    justifyContent: "center",
+    alignItems: "center",
+    maxHeight: 100,
+    paddingTop: 0,
+    paddingBottom: 5,
   },
   textInput: {
     height: "100%",
