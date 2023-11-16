@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   Dimensions,
   TouchableOpacity,
 } from "react-native";
@@ -16,19 +15,20 @@ import { GiftedChat } from "react-native-gifted-chat";
 const { height, width } = Dimensions.get("window");
 
 const ChatScreen = ({ route }) => {
-  // const [input, setInput] = useState("");
   const [messageList, setMessageList] = useState([]);
 
-  const { user_id, name, email, id } = route?.params?.data;
+  const api = route?.params?.data;
+  const firebase = route?.params?.fireStore;
   const db = firestore();
 
-  const receiverID = JSON.stringify(user_id);
-  const senderID = JSON.stringify(route?.params?.id);
-  const postID = JSON.stringify(id);
+  const senderID = "" + route?.params?.id;
+  const receiverID = api?.user_id ? "" + api?.user_id : firebase.receiverID;
+  const postID = api?.id ? "" + api?.id : firebase.postID;
   // const receiverID = uuid.v4();
 
-  console.log(senderID, "   ", receiverID);
-  console.log(route?.params?.data, "route?.params?.data");
+  console.log(senderID, "   ", receiverID, "   ", postID);
+  console.log(route?.params?.data, "---------API DATA----");
+  // console.log(senderID + firebase.receiverID, "---------fireStore", postID);
 
   const onSend = useCallback((messages = []) => {
     // Get already signup user
@@ -46,20 +46,21 @@ const ChatScreen = ({ route }) => {
     //   });
 
     // Signup User
-    db.collection("users")
-      .doc(receiverID + postID)
-      .set({
-        name: name,
-        postTitle: postID,
-        email: email,
-        receiverID: receiverID,
-      })
-      .then((res) => {
-        console.log(res, "==========firebase SUCCESS");
-      })
-      .catch((error) => {
-        console.log(error, "==========firebase ERROR");
-      });
+    // db.collection("users")
+    //   .doc(receiverID + postID)
+    //   .set({
+    //     postID: postID,
+    //     name: api?.name,
+    //     email: api?.email,
+    //     postTitle: "Post title is most important",
+    //     receiverID: receiverID,
+    //   })
+    //   .then((res) => {
+    //     console.log(res, "==========firebase SUCCESS");
+    //   })
+    //   .catch((error) => {
+    //     console.log(error, "==========firebase ERROR");
+    //   });
 
     const msg = messages[0];
     const myMsg = {
@@ -75,9 +76,9 @@ const ChatScreen = ({ route }) => {
 
     // Access For Sender
     db.collection("chats")
-      .doc("" + senderID + receiverID)
+      .doc(senderID + receiverID)
       .collection("post")
-      .doc("" + postID)
+      .doc(postID)
       .collection("messages")
       .add(myMsg);
 
@@ -91,9 +92,9 @@ const ChatScreen = ({ route }) => {
   useEffect(() => {
     const subscriber = db
       .collection("chats")
-      .doc("" + senderID + receiverID)
+      .doc(senderID + receiverID)
       .collection("post")
-      .doc("" + postID)
+      .doc(postID)
       .collection("messages")
       .orderBy("createdAt", "desc");
 
@@ -155,30 +156,4 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 5,
   },
-  textInput: {
-    height: "100%",
-    width: "88%",
-    color: "#000",
-    // backgroundColor: "red",
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
 });
-
-{
-  /* <View style={styles.inputContainer}>
-        <TextInput
-          multiline
-          placeholder="Message..."
-          placeholderTextColor={Colors.DarkGrey}
-          onChangeText={setInput}
-          style={styles.textInput}
-        />
-
-        {input && (
-          <TouchableOpacity onPress={reg}>
-            <FontAwesome name="send" size={25} color={Colors.blue} />
-          </TouchableOpacity>
-        )}
-      </View> */
-}

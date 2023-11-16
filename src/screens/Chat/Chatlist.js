@@ -33,10 +33,6 @@ const Chatlist = ({ navigation }) => {
       .orderBy("postTitle", "desc")
       .get()
       .then((res) => {
-        console.log(
-          res.docs.map((i) => i.ref._documentPath),
-          "=================="
-        );
         setLoading(false);
         // if (res?.docs != []) {
         //   res.docs.map((item) => {
@@ -56,8 +52,21 @@ const Chatlist = ({ navigation }) => {
     getUsers();
   }, []);
 
-  const onSwipeDelete = () => {
-    console.log("onSwipeDelete");
+  const onSwipeDelete = async (index) => {
+    const docID = users?.docs[index]?.id;
+
+    if (docID) {
+      try {
+        await firestore().collection("users").doc(docID).delete();
+        const updatedUsers = [...users.docs];
+        updatedUsers.splice(index, 1);
+
+        setUsers({ docs: updatedUsers });
+        console.log("Document successfully deleted!", docID);
+      } catch (error) {
+        console.error("Error removing document: ", error);
+      }
+    }
   };
 
   const handleDelete = () => {
@@ -70,32 +79,64 @@ const Chatlist = ({ navigation }) => {
       .delete()
       .then(() => {
         console.log("Document successfully deleted!");
+        firestore()
+          .collection("users")
+          .orderBy("postTitle", "desc")
+          .get()
+          .then((res) => {
+            // console.log(
+            //   res.docs.map((i) => i.ref._documentPath),
+            //   "=================="
+            // );
+            // setLoading(false);
+            setUsers(res);
+          })
+          .catch((error) => {
+            // setLoading(false);
+            console.log("ERROR: ", error.message);
+          });
       })
       .catch((error) => {
         console.error("Error removing document: ", error);
       });
   };
 
-  const rightAction = () => {
+  const rightAction = (index) => {
+    // console.log(index, " index");
+    // console.log(progress, " progress");
+    // console.log(dragX, " dragX");
+    const docID = users?.docs[index]?.id;
+    // console.log(users?.docs, "**********rightAction***********");
     return (
-      <View
-        style={{
-          justifyContent: "center",
-        }}>
-        <TouchableOpacity
-          onPress={() => handleDelete()}
-          style={styles.deleteBTN}>
-          <MaterialIcons name="delete" color={"white"} size={25} />
-        </TouchableOpacity>
-      </View>
+      <>
+        {docID && (
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "red",
+              justifyContent: "center",
+              alignItems: "flex-end",
+              paddingRight: 20,
+            }}>
+            {/* <TouchableOpacity
+            // onPress={() => handleDelete()}
+            // style={styles.deleteBTN}
+            > */}
+            <MaterialIcons name="delete" color={"white"} size={25} />
+            {/* </TouchableOpacity> */}
+          </View>
+        )}
+      </>
     );
   };
 
-  const navHandler = (item) =>
+  const navHandler = (item) => {
+    console.log(item?.data(), " :CHAT DATA");
     navigation.navigate("ChatScreen", {
-      data: item?.data(),
+      fireStore: item?.data(),
       id: currentUser?.detail[0].user_id,
     });
+  };
 
   return (
     <View style={styles.main}>
@@ -115,11 +156,12 @@ const Chatlist = ({ navigation }) => {
         <ScrollView>
           {users?.docs?.length > 0 &&
             users?.docs.map((item, index) => {
+              const { name, postTitle, postID } = item?.data();
               return (
                 <Swipeable
                   key={index}
-                  // onSwipeableOpen={onSwipeDelete}
-                  renderRightActions={rightAction}>
+                  onSwipeableOpen={() => onSwipeDelete(index)}
+                  renderRightActions={() => rightAction(index)}>
                   <TouchableOpacity
                     activeOpacity={1}
                     onPress={() => navHandler(item)}
@@ -128,21 +170,29 @@ const Chatlist = ({ navigation }) => {
                     style={[
                       styles.userContainer,
                       {
-                        backgroundColor: chatIndex === index ? "#ddd" : "#fff",
+                        // backgroundColor: chatIndex === index ? "#aaa" : "#fff",
+                        backgroundColor: "#fff",
                         borderBottomWidth:
                           index === users?.docs.length - 1 ? 0 : 1,
                       },
                     ]}>
                     {/* avatar */}
                     <View style={styles.circle}>
-                      <Text style={styles.avatar}>{item?.data()?.name[0]}</Text>
+                      <Text style={styles.avatar}>{name[0]}</Text>
                     </View>
 
                     {/* name & title */}
                     <View>
-                      <Text style={styles.name}>{item?.data()?.name}</Text>
-                      <Text style={[styles.name, { fontSize: 15 }]}>
-                        {item?.data()?.postTitle} 4 Room appartment in DHA 2
+                      <Text style={styles.name}>{name}</Text>
+                      <Text style={styles.name}>
+                        {postTitle} {postID}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.name,
+                          { fontWeight: "400", fontSize: 12, color: "#0007" },
+                        ]}>
+                        Final price?
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -171,7 +221,7 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
   },
   avatar: { color: "#fff", fontSize: 18, fontWeight: "500" },
-  name: { color: "#000", fontSize: 16, fontWeight: "600" },
+  name: { color: "#000", fontSize: 15, fontWeight: "700" },
   circle: {
     width: 45,
     height: 45,
@@ -183,7 +233,7 @@ const styles = StyleSheet.create({
   deleteBTN: {
     backgroundColor: "red",
     height: "100%",
-    width: 60,
+    width: 70,
     justifyContent: "center",
     alignItems: "center",
   },
