@@ -26,9 +26,9 @@ const ChatScreen = ({ route }) => {
   const postID = api?.id ? "" + api?.id : firebase.postID;
   // const receiverID = uuid.v4();
 
-  console.log(senderID, "   ", receiverID, "   ", postID);
-  console.log(route?.params?.data, "---------API DATA----");
-  // console.log(senderID + firebase.receiverID, "---------fireStore", postID);
+  // console.log(senderID, "   ", receiverID, "   ", postID);
+  // console.log(route?.params?.data, "---------API DATA----");
+  console.log(firebase?.receiverID, "---------fireStore", postID);
 
   const onSend = useCallback((messages = []) => {
     // Get already signup user
@@ -37,7 +37,10 @@ const ChatScreen = ({ route }) => {
     //   .get()
     //   .then((res) => {
     //     if (res.docs != []) {
-    //       console.log(JSON.stringify(res.docs[0].data()));
+    //       console.log(
+    //         JSON.stringify(res.docs[0].data()),
+    //         "     Get already signup user"
+    //       );
     //     }
     //   })
     //   .catch((error) => {
@@ -46,21 +49,23 @@ const ChatScreen = ({ route }) => {
     //   });
 
     // Signup User
-    // db.collection("users")
-    //   .doc(receiverID + postID)
-    //   .set({
-    //     postID: postID,
-    //     name: api?.name,
-    //     email: api?.email,
-    //     postTitle: "Post title is most important",
-    //     receiverID: receiverID,
-    //   })
-    //   .then((res) => {
-    //     console.log(res, "==========firebase SUCCESS");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error, "==========firebase ERROR");
-    //   });
+    if (!firebase?.receiverID) {
+      db.collection("users")
+        .doc(receiverID + postID)
+        .set({
+          postID: postID,
+          name: api?.name,
+          email: api?.email,
+          postTitle: "Post title is most important",
+          receiverID: receiverID,
+        })
+        .then((res) => {
+          console.log(res, "==========firebase SIGNUP SUCCESS");
+        })
+        .catch((error) => {
+          console.log(error, "==========firebase SIGNUP ERROR");
+        });
+    }
 
     const msg = messages[0];
     const myMsg = {

@@ -217,7 +217,7 @@ class PostDetail extends Component {
             {/* Posted At */}
             <Text
               style={[styles.posted_at, { fontWeight: "400", fontSize: 14 }]}>
-              Posted: {moment(data?.created_at).format("YYYY-MM-DD")}
+              Posted: {moment(data?.created_at).format("DD-MM-YYYY")}
             </Text>
           </View>
 
@@ -227,7 +227,7 @@ class PostDetail extends Component {
             <Text
               style={[
                 styles.propertyTypeText,
-                { fontSize: 22, marginBottom: 10 },
+                { fontSize: 18, marginBottom: 10, marginLeft: 20 },
               ]}>
               More Details
             </Text>
@@ -237,48 +237,48 @@ class PostDetail extends Component {
             {/* Plot Category */}
             {data?.category !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText1}>{data?.category}</Text>
                 <Text style={styles.gridText2}>Plot Category</Text>
+                <Text style={styles.gridText1}>{data?.category}</Text>
               </View>
             )}
 
             {/* Sale/Rent*/}
             {data?.rent_sale !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText1}>{data?.rent_sale}</Text>
                 <Text style={styles.gridText2}>Sale/Rent</Text>
+                <Text style={styles.gridText1}>{data?.rent_sale}</Text>
               </View>
             )}
 
             {/* Area Unit */}
             {data?.area_unit !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText1}>{data?.area_unit}</Text>
                 <Text style={styles.gridText2}>Area Unit</Text>
+                <Text style={styles.gridText1}>{data?.area_unit}</Text>
               </View>
             )}
 
             {/* Yards*/}
             {data?.yards !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText1}>{data?.yards}</Text>
                 <Text style={styles.gridText2}>Yards</Text>
+                <Text style={styles.gridText1}>{data?.yards}</Text>
               </View>
             )}
 
             {/* Location */}
             {location !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText1}>{location}</Text>
                 <Text style={styles.gridText2}>Location</Text>
+                <Text style={styles.gridText1}>{location}</Text>
               </View>
             )}
 
             {/* Sub Location */}
             {subLocation !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText1}>{subLocation}</Text>
                 <Text style={styles.gridText2}>Sub Location</Text>
+                <Text style={styles.gridText1}>{subLocation}</Text>
               </View>
             )}
 
@@ -287,51 +287,51 @@ class PostDetail extends Component {
             {/* Corner West or east option */}
 
             <View style={styles.inner_moreDetailCont}>
+              <Text style={styles.gridText2}>Construction Staus</Text>
               <Text
                 numberOfLines={2}
                 style={[styles.gridText1, { width: 100 }]}>
-                {data?.corner}, {data?.open}
+                {data?.corner} | {data?.open}
               </Text>
-              <Text style={styles.gridText2}>Construction Staus</Text>
             </View>
 
             {/* Rooms */}
             {data?.rooms !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText1}>{data?.rooms}</Text>
                 <Text style={styles.gridText2}>Rooms</Text>
+                <Text style={styles.gridText1}>{data?.rooms}</Text>
               </View>
             )}
 
             {/* Bedrooms */}
             {data?.bedrooms !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText1}>{data?.bedrooms}</Text>
                 <Text style={styles.gridText2}>Bedrooms</Text>
+                <Text style={styles.gridText1}>{data?.bedrooms}</Text>
               </View>
             )}
 
             {/* Bathrooms */}
             {data?.bathrooms !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText1}>{data?.bathrooms}</Text>
                 <Text style={styles.gridText2}>Bathrooms</Text>
+                <Text style={styles.gridText1}>{data?.bathrooms}</Text>
               </View>
             )}
 
             {/* Rooms */}
             {data?.phase !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText1}>{data?.phase}</Text>
                 <Text style={styles.gridText2}>Phase</Text>
+                <Text style={styles.gridText1}>{data?.phase}</Text>
               </View>
             )}
 
             {/* Furnished */}
             {data?.furnished !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText1}>{data?.furnished}</Text>
                 <Text style={styles.gridText2}>Furnished</Text>
+                <Text style={styles.gridText1}>{data?.furnished}</Text>
               </View>
             )}
           </View>
@@ -429,8 +429,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-start",
     borderWidth: 1,
-    borderTopLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    borderRadius: 15,
+    borderColor: "#aaa",
     marginTop: 20,
     paddingBottom: 10,
   },

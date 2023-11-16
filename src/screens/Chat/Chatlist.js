@@ -54,10 +54,19 @@ const Chatlist = ({ navigation }) => {
 
   const onSwipeDelete = async (index) => {
     const docID = users?.docs[index]?.id;
+    // const docID = "4447";
+    // const postID = "31";
 
     if (docID) {
       try {
         await firestore().collection("users").doc(docID).delete();
+        // await firestore()
+        //   .collection("chats")
+        //   .doc(docID)
+        //   .collection("post")
+        //   .doc(postID)
+        //   .delete();
+
         const updatedUsers = [...users.docs];
         updatedUsers.splice(index, 1);
 
@@ -187,13 +196,13 @@ const Chatlist = ({ navigation }) => {
                       <Text style={styles.name}>
                         {postTitle} {postID}
                       </Text>
-                      <Text
+                      {/* <Text
                         style={[
                           styles.name,
                           { fontWeight: "400", fontSize: 12, color: "#0007" },
                         ]}>
                         Final price?
-                      </Text>
+                      </Text> */}
                     </View>
                   </TouchableOpacity>
                 </Swipeable>
@@ -226,7 +235,7 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 50,
-    backgroundColor: "dodgerblue",
+    backgroundColor: Colors.facebook,
     justifyContent: "center",
     alignItems: "center",
   },

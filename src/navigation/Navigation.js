@@ -39,12 +39,7 @@ export default Navigation = () => {
         screenOptions={{
           contentStyle: { backgroundColor: "transparent" },
           headerShown: false,
-          // options: {
-          //   headerTitleAlign: "center",
-          //   headerStyle: { backgroundColor: Colors.blue },
-          //   headerTintColor: "#fff",
-          //   animation: "slide_from_right",
-          // },
+          // animation: "none",
         }}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="GetStarted" component={GetStarted} />

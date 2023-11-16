@@ -32,7 +32,7 @@ const BottomBar = ({ data, id, user_cellno }) => {
     }
   };
 
-  console.log(id, data.user_id);
+  // console.log(typeof id, typeof data.user_id, "-----BOTTOM BAR");
 
   return (
     <View style={styles.bottomView}>
@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     backgroundColor: Colors.blue,
-    marginBottom: 10,
     flexDirection: "row",
   },
   text_touchable: {
