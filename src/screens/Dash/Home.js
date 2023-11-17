@@ -62,7 +62,7 @@ class Dash extends Component {
       FilteredPosts: null,
       openSearchBar: false,
       openPreFilterModal: false,
-      searched: ''
+      searched: "",
     };
   }
 
@@ -229,56 +229,73 @@ class Dash extends Component {
   }
 
   onSearchOpen = (key) => {
-
     switch (key) {
-      case 'search bar':
+      case "search bar":
         setImmediate(() => {
           this.setState({
             openSearchBar: !this.state.openSearchBar,
-          })
-        })
+          });
+        });
         break;
 
-      case 'filter':
+      case "filter":
         setImmediate(() => {
           this.setState({
             openPreFilterModal: !this.state.openPreFilterModal,
-          })
-        })
+          });
+        });
         break;
     }
-
-  }
+  };
 
   onSearch = (txt) => {
-    var { Posts } = this.state
+    var { Posts } = this.state;
 
     const filterData = Posts.filter((data) => {
-
-      const matches_property_type = data?.property_type.toLowerCase().includes(txt.toLowerCase());
-      const matches_category = data?.category.toLowerCase().includes(txt.toLowerCase());
-      const matches_rent_sale = data?.rent_sale.toLowerCase().includes(txt?.toLowerCase())
-      const matches_open = data?.open.toLowerCase().includes(txt?.toLowerCase())
-      const matches_price = data?.price.toLowerCase().includes(txt?.toLowerCase())
-      const matches_location = JSON.parse(data?.Location).location.toLowerCase().includes(txt?.toLowerCase())
-      const matches_place = JSON.parse(data?.Location).place.toLowerCase().includes(txt?.toLowerCase())
+      const matches_property_type = data?.property_type
+        .toLowerCase()
+        .includes(txt.toLowerCase());
+      const matches_category = data?.category
+        .toLowerCase()
+        .includes(txt.toLowerCase());
+      const matches_rent_sale = data?.rent_sale
+        .toLowerCase()
+        .includes(txt?.toLowerCase());
+      const matches_open = data?.open
+        .toLowerCase()
+        .includes(txt?.toLowerCase());
+      const matches_price = data?.price
+        .toLowerCase()
+        .includes(txt?.toLowerCase());
+      const matches_location = JSON.parse(data?.Location)
+        .location.toLowerCase()
+        .includes(txt?.toLowerCase());
+      const matches_place = JSON.parse(data?.Location)
+        .place.toLowerCase()
+        .includes(txt?.toLowerCase());
       //  console.log("data?.open",data?.open.replace(/\s/g, ""))
       // console.log(".toLowerCase().includes(txt?.toLowerCase())", JSON.parse(data?.Location).location.toLowerCase())
-      return matches_property_type || matches_category || matches_rent_sale || matches_open || matches_price || matches_location || matches_place
-      // || matches_rent_sale | matches_price 
-
-
-    })
+      return (
+        matches_property_type ||
+        matches_category ||
+        matches_rent_sale ||
+        matches_open ||
+        matches_price ||
+        matches_location ||
+        matches_place
+      );
+      // || matches_rent_sale | matches_price
+    });
 
     setImmediate(() => {
       this.setState({
-        FilteredPosts: filterData
-      })
-    })
+        FilteredPosts: filterData,
+      });
+    });
 
     // console.log("filterData", filterData)
     // console.log("filterData LEngth", filterData?.length)
-  }
+  };
 
   render() {
     // console.log("Props:  ",this.props?.userData?.user?.detail[0])
@@ -289,11 +306,13 @@ class Dash extends Component {
         <Header onSearchOpen={() => this.onSearchOpen("search bar")} />
 
         {/* Search Bar */}
-        {this.state.openSearchBar && <SearchBar
-          onCancelSearch={() => this.onSearchOpen("search bar")}
-          onChangeText={(txt) => this.onSearch(txt)}
-          onFilterPress={() => this.onSearchOpen("filter")}
-        />}
+        {this.state.openSearchBar && (
+          <SearchBar
+            onCancelSearch={() => this.onSearchOpen("search bar")}
+            onChangeText={(txt) => this.onSearch(txt)}
+            onFilterPress={() => this.onSearchOpen("filter")}
+          />
+        )}
 
         {/* Search Bar Filter Modal */}
 
@@ -302,7 +321,6 @@ class Dash extends Component {
           onFilterPress={() => this.onSearchOpen("filter")}
           onSearch={(txt) => this.onSearch(txt)}
         />
-
 
         {/* Menu Bar */}
         <MenuBar
@@ -318,19 +336,24 @@ class Dash extends Component {
           <Slideshow
             position={this.state.position}
             dataSource={this.state.sliderImages}
+            containerStyle={{ marginBottom: 10 }}
           />
 
           {/* Posts Component */}
           {this?.state?.Posts ? (
             <AllPosts
-              data={this.state.openSearchBar ? this.state.FilteredPosts : this.state.Posts}
+              data={
+                this.state.openSearchBar
+                  ? this.state.FilteredPosts
+                  : this.state.Posts
+              }
               navProps={this.props.navigation}
               userID={this.props.userData?.user?.id}
               openDeletePostModal={(postID) => this.openDeletePostModal(postID)}
               onFavPress={(user_id, postID, is_favourite) =>
                 this.addToFavourite(user_id, postID, is_favourite)
               }
-            // isFav={}
+              // isFav={}
             />
           ) : (
             <ActivityIndicator
@@ -346,12 +369,12 @@ class Dash extends Component {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={this.state.openDeletePostModal}
-        >
+          visible={this.state.openDeletePostModal}>
           <TouchableOpacity
             style={styles.deletePostModal}
-            onPress={() => this.setState({ openDeletePostModal: false })}
-          ></TouchableOpacity>
+            onPress={() =>
+              this.setState({ openDeletePostModal: false })
+            }></TouchableOpacity>
           <View style={styles.deletePost_mainCont}>
             <Text style={styles.deletePost_title}>
               Are you Sure you want to delete this Post? , this can't be undone!
@@ -360,14 +383,12 @@ class Dash extends Component {
             <View style={styles.flex_direc}>
               <TouchableOpacity
                 onPress={() => this.deletePost()}
-                style={styles.yes_no_btn}
-              >
+                style={styles.yes_no_btn}>
                 <Text style={styles.yes_no_text}>Yes</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => this.setState({ openDeletePostModal: false })}
-                style={styles.yes_no_btn}
-              >
+                style={styles.yes_no_btn}>
                 <Text style={styles.yes_no_text}>NO</Text>
               </TouchableOpacity>
             </View>

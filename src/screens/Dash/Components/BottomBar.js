@@ -36,14 +36,12 @@ const BottomBar = ({ data, id, user_cellno }) => {
 
   return (
     <View style={styles.bottomView}>
-      {data?.user_id != id && (
-        <TouchableOpacity
-          onPress={() => onPress("chat")}
-          style={styles.touchable}>
-          <MaterialIcons name="email" size={22} color="white" />
-          <Text style={styles.text_touchable}>Chat</Text>
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity
+        onPress={() => onPress("chat")}
+        style={styles.touchable}>
+        <MaterialIcons name="email" size={22} color="white" />
+        <Text style={styles.text_touchable}>Chat</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         onPress={() => onPress("whatsapp")}

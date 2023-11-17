@@ -22,6 +22,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 // import postApi from '../../../../src1/old screensÏ/redux1/RequestTypes/post';
 import moment from "moment";
+import { postImageURL } from "../../../config/Common";
 
 const AllPosts = ({
   data,
@@ -65,8 +66,11 @@ const AllPosts = ({
               Location = JSON.parse(item?.item?.Location);
               // console.log("DATA FLATLIST IMAGES,", Location?.location)
             }
+
+            // console.log("ALL POST >>>>", item?.item.post_images[0] === "");
             return (
               <TouchableOpacity
+                activeOpacity={0.7}
                 key={String(index)}
                 disabled={showOption}
                 style={styles.itemContainer}
@@ -76,13 +80,11 @@ const AllPosts = ({
                     location: Location?.location,
                     subLocation: Location?.place,
                   })
-                }
-              >
+                }>
                 {userID == item?.item?.user_id && (
                   <TouchableOpacity
                     onPressIn={() => onOptionPress(item?.item?.id)}
-                    style={styles.optionBtn}
-                  >
+                    style={styles.optionBtn}>
                     <Entypo
                       name="dots-three-horizontal"
                       size={25}
@@ -95,8 +97,7 @@ const AllPosts = ({
                   <TouchableOpacity
                     onPress={() => setShowOption(false)}
                     activeOpacity={0.5}
-                    style={styles.fade}
-                  ></TouchableOpacity>
+                    style={styles.fade}></TouchableOpacity>
                 )}
 
                 {itemId == item?.item?.id && showOption == true && (
@@ -107,23 +108,21 @@ const AllPosts = ({
                         setShowOption(false);
                       }}
                       activeOpacity={0.5}
-                      style={styles.menu_item_btn}
-                    >
+                      style={styles.menu_item_btn}>
                       <Text style={styles.delete_text}>Delete</Text>
                     </TouchableOpacity>
                   </View>
                 )}
 
                 {/* Image */}
-                <Image
-                  source={{
-                    uri:
-                      "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/" +
-                      item?.item.post_images[0],
-                  }}
-                  style={styles.itemImage}
-                />
-
+                {item?.item.post_images[0] === "" ? (
+                  <View style={styles.itemImage} />
+                ) : (
+                  <Image
+                    source={{ uri: postImageURL + item?.item.post_images[0] }}
+                    style={styles.itemImage}
+                  />
+                )}
                 {/* Property Type ("commercial",'Residential", Plot) */}
                 <Text style={styles.propertyTypeText}>
                   {item?.item?.property_type}
@@ -145,8 +144,7 @@ const AllPosts = ({
                         flexDirection: "row",
                         alignItems: "center",
                         marginLeft: 5,
-                      }}
-                    >
+                      }}>
                       <Ionicons name="location-sharp" color={Colors.blue} />
                       <Text style={styles.locationText}>
                         {Location?.location}
@@ -157,8 +155,7 @@ const AllPosts = ({
                     style={[
                       styles.priceText,
                       { marginLeft: Location !== "Null" ? 5 : 0 },
-                    ]}
-                  >
+                    ]}>
                     {item?.item?.property_type}
                   </Text>
                 </View>
@@ -177,8 +174,7 @@ const AllPosts = ({
                     style={[
                       styles.location_price_cont,
                       { justifyContent: "space-around", marginTop: 5 },
-                    ]}
-                  >
+                    ]}>
                     <TouchableOpacity
                       onPress={() =>
                         onFavPress(
@@ -186,8 +182,7 @@ const AllPosts = ({
                           item?.item?.id,
                           item?.item?.is_favourite
                         )
-                      }
-                    >
+                      }>
                       <AntDesign
                         name="heart"
                         size={20}
@@ -200,8 +195,7 @@ const AllPosts = ({
                       />
                     </TouchableOpacity>
                     <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
+                      style={{ flexDirection: "row", alignItems: "center" }}>
                       <Entypo name="eye" size={20} color={Colors.DarkGrey} />
                       <Text style={[styles.posted_at, { marginTop: 0 }]}>
                         {item?.item?.views}
@@ -262,13 +256,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   optionMenu_cont: {
-    width: 80,
+    width: "70%",
     // height: 40,
     borderRadius: 10,
     backgroundColor: "white",
     position: "absolute",
-    right: 5,
-    top: 40,
+    top: 100,
+    alignSelf: "center",
     zIndex: 150,
     justifyContent: "center",
     alignItems: "center",
@@ -300,7 +294,7 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     width: width / 2.15,
-    height: 225,
+    height: 275,
     backgroundColor: "white",
     borderRadius: 10,
     borderWidth: 1,
@@ -314,9 +308,10 @@ const styles = StyleSheet.create({
   },
   itemImage: {
     width: "100%",
-    height: 100,
+    height: 150,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
+    backgroundColor: "#0002",
   },
   propertyTypeText: {
     fontSize: 16,

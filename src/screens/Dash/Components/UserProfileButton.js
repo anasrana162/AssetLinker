@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    marginBottom: 100,
+    marginBottom: 90,
   },
   inner_cont: {
     width: "60%",

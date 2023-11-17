@@ -367,11 +367,13 @@ class PostDetail extends Component {
           <UserProfileButton navProps={this.props.navigation} data={data} />
         </ScrollView>
 
-        <BottomBar
-          data={data}
-          id={this.state.localUserID}
-          user_cellno={data?.phone}
-        />
+        {data?.user_id != this.state.localUserID && (
+          <BottomBar
+            data={data}
+            id={this.state.localUserID}
+            user_cellno={data?.phone}
+          />
+        )}
       </View>
     );
   }
@@ -396,9 +398,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(PostDetail);
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
+    // flex: 1,
     width: width,
-    height: height,
+    // height: height,
     justifyContent: "flex-start",
     alignItems: "flex-start",
     backgroundColor: "white",

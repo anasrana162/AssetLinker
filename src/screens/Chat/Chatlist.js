@@ -13,32 +13,26 @@ import { Colors } from "../../config";
 import LoadingModal from "../../components/LoadingModal";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { postImageURL } from "../../config/Common";
 
 const Chatlist = ({ navigation }) => {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState([]);
   const [loading, setLoading] = useState(true);
   const [chatIndex, setChatIndex] = useState(null);
-
-  // console.log(chatIndex, "chat Index");
+  const db = firestore();
 
   const getUsers = async () => {
     const res = await AsyncStorage.getItem("@assetlinker_userData");
     const data = JSON.parse(res);
     // const tempData = [];
-
     // .where("email", "!=", data?.email)
-    firestore()
-      .collection("users")
-      .orderBy("postTitle", "desc")
+
+    db.collection("users")
+      .orderBy("postID", "desc")
       .get()
       .then((res) => {
         setLoading(false);
-        // if (res?.docs != []) {
-        //   res.docs.map((item) => {
-        //     tempData.push(item.data());
-        //   });
-        // }
         setUsers(res);
         setCurrentUser(data);
       })
@@ -48,96 +42,32 @@ const Chatlist = ({ navigation }) => {
       });
   };
 
-  useEffect(() => {
-    getUsers();
-  }, []);
+  var lastMsg = "";
+  console.log(lastMsg, "~~~~~~~~~GET lastMsg~~~~~~~~~");
+  const getLastMsg = async () => {
+    try {
+      const res = await db
+        .collection("chats")
+        .doc("4445")
+        .collection("post")
+        .doc("29")
+        .collection("messages")
+        .doc("kyc5hWtHLqjXyPrTufUC")
+        .get();
 
-  const onSwipeDelete = async (index) => {
-    const docID = users?.docs[index]?.id;
-    // const docID = "4447";
-    // const postID = "31";
-
-    if (docID) {
-      try {
-        await firestore().collection("users").doc(docID).delete();
-        // await firestore()
-        //   .collection("chats")
-        //   .doc(docID)
-        //   .collection("post")
-        //   .doc(postID)
-        //   .delete();
-
-        const updatedUsers = [...users.docs];
-        updatedUsers.splice(index, 1);
-
-        setUsers({ docs: updatedUsers });
-        console.log("Document successfully deleted!", docID);
-      } catch (error) {
-        console.error("Error removing document: ", error);
+      if (res?._data?.text) {
+        lastMsg = res?._data?.text;
       }
+      console.log("GET MSG: ", lastMsg);
+    } catch (error) {
+      console.log("GET LAST MSG: ", error);
     }
   };
 
-  const handleDelete = () => {
-    console.log("handleDelete");
-    const docId = "4730";
-
-    firestore()
-      .collection("users")
-      .doc(docId)
-      .delete()
-      .then(() => {
-        console.log("Document successfully deleted!");
-        firestore()
-          .collection("users")
-          .orderBy("postTitle", "desc")
-          .get()
-          .then((res) => {
-            // console.log(
-            //   res.docs.map((i) => i.ref._documentPath),
-            //   "=================="
-            // );
-            // setLoading(false);
-            setUsers(res);
-          })
-          .catch((error) => {
-            // setLoading(false);
-            console.log("ERROR: ", error.message);
-          });
-      })
-      .catch((error) => {
-        console.error("Error removing document: ", error);
-      });
-  };
-
-  const rightAction = (index) => {
-    // console.log(index, " index");
-    // console.log(progress, " progress");
-    // console.log(dragX, " dragX");
-    const docID = users?.docs[index]?.id;
-    // console.log(users?.docs, "**********rightAction***********");
-    return (
-      <>
-        {docID && (
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: "red",
-              justifyContent: "center",
-              alignItems: "flex-end",
-              paddingRight: 20,
-            }}>
-            {/* <TouchableOpacity
-            // onPress={() => handleDelete()}
-            // style={styles.deleteBTN}
-            > */}
-            <MaterialIcons name="delete" color={"white"} size={25} />
-            {/* </TouchableOpacity> */}
-          </View>
-        )}
-      </>
-    );
-  };
+  useEffect(() => {
+    getUsers();
+    getLastMsg();
+  }, []);
 
   const navHandler = (item) => {
     console.log(item?.data(), " :CHAT DATA");
@@ -165,47 +95,48 @@ const Chatlist = ({ navigation }) => {
         <ScrollView>
           {users?.docs?.length > 0 &&
             users?.docs.map((item, index) => {
-              const { name, postTitle, postID } = item?.data();
+              const { name, location, features, img } = item?.data();
+              {
+                /* console.log(img, "______________IMAGE"); */
+              }
               return (
-                <Swipeable
-                  key={index}
-                  onSwipeableOpen={() => onSwipeDelete(index)}
-                  renderRightActions={() => rightAction(index)}>
-                  <TouchableOpacity
-                    activeOpacity={1}
-                    onPress={() => navHandler(item)}
-                    onPressIn={() => setChatIndex(index)}
-                    onPressOut={() => setChatIndex(null)}
-                    style={[
-                      styles.userContainer,
-                      {
-                        // backgroundColor: chatIndex === index ? "#aaa" : "#fff",
-                        backgroundColor: "#fff",
-                        borderBottomWidth:
-                          index === users?.docs.length - 1 ? 0 : 1,
-                      },
-                    ]}>
-                    {/* avatar */}
-                    <View style={styles.circle}>
-                      <Text style={styles.avatar}>{name[0]}</Text>
-                    </View>
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={() => navHandler(item)}
+                  onPressIn={() => setChatIndex(index)}
+                  onPressOut={() => setChatIndex(null)}
+                  style={[
+                    styles.userContainer,
+                    {
+                      backgroundColor:
+                        chatIndex === index ? "#00008021" : "#fff",
+                      borderBottomWidth:
+                        index === users?.docs.length - 1 ? 0 : 1,
+                    },
+                  ]}>
+                  {/* avatar */}
+                  <View style={styles.circle}>
+                    <Image
+                      source={{ uri: postImageURL + img }}
+                      style={styles.avatarImg}
+                    />
+                  </View>
 
-                    {/* name & title */}
-                    <View>
-                      <Text style={styles.name}>{name}</Text>
-                      <Text style={styles.name}>
-                        {postTitle} {postID}
-                      </Text>
-                      {/* <Text
-                        style={[
-                          styles.name,
-                          { fontWeight: "400", fontSize: 12, color: "#0007" },
-                        ]}>
-                        Final price?
-                      </Text> */}
-                    </View>
-                  </TouchableOpacity>
-                </Swipeable>
+                  {/* name & title */}
+                  <View>
+                    <Text style={styles.name}>{name}</Text>
+                    <Text style={styles.name}>
+                      {location} {features}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.name,
+                        { fontWeight: "300", fontSize: 12, color: "#0007" },
+                      ]}>
+                      {lastMsg}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               );
             })}
         </ScrollView>
@@ -230,7 +161,12 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
   },
   avatar: { color: "#fff", fontSize: 18, fontWeight: "500" },
-  name: { color: "#000", fontSize: 15, fontWeight: "700" },
+  avatarImg: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+  name: { color: "#000", fontSize: 15, fontWeight: "800" },
   circle: {
     width: 45,
     height: 45,
@@ -238,6 +174,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.facebook,
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden",
   },
   deleteBTN: {
     backgroundColor: "red",

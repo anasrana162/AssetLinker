@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, Dimensions, Button } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import firestore from "@react-native-firebase/firestore";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -24,11 +18,12 @@ const ChatScreen = ({ route }) => {
   const senderID = "" + route?.params?.id;
   const receiverID = api?.user_id ? "" + api?.user_id : firebase.receiverID;
   const postID = api?.id ? "" + api?.id : firebase.postID;
+  // const location = JSON.parse(api?.Location);
   // const receiverID = uuid.v4();
 
   // console.log(senderID, "   ", receiverID, "   ", postID);
-  // console.log(route?.params?.data, "---------API DATA----");
-  console.log(firebase?.receiverID, "---------fireStore", postID);
+  // console.log(location?.valueToShow, "---------API DATA----");
+  // console.log(firebase?.receiverID, "---------fireStore", postID);
 
   const onSend = useCallback((messages = []) => {
     // Get already signup user
@@ -56,7 +51,9 @@ const ChatScreen = ({ route }) => {
           postID: postID,
           name: api?.name,
           email: api?.email,
-          postTitle: "Post title is most important",
+          img: api?.post_images[0],
+          location: JSON.parse(api?.Location)?.valueToShow,
+          features: api?.main_features,
           receiverID: receiverID,
         })
         .then((res) => {
@@ -94,6 +91,36 @@ const ChatScreen = ({ route }) => {
     //   .add(myMsg);
   }, []);
 
+  // =====================================================
+  const onDelete = async (index) => {
+    // const docID = users?.docs[index]?.id;
+    const docID = "4447";
+    const postID = "31";
+
+    if (docID) {
+      try {
+        const res = await firestore()
+          .collection("chats")
+          .doc(docID)
+          .collection("post")
+          .doc(postID)
+          .collection("messages")
+          .doc("jvxNMclr8I9k6Vz51JR5")
+          .delete();
+
+        console.log(
+          "CHAT successfully deleted! ========== ",
+          res,
+          " ============== ",
+          docID
+        );
+      } catch (error) {
+        console.error("Error removing document: ", error);
+      }
+    }
+  };
+  // =====================================================
+
   useEffect(() => {
     const subscriber = db
       .collection("chats")
@@ -116,6 +143,7 @@ const ChatScreen = ({ route }) => {
 
   return (
     <View style={styles.main}>
+      {/* <Button title="Delete" color={"red"} onPress={onDelete} /> */}
       <GiftedChat
         messages={messageList}
         onSend={(messages) => onSend(messages)}
