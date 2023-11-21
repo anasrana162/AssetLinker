@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
 
 export const chatDeleteHandler = async (docID) => {
   // const docID = users?.docs[index]?.id;
-  console.log("------DELETED------", docID);
+  console.log("------chatDeleteHandler------", docID);
 
   if (docID) {
     try {

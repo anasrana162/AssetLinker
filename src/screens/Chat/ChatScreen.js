@@ -97,55 +97,6 @@ const ChatScreen = ({ route }) => {
     //   .add(myMsg);
   }, []);
 
-  // =====================================================\
-
-  // const collectionRef = () => {
-  //   const docID = "4445";
-  //   const postID = "29";
-
-  //   db.collection("chats")
-  //     .doc(docID)
-  //     .collection("post")
-  //     .doc(postID)
-  //     .get()
-  //     .then((querySnapshot) => {
-  //       // querySnapshot.forEach((doc) => {
-  //       //   doc.ref.delete();
-  //       // });
-
-  //       console.log(querySnapshot, "_______________");
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error deleting collection: ", error);
-  //     });
-  // };
-
-  const onDelete = async (index) => {
-    // const docID = users?.docs[index]?.id;
-    const docID = "4445";
-    const postID = "29";
-
-    if (docID) {
-      try {
-        const messagesCollection = db
-          .collection("chats")
-          .doc(docID)
-          .collection("post")
-          .doc(postID)
-          .collection("messages");
-
-        const messagesSnapshot = await messagesCollection.get();
-        messagesSnapshot.forEach((doc) => {
-          // const res = await messagesCollection.doc(doc.id).delete();
-          console.log("CHAT successfully deleted!:    ", doc);
-        });
-      } catch (error) {
-        console.error("Error removing document: ", error);
-      }
-    }
-  };
-  // =====================================================
-
   useEffect(() => {
     const subscriber = db
       .collection("chat")
@@ -215,3 +166,29 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
 });
+
+// =====================================================\
+
+export const deleteMessagesHandler = async (docID, postID) => {
+  // const docID = users?.docs[index]?.id;
+
+  if (docID) {
+    try {
+      const messagesCollection = firestore()
+        .collection("chats")
+        .doc(docID)
+        .collection("post")
+        .doc(postID)
+        .collection("messages");
+
+      const messagesSnapshot = await messagesCollection.get();
+      // messagesSnapshot.forEach((doc) => {
+      //   // const res = await messagesCollection.doc(doc.id).delete();
+      // });
+      console.log("CHAT successfully deleted!:    ", docID, "----", postID);
+    } catch (error) {
+      console.error("Error removing document: ", error);
+    }
+  }
+};
+// =====================================================

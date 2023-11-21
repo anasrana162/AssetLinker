@@ -39,6 +39,8 @@ import Toast from "react-native-toast-message";
 import { ActivityIndicator } from "react-native";
 import SearchBar from "./Components/SearchBar";
 import FilterModal from "./Components/FilterModal";
+import { chatDeleteHandler } from "../Chat/Chatlist";
+import { deleteMessagesHandler } from "../Chat/ChatScreen";
 
 class Dash extends Component {
   constructor(props) {
@@ -58,6 +60,7 @@ class Dash extends Component {
       ],
       openDeletePostModal: false,
       postID: "",
+      docID: "",
       Posts: null,
       FilteredPosts: null,
       openSearchBar: false,
@@ -92,12 +95,14 @@ class Dash extends Component {
       this.props?.navigation.navigate("GetStarted");
     }, 1000);
   };
-  openDeletePostModal = (postID) => {
-    console.log("POST TO DELETE:", postID);
+
+  openDeletePostModal = (postID, docID) => {
+    console.log("POST TO DELETE:", docID);
     setImmediate(() => {
       this.setState({
         openDeletePostModal: true,
         postID: postID,
+        docID: docID,
       });
     });
   };
@@ -124,6 +129,8 @@ class Dash extends Component {
             text1: "Post Deleted Successfully!",
             visibilityTime: 3000,
           });
+          chatDeleteHandler(this.state.docID);
+          deleteMessagesHandler(this.state.docID, this.state.postID);
           console.log("Delete Post API Response", res?.data);
         }
       })
@@ -349,7 +356,9 @@ class Dash extends Component {
               }
               navProps={this.props.navigation}
               userID={this.props.userData?.user?.id}
-              openDeletePostModal={(postID) => this.openDeletePostModal(postID)}
+              openDeletePostModal={(postID, docID) =>
+                this.openDeletePostModal(postID, docID)
+              }
               onFavPress={(user_id, postID, is_favourite) =>
                 this.addToFavourite(user_id, postID, is_favourite)
               }

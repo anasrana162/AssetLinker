@@ -24,6 +24,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import moment from "moment";
 import { postImageURL } from "../../../config/Common";
 import { chatDeleteHandler } from "../../Chat/Chatlist";
+import { deleteMessagesHandler } from "../../Chat/ChatScreen";
 
 const AllPosts = ({
   data,
@@ -58,6 +59,7 @@ const AllPosts = ({
           columnWrapperStyle={styles.inner_main}
           renderItem={(item, index) => {
             const docID = item?.item?.user_id + "" + item?.item?.id;
+            const postID = "" + item?.item?.id;
             var Location = "";
             if (
               item?.item?.Location !== "Null" ||
@@ -66,8 +68,6 @@ const AllPosts = ({
               Location = JSON.parse(item?.item?.Location);
               // console.log("DATA FLATLIST IMAGES,", Location?.location)
             }
-
-            // console.log("ALL POST >>>>", item?.item.post_images[0] === "");
             return (
               <TouchableOpacity
                 activeOpacity={0.7}
@@ -104,9 +104,9 @@ const AllPosts = ({
                   <View style={styles.optionMenu_cont}>
                     <TouchableOpacity
                       onPress={() => {
-                        openDeletePostModal(item?.item?.id);
+                        // console.log("ALL POST >>>>", docID);
                         setShowOption(false);
-                        chatDeleteHandler(docID);
+                        openDeletePostModal(postID, docID);
                       }}
                       activeOpacity={0.5}
                       style={styles.menu_item_btn}>
