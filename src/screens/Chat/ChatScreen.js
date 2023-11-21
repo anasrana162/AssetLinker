@@ -21,7 +21,7 @@ const ChatScreen = ({ route }) => {
   // const location = JSON.parse(api?.Location);
   // const receiverID = uuid.v4();
 
-  // console.log(senderID, "   ", receiverID, "   ", postID);
+  console.log(senderID, "   ", receiverID, "   ", postID);
   // console.log(location?.valueToShow, "---------API DATA----");
   // console.log(firebase?.receiverID, "---------fireStore", postID);
 
@@ -43,6 +43,28 @@ const ChatScreen = ({ route }) => {
     //     console.log("FAILED GET ID: ", error.message);
     //   });
 
+    const chatHandler = () => {
+      const msg = messages[0];
+      const myMsg = {
+        ...msg,
+        sendBy: senderID,
+        sendTo: receiverID,
+        createdAt: Date.parse(msg?.createdAt),
+      };
+
+      setMessageList((previousMessages) =>
+        GiftedChat.append(previousMessages, myMsg)
+      );
+
+      // Access For Sender
+      db.collection("chat")
+        .doc(senderID + receiverID)
+        .collection("post")
+        .doc(postID)
+        .collection("messages")
+        .add(myMsg);
+    };
+
     // Signup User
     if (!firebase?.receiverID) {
       db.collection("users")
@@ -55,34 +77,18 @@ const ChatScreen = ({ route }) => {
           location: JSON.parse(api?.Location)?.valueToShow,
           features: api?.main_features,
           receiverID: receiverID,
+          senderID: senderID,
         })
         .then((res) => {
           console.log(res, "==========firebase SIGNUP SUCCESS");
+          chatHandler();
         })
         .catch((error) => {
           console.log(error, "==========firebase SIGNUP ERROR");
         });
+    } else {
+      chatHandler();
     }
-
-    const msg = messages[0];
-    const myMsg = {
-      ...msg,
-      sendBy: senderID,
-      sendTo: receiverID,
-      createdAt: Date.parse(msg?.createdAt),
-    };
-
-    setMessageList((previousMessages) =>
-      GiftedChat.append(previousMessages, myMsg)
-    );
-
-    // Access For Sender
-    db.collection("chats")
-      .doc(senderID + receiverID)
-      .collection("post")
-      .doc(postID)
-      .collection("messages")
-      .add(myMsg);
 
     // Access For Receiver
     // db.collection("chats")
@@ -91,29 +97,48 @@ const ChatScreen = ({ route }) => {
     //   .add(myMsg);
   }, []);
 
-  // =====================================================
+  // =====================================================\
+
+  // const collectionRef = () => {
+  //   const docID = "4445";
+  //   const postID = "29";
+
+  //   db.collection("chats")
+  //     .doc(docID)
+  //     .collection("post")
+  //     .doc(postID)
+  //     .get()
+  //     .then((querySnapshot) => {
+  //       // querySnapshot.forEach((doc) => {
+  //       //   doc.ref.delete();
+  //       // });
+
+  //       console.log(querySnapshot, "_______________");
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error deleting collection: ", error);
+  //     });
+  // };
+
   const onDelete = async (index) => {
     // const docID = users?.docs[index]?.id;
-    const docID = "4447";
-    const postID = "31";
+    const docID = "4445";
+    const postID = "29";
 
     if (docID) {
       try {
-        const res = await firestore()
+        const messagesCollection = db
           .collection("chats")
           .doc(docID)
           .collection("post")
           .doc(postID)
-          .collection("messages")
-          .doc("jvxNMclr8I9k6Vz51JR5")
-          .delete();
+          .collection("messages");
 
-        console.log(
-          "CHAT successfully deleted! ========== ",
-          res,
-          " ============== ",
-          docID
-        );
+        const messagesSnapshot = await messagesCollection.get();
+        messagesSnapshot.forEach((doc) => {
+          // const res = await messagesCollection.doc(doc.id).delete();
+          console.log("CHAT successfully deleted!:    ", doc);
+        });
       } catch (error) {
         console.error("Error removing document: ", error);
       }
@@ -123,7 +148,7 @@ const ChatScreen = ({ route }) => {
 
   useEffect(() => {
     const subscriber = db
-      .collection("chats")
+      .collection("chat")
       .doc(senderID + receiverID)
       .collection("post")
       .doc(postID)

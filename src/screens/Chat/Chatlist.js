@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import firestore from "@react-native-firebase/firestore";
@@ -15,58 +16,45 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { postImageURL } from "../../config/Common";
 
+const { width } = Dimensions.get("window");
+
 const Chatlist = ({ navigation }) => {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState([]);
   const [loading, setLoading] = useState(true);
   const [chatIndex, setChatIndex] = useState(null);
+  const [lastMsg, setLastMsg] = useState("");
   const db = firestore();
 
   const getUsers = async () => {
     const res = await AsyncStorage.getItem("@assetlinker_userData");
     const data = JSON.parse(res);
+    const userID = "" + data?.id;
     // const tempData = [];
     // .where("email", "!=", data?.email)
 
-    db.collection("users")
-      .orderBy("postID", "desc")
-      .get()
-      .then((res) => {
-        setLoading(false);
-        setUsers(res);
-        setCurrentUser(data);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log("ERROR: ", error.message);
-      });
-  };
-
-  var lastMsg = "";
-  console.log(lastMsg, "~~~~~~~~~GET lastMsg~~~~~~~~~");
-  const getLastMsg = async () => {
-    try {
-      const res = await db
-        .collection("chats")
-        .doc("4445")
-        .collection("post")
-        .doc("29")
-        .collection("messages")
-        .doc("kyc5hWtHLqjXyPrTufUC")
-        .get();
-
-      if (res?._data?.text) {
-        lastMsg = res?._data?.text;
-      }
-      console.log("GET MSG: ", lastMsg);
-    } catch (error) {
-      console.log("GET LAST MSG: ", error);
+    if (userID) {
+      db.collection("users")
+        .where("senderID", "==", userID)
+        .get()
+        .then((res) => {
+          setLoading(false);
+          setUsers(res);
+          setCurrentUser(data);
+        })
+        .catch((error) => {
+          setLoading(false);
+          console.log("ERROR: ", error.message);
+        });
     }
   };
 
+  // console.log(currentUser?.email, "~~~~~~~~~USER~~~~~~~~~");
+  console.log(users?.docs, "~~~~~~~~~GET USERS~~~~~~~~~");
+  // console.log(lastMsg, "~~~~~~~~~GET lastMsg~~~~~~~~~");
+
   useEffect(() => {
     getUsers();
-    getLastMsg();
   }, []);
 
   const navHandler = (item) => {
@@ -95,12 +83,15 @@ const Chatlist = ({ navigation }) => {
         <ScrollView>
           {users?.docs?.length > 0 &&
             users?.docs.map((item, index) => {
-              const { name, location, features, img } = item?.data();
+              const { name, location, features, img, receiverID, senderID } =
+                item?.data();
               {
-                /* console.log(img, "______________IMAGE"); */
+                /* console.log(senderID, "______________IMAGE"); */
               }
+
               return (
                 <TouchableOpacity
+                  key={index}
                   activeOpacity={1}
                   onPress={() => navHandler(item)}
                   onPressIn={() => setChatIndex(index)}
@@ -116,22 +107,31 @@ const Chatlist = ({ navigation }) => {
                   ]}>
                   {/* avatar */}
                   <View style={styles.circle}>
-                    <Image
-                      source={{ uri: postImageURL + img }}
-                      style={styles.avatarImg}
-                    />
+                    {img ? (
+                      <Image
+                        source={{ uri: postImageURL + img }}
+                        style={styles.avatarImg}
+                      />
+                    ) : (
+                      <Text style={{ color: "#fff", fontSize: 20 }}>
+                        {name[0]}
+                      </Text>
+                    )}
                   </View>
 
                   {/* name & title */}
                   <View>
                     <Text style={styles.name}>{name}</Text>
-                    <Text style={styles.name}>
-                      {location} {features}
+                    <Text
+                      style={[styles.name, { width: width / 1.3 }]}
+                      numberOfLines={1}
+                      ellipsizeMode="tail">
+                      {receiverID} {location} {features}
                     </Text>
                     <Text
                       style={[
                         styles.name,
-                        { fontWeight: "300", fontSize: 12, color: "#0007" },
+                        { fontWeight: "300", fontSize: 12, color: "#000" },
                       ]}>
                       {lastMsg}
                     </Text>
@@ -184,3 +184,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+export const chatDeleteHandler = async (docID) => {
+  // const docID = users?.docs[index]?.id;
+  console.log("------DELETED------", docID);
+
+  if (docID) {
+    try {
+      await firestore().collection("users").doc(docID).delete();
+      // const updatedUsers = [...users.docs];
+      // updatedUsers.splice(index, 1);
+
+      // setUsers({ docs: updatedUsers });
+      console.log("successfully deleted!");
+    } catch (error) {
+      console.error("Error removing document: ", error);
+    }
+  }
+};

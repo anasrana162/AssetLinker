@@ -53,19 +53,20 @@ const Chatlist = ({ navigation }) => {
   }, []);
 
   const onSwipeDelete = async (index) => {
-    // const docID = users?.docs[index]?.id;
-    const docID = "4445";
-    const postID = "29";
+    const docID = users?.docs[index]?.id;
 
     if (docID) {
       try {
         // await firestore().collection("users").doc(docID).delete();
 
-        // .collection("post")
-        // .doc(postID)
-        // .collection("messages")
-        // .doc("GQGI4djmNJiNV9HluwgI")
-        const res = await firestore().collection("chats").doc("4445").delete();
+        const res = await firestore()
+          .collection("chats")
+          .doc("4445")
+          .collection("post")
+          .doc(postID)
+          .collection("messages")
+          .doc("GQGI4djmNJiNV9HluwgI")
+          .delete();
 
         // const updatedUsers = [...users.docs];
         // updatedUsers.splice(index, 1);
@@ -252,3 +253,41 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+// const getLastMsg = async () => {
+//   var postID = "";
+//   var receiverID = "";
+
+//   users.forEach((element) => {
+//     if (element?.data) {
+//       postID = element?._data?.postID;
+//       receiverID = element?._data?.receiverID;
+//       console.log(receiverID, "~~~~~~~~~GET USERS~~~~~~~~~");
+//       console.log(postID, "~~~~~~~~~GET POST~~~~~~~~~");
+//     }
+//   });
+
+//   try {
+//     const res = await db
+//       .collection("users")
+//       .doc(currentUser?.id + receiverID)
+//       .collection("post")
+//       .doc(postID)
+//       .collection("messages")
+//       .orderBy("createdAt", "desc")
+//       .limit(1)
+//       .get();
+
+//     if (res?._docs) {
+//       const [
+//         {
+//           _data: { text },
+//         },
+//       ] = res?._docs;
+//       setLastMsg(text);
+//     }
+//     console.log("GET MSG: ", res?._docs);
+//   } catch (error) {
+//     console.log("GET LAST MSG: ", error);
+//   }
+// };

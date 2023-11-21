@@ -23,6 +23,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 // import postApi from '../../../../src1/old screensÏ/redux1/RequestTypes/post';
 import moment from "moment";
 import { postImageURL } from "../../../config/Common";
+import { chatDeleteHandler } from "../../Chat/Chatlist";
 
 const AllPosts = ({
   data,
@@ -56,8 +57,7 @@ const AllPosts = ({
           scrollEnabled={false}
           columnWrapperStyle={styles.inner_main}
           renderItem={(item, index) => {
-            // console.log("ID", userID," ",item?.item?.user_id)
-
+            const docID = item?.item?.user_id + "" + item?.item?.id;
             var Location = "";
             if (
               item?.item?.Location !== "Null" ||
@@ -106,6 +106,7 @@ const AllPosts = ({
                       onPress={() => {
                         openDeletePostModal(item?.item?.id);
                         setShowOption(false);
+                        chatDeleteHandler(docID);
                       }}
                       activeOpacity={0.5}
                       style={styles.menu_item_btn}>
