@@ -163,7 +163,8 @@ const styles = StyleSheet.create({
   searchTextInput: {
     color: "#000",
     width: "85%",
-    height: 30,
+    height: 35,
+    fontSize:12,
     backgroundColor: "#fff",
     borderRadius: 50,
     paddingHorizontal: 20,

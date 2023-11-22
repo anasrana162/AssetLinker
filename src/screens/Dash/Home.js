@@ -259,18 +259,18 @@ class Dash extends Component {
     var { Posts } = this.state;
 
     const filterData = Posts.filter((data) => {
-      const matches_property_type = data?.property_type
-        .toLowerCase()
-        .includes(txt.toLowerCase());
+        const matches_property_type = data?.property_type
+          .toLowerCase()
+          .includes(txt.toLowerCase());
       const matches_category = data?.category
         .toLowerCase()
         .includes(txt.toLowerCase());
       const matches_rent_sale = data?.rent_sale
         .toLowerCase()
         .includes(txt?.toLowerCase());
-      const matches_open = data?.open
-        .toLowerCase()
-        .includes(txt?.toLowerCase());
+      // const matches_open = data?.open
+      //   .toLowerCase()
+      //   .includes(txt?.toLowerCase());
       const matches_price = data?.price
         .toLowerCase()
         .includes(txt?.toLowerCase());
@@ -280,13 +280,13 @@ class Dash extends Component {
       const matches_place = JSON.parse(data?.Location)
         .place.toLowerCase()
         .includes(txt?.toLowerCase());
-      //  console.log("data?.open",data?.open.replace(/\s/g, ""))
+      console.log("data?.open", data?.open) //.replace(/\s/g, "")
       // console.log(".toLowerCase().includes(txt?.toLowerCase())", JSON.parse(data?.Location).location.toLowerCase())
       return (
         matches_property_type ||
         matches_category ||
         matches_rent_sale ||
-        matches_open ||
+        // matches_open ||
         matches_price ||
         matches_location ||
         matches_place
@@ -362,7 +362,7 @@ class Dash extends Component {
               onFavPress={(user_id, postID, is_favourite) =>
                 this.addToFavourite(user_id, postID, is_favourite)
               }
-              // isFav={}
+            // isFav={}
             />
           ) : (
             <ActivityIndicator

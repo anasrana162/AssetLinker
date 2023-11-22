@@ -29,12 +29,12 @@ const height = Dimensions.get("screen").height - HEIGHT;
 import { connect } from "react-redux";
 import * as userActions from "../../redux/actions/user";
 import { bindActionCreators } from "redux";
-import ImageViewer from "./Components/ImageViewer";
+import ImageViewer from "../Dash/Components/ImageViewer";
 
 import { Colors } from "../../config";
 import moment from "moment";
-import UserProfileButton from "./Components/UserProfileButton";
-import BottomBar from "./Components/BottomBar";
+import UserProfileButton from "../Dash/Components/UserProfileButton";
+import BottomBar from "../Dash/Components/BottomBar";
 import AssetLinkers from "../../api/AssetLinkers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -210,7 +210,7 @@ class PostDetail extends Component {
                   styles.posted_at,
                   { marginLeft: 0, fontWeight: "400", fontSize: 14 },
                 ]}>
-                {location}
+                {location}{subLocation == "Null" ? "" : ", " + subLocation}
               </Text>
             </View>
 
@@ -221,7 +221,7 @@ class PostDetail extends Component {
             </Text>
           </View>
 
-          {/* More Detail */}
+          {/*  Detail */}
           <View style={styles.moreDetailCont}>
             {/* More Details Title */}
             <Text
@@ -229,7 +229,7 @@ class PostDetail extends Component {
                 styles.propertyTypeText,
                 { fontSize: 18, marginBottom: 10, marginLeft: 20 },
               ]}>
-              More Details
+              Details
             </Text>
 
             {/* GRID */}
@@ -237,13 +237,13 @@ class PostDetail extends Component {
             {/* Plot Category */}
             {data?.category !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText2}>Plot Category</Text>
+                <Text style={styles.gridText2}>Category</Text>
                 <Text style={styles.gridText1}>{data?.category}</Text>
               </View>
             )}
 
             {/* Sale/Rent*/}
-            {data?.rent_sale !== "Null" && (
+            {data?.rent_sale !== "Null" && data?.property_type !== "Plot" && (
               <View style={styles.inner_moreDetailCont}>
                 <Text style={styles.gridText2}>Sale/Rent</Text>
                 <Text style={styles.gridText1}>{data?.rent_sale}</Text>
@@ -251,18 +251,18 @@ class PostDetail extends Component {
             )}
 
             {/* Area Unit */}
-            {data?.area_unit !== "Null" && (
+            {/* {data?.area_unit !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
                 <Text style={styles.gridText2}>Area Unit</Text>
                 <Text style={styles.gridText1}>{data?.area_unit}</Text>
               </View>
-            )}
+            )} */}
 
             {/* Yards*/}
             {data?.yards !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
                 <Text style={styles.gridText2}>Yards</Text>
-                <Text style={styles.gridText1}>{data?.yards}</Text>
+                <Text style={styles.gridText1}>{data?.yards.toLowerCase()}</Text>
               </View>
             )}
 
@@ -270,24 +270,24 @@ class PostDetail extends Component {
             {location !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
                 <Text style={styles.gridText2}>Location</Text>
-                <Text style={styles.gridText1}>{location}</Text>
+                <Text style={styles.gridText1}>{location}{subLocation == "Null" ? "" : ", " + subLocation}</Text>
               </View>
             )}
 
             {/* Sub Location */}
-            {subLocation !== "Null" && (
+            {/* {subLocation !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
                 <Text style={styles.gridText2}>Sub Location</Text>
                 <Text style={styles.gridText1}>{subLocation}</Text>
               </View>
-            )}
+            )} */}
 
             {/* Construction Status */}
 
             {/* Corner West or east option */}
 
             <View style={styles.inner_moreDetailCont}>
-              <Text style={styles.gridText2}>Construction Staus</Text>
+              <Text style={styles.gridText2}>Status</Text>
               <Text
                 numberOfLines={2}
                 style={[styles.gridText1, { width: 100 }]}>
@@ -319,10 +319,10 @@ class PostDetail extends Component {
               </View>
             )}
 
-            {/* Rooms */}
+            {/* Area Type */}
             {data?.phase !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText2}>Phase</Text>
+                <Text style={styles.gridText2}>Area Type</Text>
                 <Text style={styles.gridText1}>{data?.phase}</Text>
               </View>
             )}
@@ -330,7 +330,7 @@ class PostDetail extends Component {
             {/* Furnished */}
             {data?.furnished !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText2}>Furnished</Text>
+                <Text style={styles.gridText2}>Furn/Unfurn</Text>
                 <Text style={styles.gridText1}>{data?.furnished}</Text>
               </View>
             )}
@@ -463,6 +463,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "400",
     color: Colors.black,
+    textAlign: "right",
   },
   gridText2: {
     fontSize: 16,

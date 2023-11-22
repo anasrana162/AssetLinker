@@ -95,6 +95,8 @@ export const Yards = [
     { id: 2, name: 'KANAL' },
     { id: 3, name: 'YARD' },
     { id: 4, name: 'MARLA' },
+    { id: 1, name: 'Sq.FEET' },
+    { id: 2, name: 'Sq.YARD' },
     { id: 5, name: 'Others' },
 ];
 export const Phase = [

@@ -18,7 +18,7 @@ import ChangePassword from "../screens/Authentication/ChangePassword";
 import Post from "../screens/Post/Post";
 import Otp from "../screens/Authentication/Otp";
 import MyProfile from "../screens/Profile/MyProfile";
-import PostDetail from "../screens/Dash/PostDetail";
+import PostDetail from "../screens/Post/PostDetail";
 import EditProfile from "../screens/Profile/EditProfile";
 import Favourite from "../screens/Favourite/Favourite";
 import Account from "../screens/Account/Account";

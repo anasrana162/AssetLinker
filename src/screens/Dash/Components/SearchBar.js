@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     },
     textinp: {
         width: "80%",
-        height: 35,
+        height: 40,
         borderRadius: 50,
         backgroundColor: "white",
         borderWidth: 0.5,

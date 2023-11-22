@@ -369,7 +369,7 @@ const Post = (props) => {
     console.log("");
     console.log(
       "dataForApi of Category " + category + " " + "dataForApi",
-      dataForApi?.check
+      dataForApi
     );
     console.log("");
     console.log("");
@@ -433,7 +433,7 @@ const Post = (props) => {
           property_type: category,
           images: images,
           price: price,
-          yards: "Null",
+          yards: yardsNumber + " " + yards.toLowerCase(),
           category: propertyCategory,
           corner: selected_constructionStatus_corner,
           open: selected_constructionStatus_open,
@@ -460,7 +460,7 @@ const Post = (props) => {
           property_type: category,
           images: images,
           price: price,
-          yards: "Null",
+          yards: yardsNumber + " " + yards.toLowerCase(),
           category: propertyCategory,
           corner: selected_constructionStatus_corner,
           open: selected_constructionStatus_open,
@@ -486,7 +486,7 @@ const Post = (props) => {
           property_type: category,
           images: images,
           price: price,
-          yards: yards,
+          yards: yardsNumber + " " + yards.toLowerCase(),
           category: "Null",
           corner: selected_constructionStatus_corner,
           open: selected_constructionStatus_open,
@@ -529,7 +529,7 @@ const Post = (props) => {
           });
           return alert("Please select either Sale or Rent!");
         }
-        if (images == null || images == []) {
+        if (images == null || images == [] || images == "") {
           setImmediate(() => {
             setCheck(false);
             setLoader(false);
@@ -557,7 +557,20 @@ const Post = (props) => {
           });
           return alert("Please select category!");
         }
-
+        if (yards == null || yards == "") {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Please select Area Unit!");
+        }
+        if (yardsNumber == null || yardsNumber == "") {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Please Enter Area Value!");
+        }
         // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
         //     setImmediate(() => {
         //         setCheck(false)
@@ -620,6 +633,13 @@ const Post = (props) => {
           });
           return alert("Please select either Sale or Rent!");
         }
+        if (images == null || images == [] || images == "") {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Please select an image");
+        }
         if (category == null || category == "") {
           console.log("category is prob,: ", category);
           setImmediate(() => {
@@ -643,6 +663,20 @@ const Post = (props) => {
             setLoader(false);
           });
           return alert("Please select category!");
+        }
+        if (yards == null || yards == "") {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Please select Area Unit!");
+        }
+        if (yardsNumber == null || yardsNumber == "") {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Please Enter Area Value!");
         }
 
         // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
@@ -699,8 +733,15 @@ const Post = (props) => {
             setCheck(false);
             setLoader(false);
           });
-          return alert("Please eneter Details!");
+          return alert("Please enter Details!");
         }
+        // if (area_unit == null || area_unit == "") {
+        //   setImmediate(() => {
+        //     setCheck(false);
+        //     setLoader(false);
+        //   });
+        //   return alert("Please select Area Unit!");
+        // }
 
         return check;
 
@@ -718,6 +759,13 @@ const Post = (props) => {
             setLoader(false);
           });
           return alert("Please select either Sale or Rent!");
+        }
+        if (images == null || images == [] || images == "") {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Please select an image");
         }
         if (category == null || category == "") {
           setImmediate(() => {
@@ -738,7 +786,14 @@ const Post = (props) => {
             setCheck(false);
             setLoader(false);
           });
-          return alert("Please select Yards!");
+          return alert("Please select Area Unit!");
+        }
+        if (yardsNumber == null || yardsNumber == "") {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Please Enter Area Value!");
         }
 
         // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
@@ -893,8 +948,8 @@ const Post = (props) => {
           dropdownDataChange == false
             ? listOfArea
             : dropdownSV == "DHA"
-            ? Location_DHA_City
-            : Location_Bahria
+              ? Location_DHA_City
+              : Location_Bahria
         }
         show={locationDropDownOpen}
         onDismiss={() => setLocationDropDownOpen(!locationDropDownOpen)}
