@@ -10,6 +10,8 @@ const { height, width } = Dimensions.get("window");
 
 const ChatScreen = ({ route }) => {
   const [messageList, setMessageList] = useState([]);
+  const [messageList1, setMessageList1] = useState([]);
+  const [messageList2, setMessageList2] = useState([]);
 
   const api = route?.params?.data;
   const firebase = route?.params?.fireStore;
@@ -97,7 +99,28 @@ const ChatScreen = ({ route }) => {
     //   .add(myMsg);
   }, []);
 
+  // useEffect(() => {
+  //   console.log("senderID + receiverID",senderID + receiverID)
+  //   const subscriber = db
+  //     .collection("chat")
+  //     .doc(senderID + receiverID)
+  //     .collection("post")
+  //     .doc(postID)
+  //     .collection("messages")
+  //     .orderBy("createdAt", "desc");
+
+  //   subscriber.onSnapshot((querysnapshot) => {
+  //     const allmessages = querysnapshot.docs.map((item) => {
+  //       // console.log(item, "==========firebase SUCCESS");
+  //       return { ...item._data, createdAt: item._data.createdAt };
+  //     });
+  //     setMessageList(allmessages);
+  //   });
+
+  //   return () => subscriber;
+  // }, []);
   useEffect(() => {
+    console.log("senderID + receiverID", senderID + receiverID)
     const subscriber = db
       .collection("chat")
       .doc(senderID + receiverID)
@@ -106,22 +129,71 @@ const ChatScreen = ({ route }) => {
       .collection("messages")
       .orderBy("createdAt", "desc");
 
+    console.log("subscriber", subscriber.onSnapshot)
+    var messages1 = []
     subscriber.onSnapshot((querysnapshot) => {
-      const allmessages = querysnapshot.docs.map((item) => {
-        console.log(item, "==========firebase SUCCESS");
-        return { ...item._data, createdAt: item._data.createdAt };
-      });
-      setMessageList(allmessages);
+      console.log("querysnapshot", querysnapshot.docs)
+      const allmessages = querysnapshot.docs
+      // .map((item) => {
+      //   console.log(item, "==========firebase SUCCESS");
+      //   return { ...item._data, createdAt: item._data.createdAt }
+      //   // { ...item._data, createdAt: item._data.createdAt };
+      // });
+      console.log("allmessages", allmessages)
+      // messageList.push(allmessages)
+      setMessageList1(allmessages)
+      // messages1 = allmessages
+      // setMessageList(allmessages);
+      // return querysnapshot.docs
     });
 
-    return () => subscriber;
+    const subscriber1 = db
+      .collection("chat")
+      .doc(receiverID + senderID)
+      .collection("post")
+      .doc(postID)
+      .collection("messages")
+      .orderBy("createdAt", "desc");
+
+    var messages2 = []
+    subscriber1.onSnapshot(async (querysnapshot) => {
+      const allmessages = querysnapshot.docs
+      // .map((item) => {
+      //   // console.log(item, "==========firebase SUCCESS");
+      //   return { ...item._data, createdAt: item._data.createdAt }
+      //   // ;
+      // });
+      // messages2 = allmessages
+      setMessageList(allmessages)
+      // messageList.push(allmessages)
+      //;
+
+    });
+    var mergeResult = [...messageList, ...messageList1]
+    var arr
+    mergeResult.map((item) => {
+      // console.log(item, "==========firebase SUCCESS");
+      messageList2.push({ ...item._data, createdAt: item._data.createdAt })
+      // ;
+    })
+    setMessageList2(messageList2)
+
+
+
+
+
+
+    // setMessageList(...messages1,...messages2)
+
+    // return () => finalmes;
   }, []);
 
   return (
     <View style={styles.main}>
       {/* <Button title="Delete" color={"red"} onPress={onDelete} /> */}
+      {console.log("messageList", messageList)}
       <GiftedChat
-        messages={messageList}
+        messages={messageList2}
         onSend={(messages) => onSend(messages)}
         textInputStyle={styles.chatInput}
         multi

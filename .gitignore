@@ -12,10 +12,10 @@ Gemfile.lock
 tsconfig.json
 
 #IOS
-ios/
+# ios/
 
 #Android
-android/
+# android/
 
 src1/
 

@@ -15,9 +15,7 @@ import LoadingModal from "../../components/LoadingModal";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { postImageURL } from "../../config/Common";
-
 const { width } = Dimensions.get("window");
-
 const Chatlist = ({ navigation }) => {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState([]);
@@ -25,50 +23,43 @@ const Chatlist = ({ navigation }) => {
   const [chatIndex, setChatIndex] = useState(null);
   const [lastMsg, setLastMsg] = useState("");
   const db = firestore();
-
   const getUsers = async () => {
     const res = await AsyncStorage.getItem("@assetlinker_userData");
     const data = JSON.parse(res);
     const userID = "" + data?.id;
-    // const tempData = [];
-    // .where("email", "!=", data?.email)
-
     if (userID) {
-      db.collection("users")
-        .where("senderID", "==", userID)
-        .get()
-        .then((res) => {
-          setLoading(false);
-          setUsers(res);
-          setCurrentUser(data);
-        })
-        .catch((error) => {
-          setLoading(false);
-          console.log("ERROR: ", error.message);
-        });
+      const senderQuery = db
+        .collection("users")
+        .where("senderID", "==", userID);
+      const receiverQuery = db
+        .collection("users")
+        .where("receiverID", "==", userID);
+      // Combine results from both queries
+      const senderResults = await senderQuery.get();
+      const receiverResults = await receiverQuery.get();
+      const combinedResults = [...senderResults.docs, ...receiverResults.docs];
+      setLoading(false);
+      setUsers(combinedResults);
+      setCurrentUser(data);
+      // console.log(combinedResults, "~~~~~~~~~GET USERS~~~~~~~~~");
     }
   };
-
-  // console.log(currentUser?.email, "~~~~~~~~~USER~~~~~~~~~");
-  console.log(users?.docs, "~~~~~~~~~GET USERS~~~~~~~~~");
-  // console.log(lastMsg, "~~~~~~~~~GET lastMsg~~~~~~~~~");
-
+  // console.log(users.length, "~~~~~~~~~GET lastMsg~~~~~~~~~");
   useEffect(() => {
     getUsers();
   }, []);
-
   const navHandler = (item) => {
-    console.log(item?.data(), " :CHAT DATA");
+    // console.log(item?.data(), " :CHAT DATA");
+    console.log("currentUser DATA",currentUser)
     navigation.navigate("ChatScreen", {
       fireStore: item?.data(),
       id: currentUser?.detail[0].user_id,
     });
   };
-
   return (
     <View style={styles.main}>
       <LoadingModal loading={loading} bgc="transparent" />
-      {users?.docs?.length == 0 ? (
+      {!users?.length ? (
         <Text
           style={{
             color: "grey",
@@ -81,14 +72,11 @@ const Chatlist = ({ navigation }) => {
         </Text>
       ) : (
         <ScrollView>
-          {users?.docs?.length > 0 &&
-            users?.docs.map((item, index) => {
+          {users?.length > 0 &&
+            users?.map((item, index) => {
+              console.log(item, "______________IMAGE");
               const { name, location, features, img, receiverID, senderID } =
                 item?.data();
-              {
-                /* console.log(senderID, "______________IMAGE"); */
-              }
-
               return (
                 <TouchableOpacity
                   key={index}
@@ -101,8 +89,7 @@ const Chatlist = ({ navigation }) => {
                     {
                       backgroundColor:
                         chatIndex === index ? "#00008021" : "#fff",
-                      borderBottomWidth:
-                        index === users?.docs.length - 1 ? 0 : 1,
+                      borderBottomWidth: index === users?.length - 1 ? 0 : 1,
                     },
                   ]}>
                   {/* avatar */}
@@ -118,7 +105,6 @@ const Chatlist = ({ navigation }) => {
                       </Text>
                     )}
                   </View>
-
                   {/* name & title */}
                   <View>
                     <Text style={styles.name}>{name}</Text>
@@ -144,9 +130,7 @@ const Chatlist = ({ navigation }) => {
     </View>
   );
 };
-
 export default Chatlist;
-
 const styles = StyleSheet.create({
   main: {
     flex: 1,
@@ -184,17 +168,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
 export const chatDeleteHandler = async (docID) => {
-  // const docID = users?.docs[index]?.id;
   console.log("------chatDeleteHandler------", docID);
-
   if (docID) {
     try {
       await firestore().collection("users").doc(docID).delete();
       // const updatedUsers = [...users.docs];
       // updatedUsers.splice(index, 1);
-
       // setUsers({ docs: updatedUsers });
       console.log("successfully deleted!");
     } catch (error) {
