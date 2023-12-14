@@ -342,7 +342,7 @@ class PostDetail extends Component {
             {data?.phase !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
                 <Text style={styles.gridText2}>Plot Status</Text>
-                <Text style={[styles.gridText1,{width:150}]}>{data?.phase}</Text>
+                <Text style={[styles.gridText1, { width: 150 }]}>{data?.phase}</Text>
               </View>
             )}
 
@@ -358,17 +358,6 @@ class PostDetail extends Component {
           {/* Description */}
           <Text style={styles.posted_at}>Description:</Text>
           <Text style={styles.main_features_text}>{data?.details}</Text>
-
-          {/* MSID */}
-          <Text style={styles.posted_at}>MSID: {data?.ms_id}</Text>
-
-          {/* User Type Button */}
-          <TouchableOpacity
-            onPress={() => this.onPress("openUserDetail")}
-            style={styles.user_type_btn}>
-            <Text style={styles.user_type_btn_text}>{user_type}</Text>
-          </TouchableOpacity>
-
           {/* Address */}
           {
             data?.address !== "Null" && (
@@ -385,7 +374,35 @@ class PostDetail extends Component {
             )
           }
 
-          {!this.state.postUserData == "" && <UserProfileButton navProps={this.props.navigation} data={this.state.postUserData} />}
+
+          {/* User Type Button */}
+          <TouchableOpacity
+            onPress={() => this.onPress("openUserDetail")}
+            style={styles.user_type_btn}>
+            <Text style={styles.user_type_btn_text}>{user_type}</Text>
+          </TouchableOpacity>
+
+          {/* MSID */}
+          {console.log("data?.ms_id",this.props.userData?.user)}
+          <Text style={styles.posted_at}>MSID: {this.props?.userData?.user?.ms_id}</Text>
+
+          <View style={{ flexDirection: "row", columnGap: 5,marginLeft:10,marginTop:5 }}>
+          <Text style={[styles.text, { fontWeight: "600" }]}>
+            Member Since:
+          </Text>
+          <Text style={[styles.text, { fontWeight: "400" }]}>
+            {moment(data?.member_since).format("YYYY-MM-DD")}
+          </Text>
+        </View>
+
+          {
+            !this.state.postUserData == "" &&
+            <UserProfileButton
+              navProps={this.props.navigation}
+              data={this.state.postUserData}
+            />
+          }
+
         </ScrollView >
 
         {data?.user_id != this.state.localUserID && (
@@ -523,5 +540,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 10,
     width: width - 40,
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.black,
   },
 });

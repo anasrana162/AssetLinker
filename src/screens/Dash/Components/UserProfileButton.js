@@ -15,8 +15,8 @@ import Feather from "react-native-vector-icons/Feather";
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
-const UserProfileButton = ({ navProps, data, }) => {
-  console.log("data", data)
+const UserProfileButton = ({ navProps, data, screenName }) => {
+  // console.log("data", data)
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -47,41 +47,50 @@ const UserProfileButton = ({ navProps, data, }) => {
         {/* Designation */}
 
         {/* User Name */}
-        <View style={{ flexDirection: "row", marginTop: 5, marginBottom: 5, alignItems: "center" }}>
+        <View style={{
+          flexDirection: "row",
+          marginTop: (data?.detail[0]?.designation == undefined ||
+            data?.detail[0]?.designation == "") ? 0 : 10,
+          marginBottom: (data?.detail[0]?.designation == undefined ||
+            data?.detail[0]?.designation == "") ? 0 : 10,
+          alignItems: "center"
+        }}>
+
           {(
             data?.detail[0]?.designation == undefined ||
             data?.detail[0]?.designation == "") ?
             <></>
             :
             <View style={{
-              // width: 80,
-              // height: 30,
-              paddingVertical: 5,
-              paddingHorizontal: 10,
+              width: 60,
+              height: 25,
               backgroundColor: Colors.blue,
               justifyContent: "center",
               alignItems: "center",
-              borderRadius: 10,
+              borderRadius: 5,
 
             }}>
-              <Text style={[styles.text, { fontWeight: "700", fontSize: 12, color: "white" }]}>{data?.detail[0]?.designation}</Text>
+              <Text style={[styles.text, { fontWeight: "800", fontSize: 14, color: "white" }]}>{data?.detail[0]?.designation}</Text>
             </View>}
 
-          <Text style={[styles.text, {
-            fontWeight: "700",
-            marginLeft: 5
-          }]}
-          >{data?.name}</Text>
+
+
 
         </View>
-        <View style={{ flexDirection: "row", columnGap: 10 }}>
+        <Text style={[styles.text, {
+          fontWeight: "700",
+          marginBottom: (data?.detail[0]?.designation == undefined ||
+            data?.detail[0]?.designation == "") ? -5 : 5,
+        }]}
+        >{data?.name}</Text>
+        {/* <View style={{ flexDirection: "row", columnGap: 5 }}>
           <Text style={[styles.text, { fontWeight: "600" }]}>
             Member Since:
           </Text>
           <Text style={[styles.text, { fontWeight: "400" }]}>
             {moment(data?.member_since).format("YYYY-MM-DD")}
           </Text>
-        </View>
+        </View> */}
 
 
         {/* See Profile Button */}
@@ -95,7 +104,8 @@ const UserProfileButton = ({ navProps, data, }) => {
             });
           }}
           style={{
-            marginTop: 10,
+            marginTop: (data?.detail[0]?.designation == undefined ||
+              data?.detail[0]?.designation == "") ? -5 : 5,
             flexDirection: "row",
             // marginLeft: 2
           }}>
@@ -106,7 +116,7 @@ const UserProfileButton = ({ navProps, data, }) => {
             name="chevron-right"
             size={20}
             color="black"
-            // style={{ position: "absolute", right: 30 }}
+          // style={{ position: "absolute", right: 30 }}
           />
 
         </TouchableOpacity>
@@ -127,7 +137,7 @@ export default UserProfileButton;
 const styles = StyleSheet.create({
   mainContainer: {
     width: width,
-    height: 100,
+    height: 90,
     // borderWidth: 1,
     marginVertical: 20,
     flexDirection: "row",

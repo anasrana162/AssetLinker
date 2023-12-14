@@ -124,15 +124,19 @@ const AllPosts = ({
                     style={styles.itemImage}
                   />
                 )}
-                {/* Property Type ("commercial",'Residential", Plot) */}
-                <Text style={styles.propertyTypeText}>
-                  {item?.item?.property_type}
-                </Text>
-
                 {/* Plot Category (Bulding, shop etc) */}
-                {item?.item?.category == "Null" ? <></> : <Text style={styles.plotCategory}>
-                  Plot Category: {item?.item?.category}
+                {item?.item?.category == "Null" ? <></> :  <Text style={styles.propertyTypeText}>
+                  {item?.item?.category}
                 </Text>}
+
+                {/* Property Type ("commercial",'Residential", Plot) */}
+                <Text style={[styles.propertyTypeText, { fontSize: 14, marginTop: 5 }]}>
+                  {item?.item?.property_type} / {item?.item?.rent_sale}
+                  {/* {item?.item?.property_type} */}
+                </Text>
+                {/* {item?.item?.category == "Null" ? <></> : <Text style={styles.plotCategory}>
+                  Plot Category: {item?.item?.category}
+                </Text>} */}
 
                 {/* Description (details) */}
                 {/* <Text numberOfLines={2} style={styles.description}>{item?.item?.details}</Text> */}

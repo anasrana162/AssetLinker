@@ -31,19 +31,23 @@ export default class Account extends Component {
   }
 
   async allUser() {
+    var { buyerSeller, consultant, builder } = this.state
     try {
       const res = await AssetLinkers.get("/allUser");
       const data = res?.data?.response;
       this.setState({ all: data });
       data.map((item, index) => {
         if (item?.user_type === "buyer_seller") {
-          this.setState({ buyerSeller: [item] });
+          buyerSeller.push(item)
+          this.setState({ buyerSeller });
           console.log(item, "=========Buyer Seller===========");
         } else if (item?.user_type === "estate_agent") {
-          this.setState({ consultant: [item] });
+          consultant.push(item)
+          this.setState({ consultant });
           console.log(item, "=========Consultant===========");
         } else if (item?.user_type === "builder") {
-          this.setState({ builder: [item] });
+          builder.push(item)
+          this.setState({ builder});
           console.log(item, "=========builder===========");
         }
       });
@@ -104,8 +108,8 @@ export default class Account extends Component {
               alignSelf: "flex-start",
               flexDirection: "row",
               alignItems: "center",
-              marginLeft:10,
-              marginBottom:20
+              marginLeft: 10,
+              marginBottom: 20
             }}>
             <AntDesign name="leftcircleo" size={30} color="black" />
             <Text style={{ fontSize: 14, color: "black", fontWeight: "500", marginLeft: 5, }}>Go Back</Text>

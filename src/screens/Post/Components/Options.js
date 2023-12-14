@@ -22,6 +22,7 @@ const Options = ({
     constructionStatus_corner,
     constructionStatus_open,
     PlotYards,
+    selectedAreaUnit,
     PlotPhase,
     Area_Unit,
     Rooms,
@@ -125,9 +126,15 @@ const Options = ({
                 {/* } */}
                 {/* {(Category_Selected == "Plot" && yardSelected == true) && */}
                 <CustomTextInp
-                    // titleEN={"Address *"}
+                    titleEN={ "Enter Number *"}
                     onChangeText={(txt) => onChangeText(txt, "yards")}
+                    placeholder={selectedAreaUnit == "Others" ? "ex. 100" : ""}
                 />
+                {selectedAreaUnit == "Others" && <CustomTextInp
+                    titleEN={selectedAreaUnit == "Others" ? "Enter Unit *" : "Others"}
+                    onChangeText={(txt) => onChangeText(txt, "num_unit_yards")}
+                    placeholder={selectedAreaUnit == "Others" ? "ex. yards" : ""}
+                />}
                 {/* } */}
 
 
@@ -205,11 +212,12 @@ const Options = ({
                 {<View style={styles.space_line}></View>}
 
                 {/* Address */}
-                {Category_Selected !== "Residential" &&
+                {/* {Category_Selected !== "Residential" && */}
                     <CustomTextInp
                         titleEN={"Address *"}
                         onChangeText={(txt) => onChangeText(txt, "address")}
-                    />}
+                    />
+                    {/* } */}
 
                 {/* Space Line */}
                 {/* <View style={styles.space_line}></View> */}

@@ -67,6 +67,7 @@ const Post = (props) => {
   const [sale_Rent, setSale_Rent] = useState("Rent");
   const [rooms, setRooms] = useState("Null");
   const [yards, setYards] = useState("");
+  const [yards_Unit, setYards_Unit] = useState("");
   const [PlotYards, setPlotYards] = useState([
     { id: 1, name: 'ACRE' },
     { id: 2, name: 'KANAL' },
@@ -277,8 +278,10 @@ const Post = (props) => {
       case "yards":
         setYardsNumber(val);
         break;
+      case "num_unit_yards":
+        setYards_Unit(val);
+        break;
       case "commercial_prop_cat":
-
         setPropertyCategory(val);
         break;
 
@@ -517,20 +520,20 @@ const Post = (props) => {
 
     const dataForApi = checkCategory();
 
-    console.log("");
-    console.log("");
-    console.log("--------------------ffffff2-------------------------");
-    console.log("");
-    console.log("");
-    console.log(
-      "dataForApi of Category " + category + " " + "dataForApi",
-      dataForApi
-    );
-    console.log("");
-    console.log("");
-    console.log("--------------------ffffff-------------------------");
-    console.log("");
-    console.log("");
+    // console.log("");
+    // console.log("");
+    // console.log("--------------------ffffff2-------------------------");
+    // console.log("");
+    // console.log("");
+    // console.log(
+    //   "dataForApi of Category " + category + " " + "dataForApi",
+    //   dataForApi
+    // );
+    // console.log("");
+    // console.log("");
+    // console.log("--------------------ffffff-------------------------");
+    // console.log("");
+    // console.log("");
 
     if (dataForApi?.check == true) {
       setImmediate(() => {
@@ -588,7 +591,7 @@ const Post = (props) => {
           property_type: category,
           images: images,
           price: price,
-          yards: yardsNumber + " " + yards.toLowerCase(),
+          yards: yards == "Others" ? yardsNumber + " " + yards_Unit : yardsNumber + " " + yards.toLowerCase(),
           category: propertyCategory,
           corner: selected_constructionStatus_corner,
           open: selected_constructionStatus_open,
@@ -615,7 +618,7 @@ const Post = (props) => {
           property_type: category,
           images: images,
           price: price,
-          yards: yardsNumber + " " + yards.toLowerCase(),
+          yards: yards == "Others" ? yardsNumber + " " + yards_Unit : yardsNumber + " " + yards.toLowerCase(),
           category: propertyCategory,
           corner: selected_constructionStatus_corner,
           open: selected_constructionStatus_open,
@@ -641,7 +644,7 @@ const Post = (props) => {
           property_type: category,
           images: images,
           price: price,
-          yards: yardsNumber + " " + yards.toLowerCase(),
+          yards: yards == "Others" ? yardsNumber + " " + yards_Unit : yardsNumber + " " + yards.toLowerCase(),
           category: "Null",
           corner: selected_constructionStatus_corner,
           open: selected_constructionStatus_open,
@@ -684,13 +687,13 @@ const Post = (props) => {
           });
           return alert("Please select either Sale or Rent!");
         }
-        if (images == null || images == [] || images == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please select an image");
-        }
+        // if (images == null || images == [] || images == "") {
+        //   setImmediate(() => {
+        //     setCheck(false);
+        //     setLoader(false);
+        //   });
+        //   return alert("Please select an image");
+        // }
         if (category == null || category == "") {
           setImmediate(() => {
             setCheck(false);
@@ -725,6 +728,13 @@ const Post = (props) => {
             setLoader(false);
           });
           return alert("Please Enter Area Value!");
+        }
+        if (yards == "Others" && (yardsNumber == "" || yards_Unit == "")) {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Please Enter Value of Others!");
         }
         // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
         //     setImmediate(() => {
@@ -788,13 +798,13 @@ const Post = (props) => {
           });
           return alert("Please select either Sale or Rent!");
         }
-        if (images == null || images == [] || images == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please select an image");
-        }
+        // if (images == null || images == [] || images == "") {
+        //   setImmediate(() => {
+        //     setCheck(false);
+        //     setLoader(false);
+        //   });
+        //   return alert("Please select an image");
+        // }
         if (category == null || category == "") {
           console.log("category is prob,: ", category);
           setImmediate(() => {
@@ -832,6 +842,13 @@ const Post = (props) => {
             setLoader(false);
           });
           return alert("Please Enter Area Value!");
+        }
+        if (address == null || address == "") {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Please enter Address!");
         }
 
         // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
@@ -915,13 +932,13 @@ const Post = (props) => {
           });
           return alert("Please select either Sale or Rent!");
         }
-        if (images == null || images == [] || images == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please select an image");
-        }
+        // if (images == null || images == [] || images == "") {
+        //   setImmediate(() => {
+        //     setCheck(false);
+        //     setLoader(false);
+        //   });
+        //   return alert("Please select an image");
+        // }
         if (category == null || category == "") {
           setImmediate(() => {
             setCheck(false);
@@ -1069,6 +1086,7 @@ const Post = (props) => {
           constructionStatus_corner={Plots1} //data  corner/non-corner
           constructionStatus_open={Plots} //data  west/east open
           PlotYards={PlotYards} //data
+          selectedAreaUnit={yards}
           PlotPhase={Phase1} // old data Phase //data
           Area_Unit={propertyCategory == "Apartment" ? Area_unit1 : Area_unit} //data
           Rooms={Rooms} // data

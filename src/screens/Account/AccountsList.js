@@ -57,7 +57,7 @@ const AccountsList = (props) => {
     <View style={styles.mainContainer}>
       <SearchBar onChangeText={(i) => setSearchInput(i)} navProps={props?.navigation} />
       <FlatList
-        data={filteredData}
+        data={filteredData.length == 0 ? data : filteredData}
         renderItem={({ item, index }) => {
           // console.log(item, "~~~~~~ITEM~~~~~~~");
           return <CustomerContainer data={item} key={index} />;
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     color: "#000",
     width: "85%",
     height: 35,
-    fontSize:12,
+    fontSize: 12,
     backgroundColor: "#fff",
     borderRadius: 50,
     paddingHorizontal: 20,

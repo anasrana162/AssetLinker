@@ -96,7 +96,7 @@ const Chatlist = (props,) => {
         <ScrollView>
           {users?.length > 0 &&
             users?.map((item, index) => {
-              // console.log(item, "______________IMAGE");
+              console.log(item, "______________IMAGE");
               const { name, location, features, img, receiverID, senderID } =
                 item?.data();
               return (
