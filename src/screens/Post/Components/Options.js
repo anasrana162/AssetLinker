@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Dimensions, Image, TouchableOpacity, NativeModules } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ButtonList from './ButtonList'
 import CustomTextInp from './CustomTextInp'
 import LocationDropDown from './LocationDropDown'
@@ -37,8 +37,18 @@ const Options = ({
     propertyCategorySelected,
     typedYards,
 }) => {
-    const [yardSelected, setYardselected] = useState(false)
+    // const [PlotYards, setPlotYards] = useState([
+    //     { id: 1, name: 'ACRE' },
+    //     { id: 2, name: 'KANAL' },
+    //     { id: 3, name: 'YARDS' },
+    //     { id: 4, name: 'MARLA' },
+    //     { id: 5, name: 'Sq.FEET' },
+    //     { id: 6, name: 'Others' },
+    // ])
     // console.log("selectTypeData", selectTypeData)
+
+
+
     return (
         <>
             <View style={styles.mainContainer}>
@@ -70,6 +80,12 @@ const Options = ({
                         titleSale={"Category *"}
                         onSelectValue={(val) => onSelectValue(val, "commercial_prop_cat")}
                     />}
+                {propertyCategorySelected == "Others" && Category_Selected == "Commercial" &&
+                    <CustomTextInp
+                        titleEN={"Others *"}
+                        onChangeText={(txt) => onChangeText(txt, "commercial_prop_cat")}
+                    />
+                }
 
                 {/* residential Category */}
                 {Category_Selected == "Residential" &&
@@ -78,6 +94,14 @@ const Options = ({
                         titleSale={"Category *"}
                         onSelectValue={(val) => onSelectValue(val, "residential_prop_cat")}
                     />}
+
+                {propertyCategorySelected == "Others" && Category_Selected == "Residential" &&
+                    <CustomTextInp
+
+                        titleEN={"Others *"}
+                        onChangeText={(txt) => onChangeText(txt, "residential_prop_cat")}
+                    />
+                }
 
                 {/* Rooms */}
                 {/* {propertyCategorySelected == "Office" &&
@@ -89,21 +113,22 @@ const Options = ({
 
                 {/* Yards for plots */}
                 {/* {Category_Selected == "Plot" && */}
-                    < ButtonList
-                        data={PlotYards}
-                        titleSale={"Area Unit *"}
-                        onSelectValue={(val) => {
-                            onSelectValue(val, "yards")
-                            setYardselected(true)
-                        }}
-                    />
-                    {/* } */}
+
+                < ButtonList
+                    data={PlotYards}
+                    titleSale={"Area Unit *"}
+                    onSelectValue={(val) => {
+                        onSelectValue(val, "yards")
+                        // setYardselected(true)
+                    }}
+                />
+                {/* } */}
                 {/* {(Category_Selected == "Plot" && yardSelected == true) && */}
-                    <CustomTextInp
-                        // titleEN={"Address *"}
-                        onChangeText={(txt) => onChangeText(txt, "yards")}
-                    />
-                    {/* } */}
+                <CustomTextInp
+                    // titleEN={"Address *"}
+                    onChangeText={(txt) => onChangeText(txt, "yards")}
+                />
+                {/* } */}
 
 
 
@@ -157,6 +182,12 @@ const Options = ({
                         data={PlotPhase}
                         titleSale={"Area Type *"}
                         onSelectValue={(val) => onSelectValue(val, "phase")}
+                    />
+                }
+                {Category_Selected == "Plot" &&
+                    <CustomTextInp
+                        titleEN={"Plot Status *"}
+                        onChangeText={(txt) => onChangeText(txt, "phase1")}
                     />}
 
                 {/* Space Line */}
@@ -185,8 +216,8 @@ const Options = ({
 
                 {/* Area Unit */}
                 {/* {propertyCategorySelected == "Shop" || propertyCategorySelected == "Apartment" && */}
-               
-                    {/* < ButtonList
+
+                {/* < ButtonList
                         data={Area_Unit}
                         titleSale={"Area Unit *"}
                         onSelectValue={(val) => onSelectValue(val, "area_unit")}

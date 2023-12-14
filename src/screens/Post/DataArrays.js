@@ -93,11 +93,10 @@ export const ResidentialCategories = [
 export const Yards = [
     { id: 1, name: 'ACRE' },
     { id: 2, name: 'KANAL' },
-    { id: 3, name: 'YARD' },
+    { id: 3, name: 'YARDS' },
     { id: 4, name: 'MARLA' },
-    { id: 1, name: 'Sq.FEET' },
-    { id: 2, name: 'Sq.YARD' },
-    { id: 5, name: 'Others' },
+    { id: 5, name: 'Sq.FEET' },
+    { id: 6, name: 'Others' },
 ];
 export const Phase = [
     { id: 1, name: 'Phase' },
@@ -105,6 +104,11 @@ export const Phase = [
     { id: 3, name: 'Sector' },
     { id: 4, name: 'Block' },
     { id: 5, name: 'Others' },
+];
+export const Phase1=[
+    { id: 1, name: 'Grey Structure' },
+    { id: 2, name: 'Boundary Wall' },
+    
 ];
 export const Area_unit = [
     { id: 1, name: 'Sq. Feet' },

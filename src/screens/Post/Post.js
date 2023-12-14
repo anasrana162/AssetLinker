@@ -52,6 +52,7 @@ import {
   bathrooms,
   Plots,
   Plots1,
+  Phase1,
 } from "./DataArrays";
 
 {
@@ -66,11 +67,20 @@ const Post = (props) => {
   const [sale_Rent, setSale_Rent] = useState("Rent");
   const [rooms, setRooms] = useState("Null");
   const [yards, setYards] = useState("");
+  const [PlotYards, setPlotYards] = useState([
+    { id: 1, name: 'ACRE' },
+    { id: 2, name: 'KANAL' },
+    { id: 3, name: 'YARDS' },
+    { id: 4, name: 'MARLA' },
+    { id: 5, name: 'Sq.FEET' },
+    { id: 6, name: 'Others' },
+  ])
   const [yardsNumber, setYardsNumber] = useState("");
   const [furnished, setFurnished] = useState("Null");
   const [bedrooms1, setBedrooms] = useState("Null");
   const [bathrooms1, setBathrooms] = useState("Null");
   const [phase, setPhase] = useState("");
+  const [phase1, setPhase1] = useState("");
   const [loc_bahria, setLoc_bahria] = useState("");
   const [loc_dha, setLoc_dha] = useState("");
   const [area_unit, setArea_Unit] = useState("Null");
@@ -97,6 +107,7 @@ const Post = (props) => {
   const [main_features, setMain_features] = useState("");
   const [details, setdetails] = useState("");
   const [propertyCategory, setPropertyCategory] = useState("");
+  const [propertyCategoryOthers, setPropertyCategoryOthers] = useState("");
   const [images, setImages] = useState("");
   const [imagesPaths, setImagesPaths] = useState("");
   const [loader, setLoader] = useState(false);
@@ -265,6 +276,22 @@ const Post = (props) => {
         break;
       case "yards":
         setYardsNumber(val);
+        break;
+      case "commercial_prop_cat":
+
+        setPropertyCategory(val);
+        break;
+
+      case "residential_prop_cat":
+        setPropertyCategory(val);
+        break;
+
+      case "phase":
+        setPhase(val);
+        break;
+      case "phase1":
+        setPhase1(val);
+        break;
     }
   };
 
@@ -326,11 +353,139 @@ const Post = (props) => {
         break;
 
       case "commercial_prop_cat":
-        setPropertyCategory(val);
+        if (val == "Others") {
+          setPropertyCategoryOthers(val)
+          setPropertyCategory('')
+        } else {
+          setPropertyCategory(val);
+          setPropertyCategoryOthers(val)
+        }
+        switch (val) {
+          case 'Building':
+
+            setPlotYards([
+              { id: 1, name: 'Sq.FEET' },
+              { id: 2, name: 'YARDS' },
+            ])
+            break;
+
+          case 'Shop':
+            setPlotYards([
+              { id: 1, name: 'Sq.FEET' },
+            ])
+            break;
+
+          case 'Office':
+            setPlotYards([
+              { id: 1, name: 'Sq.FEET' },
+            ])
+            break;
+
+          case 'Basement':
+            setPlotYards([
+              { id: 1, name: 'Sq.FEET' },
+              { id: 2, name: 'YARDS' },
+            ])
+            break;
+          case 'Mise.Nine':
+            setPlotYards([
+              { id: 1, name: 'Sq.FEET' },
+              { id: 2, name: 'YARDS' },
+            ])
+            break;
+          case 'WareHouse':
+            setPlotYards([
+              { id: 1, name: 'ACRE' },
+              { id: 2, name: 'KANAL' },
+              { id: 3, name: 'YARDS' },
+              { id: 4, name: 'MARLA' },
+              { id: 5, name: 'Sq.FEET' },
+              { id: 6, name: 'Others' },
+            ])
+            break;
+          case 'PentHouse':
+            setPlotYards([
+              { id: 1, name: 'YARDS' },
+            ])
+            break;
+          case 'Others':
+            setPlotYards([
+              { id: 1, name: 'ACRE' },
+              { id: 2, name: 'KANAL' },
+              { id: 3, name: 'YARDS' },
+              { id: 4, name: 'MARLA' },
+              { id: 5, name: 'Sq.FEET' },
+              { id: 6, name: 'Others' },
+            ])
+            break;
+        }
         break;
 
       case "residential_prop_cat":
-        setPropertyCategory(val);
+        if (val == "Others") {
+          setPropertyCategoryOthers(val)
+          setPropertyCategory('')
+        } else {
+          setPropertyCategory(val);
+          setPropertyCategoryOthers(val)
+        }
+        switch (val) {
+          case 'Bangalow':
+            setPlotYards([
+              { id: 1, name: 'ACRE' },
+              { id: 2, name: 'KANAL' },
+              { id: 3, name: 'YARDS' },
+              { id: 4, name: 'MARLA' },
+              { id: 5, name: 'Sq.FEET' },
+              { id: 6, name: 'Others' },
+            ])
+            break;
+
+          case 'Farm House':
+            setPlotYards([
+              { id: 1, name: 'ACRE' },
+              { id: 2, name: 'KANAL' },
+              { id: 3, name: 'YARDS' },
+              { id: 4, name: 'MARLA' },
+              { id: 5, name: 'Sq.FEET' },
+              { id: 6, name: 'Others' },
+            ])
+            break;
+
+          case 'Town House':
+            setPlotYards([
+              { id: 1, name: 'ACRE' },
+              { id: 2, name: 'KANAL' },
+              { id: 3, name: 'YARDS' },
+              { id: 4, name: 'MARLA' },
+              { id: 5, name: 'Sq.FEET' },
+              { id: 6, name: 'Others' },
+            ])
+            break;
+
+          case 'Apartment':
+            setPlotYards([
+              { id: 1, name: 'Sq.FEET' },
+              { id: 2, name: 'YARDS' },
+            ])
+            break;
+
+          case 'PentHouse':
+            setPlotYards([
+              { id: 1, name: 'YARDS' },
+            ])
+            break;
+          case 'Others':
+            setPlotYards([
+              { id: 1, name: 'ACRE' },
+              { id: 2, name: 'KANAL' },
+              { id: 3, name: 'YARDS' },
+              { id: 4, name: 'MARLA' },
+              { id: 5, name: 'Sq.FEET' },
+              { id: 6, name: 'Others' },
+            ])
+            break;
+        }
         break;
 
       case "Status_corner":
@@ -494,7 +649,7 @@ const Post = (props) => {
           bedrooms: "Null",
           bathrooms: "Null",
           rooms: rooms,
-          phase: phase,
+          phase: phase + " " + phase1,
           Location: locationMain,
           address: address,
           area_unit: "Null",
@@ -905,7 +1060,7 @@ const Post = (props) => {
           commercialCategories={PropertyCommercialCategories} //data  Comercial Categories
           residentialCategories={ResidentialCategories} //data  Residential Categories
           onSelectValue={(val, key) => valueAssigner(val, key)}
-          propertyCategorySelected={propertyCategory} // Commercial/Residential selected Property
+          propertyCategorySelected={propertyCategoryOthers} // old value :propertyCategory  // Commercial/Residential selected Property
           locationDropdownData={listOfArea} //data
           openLocationDropdown={() =>
             setLocationDropDownOpen(!locationDropDownOpen)
@@ -913,8 +1068,8 @@ const Post = (props) => {
           location={location} // selected location item
           constructionStatus_corner={Plots1} //data  corner/non-corner
           constructionStatus_open={Plots} //data  west/east open
-          PlotYards={Yards} //data
-          PlotPhase={Phase} //data
+          PlotYards={PlotYards} //data
+          PlotPhase={Phase1} // old data Phase //data
           Area_Unit={propertyCategory == "Apartment" ? Area_unit1 : Area_unit} //data
           Rooms={Rooms} // data
           furnishes={furnishes} // data

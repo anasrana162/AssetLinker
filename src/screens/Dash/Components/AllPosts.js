@@ -130,9 +130,9 @@ const AllPosts = ({
                 </Text>
 
                 {/* Plot Category (Bulding, shop etc) */}
-                <Text style={styles.plotCategory}>
+                {item?.item?.category == "Null" ? <></> : <Text style={styles.plotCategory}>
                   Plot Category: {item?.item?.category}
-                </Text>
+                </Text>}
 
                 {/* Description (details) */}
                 {/* <Text numberOfLines={2} style={styles.description}>{item?.item?.details}</Text> */}
@@ -189,7 +189,7 @@ const AllPosts = ({
                         size={20}
                         color={
                           item?.item?.is_favourite == 1 ||
-                          item?.item?.is_favourite == undefined
+                            item?.item?.is_favourite == undefined
                             ? "red"
                             : Colors.DarkGrey
                         }

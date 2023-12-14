@@ -45,6 +45,7 @@ class PostDetail extends Component {
     this.state = {
       position: 0,
       localUserID: "",
+      postUserData: "",
     };
   }
 
@@ -72,14 +73,30 @@ class PostDetail extends Component {
   getLocaluser = async () => {
     const res = await AsyncStorage.getItem("@assetlinker_userData");
     const data = JSON.parse(res);
-    this.setState({ localUserID: data?.detail[0].user_id });
+    this.setState({ localUserID: data?.detail[0].user_id, });
   };
 
   componentDidMount = () => {
     this.runSlideShow();
     this.AddView();
     this.getLocaluser();
+    this.getPostUserDetail()
   };
+
+  getPostUserDetail = () => {
+    var { data, location, subLocation } = this.props?.route?.params;
+
+    AssetLinkers.get("allUser/" + data?.user_id).then((res) => {
+      console.log("specifix user detail API Post detail screen Res:", res?.data)
+      setImmediate(() => {
+        this.setState({
+          postUserData: res?.data?.response[0]
+        })
+      })
+    }).catch(err => {
+      console.log("specifix user detail API Post detail screen err", err)
+    })
+  }
 
   runSlideShow = () => {
     var { data } = this.props?.route?.params;
@@ -286,14 +303,16 @@ class PostDetail extends Component {
 
             {/* Corner West or east option */}
 
-            <View style={styles.inner_moreDetailCont}>
-              <Text style={styles.gridText2}>Status</Text>
-              <Text
-                numberOfLines={2}
-                style={[styles.gridText1, { width: 100 }]}>
-                {data?.corner} | {data?.open}
-              </Text>
-            </View>
+            {(data?.corner == "Null" && data?.open == "Null") ||
+              (data?.corner == "" && data?.open == "") ? <></> :
+              < View style={styles.inner_moreDetailCont}>
+                <Text style={styles.gridText2}>Status</Text>
+                <Text
+                  numberOfLines={2}
+                  style={[styles.gridText1, { width: 100 }]}>
+                  {data?.corner} | {data?.open}
+                </Text>
+              </View>}
 
             {/* Rooms */}
             {data?.rooms !== "Null" && (
@@ -319,11 +338,11 @@ class PostDetail extends Component {
               </View>
             )}
 
-            {/* Area Type */}
+            {/* Plot Status */}
             {data?.phase !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText2}>Area Type</Text>
-                <Text style={styles.gridText1}>{data?.phase}</Text>
+                <Text style={styles.gridText2}>Plot Status</Text>
+                <Text style={[styles.gridText1,{width:150}]}>{data?.phase}</Text>
               </View>
             )}
 
@@ -351,21 +370,23 @@ class PostDetail extends Component {
           </TouchableOpacity>
 
           {/* Address */}
-          {data?.address !== "Null" && (
-            <>
-              <Text style={styles.posted_at}>Address:</Text>
-              <Text
-                style={[
-                  styles.main_features_text,
-                  { fontWeight: "400", fontSize: 15 },
-                ]}>
-                {data?.address}
-              </Text>
-            </>
-          )}
+          {
+            data?.address !== "Null" && (
+              <>
+                <Text style={styles.posted_at}>Address:</Text>
+                <Text
+                  style={[
+                    styles.main_features_text,
+                    { fontWeight: "400", fontSize: 15 },
+                  ]}>
+                  {data?.address}
+                </Text>
+              </>
+            )
+          }
 
-          <UserProfileButton navProps={this.props.navigation} data={data} />
-        </ScrollView>
+          {!this.state.postUserData == "" && <UserProfileButton navProps={this.props.navigation} data={this.state.postUserData} />}
+        </ScrollView >
 
         {data?.user_id != this.state.localUserID && (
           <BottomBar
@@ -373,7 +394,8 @@ class PostDetail extends Component {
             id={this.state.localUserID}
             user_cellno={data?.phone}
           />
-        )}
+        )
+        }
       </View>
     );
   }

@@ -15,13 +15,13 @@ import Feather from "react-native-vector-icons/Feather";
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
-const UserProfileButton = ({ navProps, data }) => {
-  // console.log("data",data?.user_id)
+const UserProfileButton = ({ navProps, data, }) => {
+  console.log("data", data)
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={() =>
-        navProps.navigate("UserProfileDetail", { user_id: data?.user_id })
+        navProps.navigate("UserProfileDetail", { user_id: data?.id })
       }
       style={styles.mainContainer}>
       <Image
@@ -33,7 +33,47 @@ const UserProfileButton = ({ navProps, data }) => {
         style={styles.image}
       />
       <View style={styles.inner_cont}>
-        <Text style={[styles.text, { fontWeight: "700" }]}>{data?.name}</Text>
+
+        {/* if real _estate_name is empty show firm_name */}
+        {/* Real Estate Name */}
+        {(data?.detail[0]?.frim_name == undefined || data?.detail[0]?.frim_name == "") ? <></> :
+          <Text style={[styles.text, { fontWeight: "700" }]}>{data?.detail[0]?.frim_name}</Text>}
+
+        {/* if firm_name is empty show real_estate_name */}
+        {/* Firm Name */}
+        {(data?.detail[0]?.real_estate_name == undefined || data?.detail[0]?.real_estate_name == "") ? <></> :
+          <Text style={[styles.text, { fontWeight: "700" }]}>{data?.detail[0]?.real_estate_name}</Text>}
+
+        {/* Designation */}
+
+        {/* User Name */}
+        <View style={{ flexDirection: "row", marginTop: 5, marginBottom: 5, alignItems: "center" }}>
+          {(
+            data?.detail[0]?.designation == undefined ||
+            data?.detail[0]?.designation == "") ?
+            <></>
+            :
+            <View style={{
+              // width: 80,
+              // height: 30,
+              paddingVertical: 5,
+              paddingHorizontal: 10,
+              backgroundColor: Colors.blue,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 10,
+
+            }}>
+              <Text style={[styles.text, { fontWeight: "700", fontSize: 12, color: "white" }]}>{data?.detail[0]?.designation}</Text>
+            </View>}
+
+          <Text style={[styles.text, {
+            fontWeight: "700",
+            marginLeft: 5
+          }]}
+          >{data?.name}</Text>
+
+        </View>
         <View style={{ flexDirection: "row", columnGap: 10 }}>
           <Text style={[styles.text, { fontWeight: "600" }]}>
             Member Since:
@@ -43,7 +83,33 @@ const UserProfileButton = ({ navProps, data }) => {
           </Text>
         </View>
 
-        <Text style={styles.seeProfileText}>See Profile </Text>
+
+        {/* See Profile Button */}
+        <TouchableOpacity
+          onPress={() => {
+            navProps.navigate("AccountDetail", {
+              user_id: data?.id,
+              created_at: data?.member_since,
+              image: data?.image,
+              name: data?.name,
+            });
+          }}
+          style={{
+            marginTop: 10,
+            flexDirection: "row",
+            // marginLeft: 2
+          }}>
+
+          <Text style={styles.seeProfileText}>See Profile </Text>
+
+          <Feather
+            name="chevron-right"
+            size={20}
+            color="black"
+            // style={{ position: "absolute", right: 30 }}
+          />
+
+        </TouchableOpacity>
       </View>
 
       <Feather
@@ -92,6 +158,6 @@ const styles = StyleSheet.create({
   seeProfileText: {
     fontSize: 15,
     fontWeight: "600",
-    color: Colors.black,
+    color: "black",
   },
 });

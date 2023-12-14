@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   Dimensions,
+  NativeModules
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import firestore from "@react-native-firebase/firestore";
@@ -15,13 +16,32 @@ import LoadingModal from "../../components/LoadingModal";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { postImageURL } from "../../config/Common";
-const { width } = Dimensions.get("window");
-const Chatlist = ({ navigation }) => {
+
+
+{
+  /* {---------------Redux Imports------------} */
+}
+import { connect } from "react-redux";
+import * as userActions from "../../redux/actions/user";
+import { bindActionCreators } from "redux";
+
+const {
+  StatusBarManager: { HEIGHT },
+} = NativeModules;
+const width = Dimensions.get("screen").width;
+const height = Dimensions.get("screen").height - HEIGHT;
+
+
+const Chatlist = (props,) => {
+
+  // States
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState([]);
   const [loading, setLoading] = useState(true);
   const [chatIndex, setChatIndex] = useState(null);
   const [lastMsg, setLastMsg] = useState("");
+
+
   const db = firestore();
   const getUsers = async () => {
     const res = await AsyncStorage.getItem("@assetlinker_userData");
@@ -49,11 +69,13 @@ const Chatlist = ({ navigation }) => {
     getUsers();
   }, []);
   const navHandler = (item) => {
-    // console.log(item?.data(), " :CHAT DATA");
-    console.log("currentUser DATA",currentUser)
-    navigation.navigate("ChatScreen", {
+    var { userData } = props
+    console.log(item?.data(), " :CHAT DATA");
+    console.log("currentUser DATA", currentUser?.id)
+    props.navigation.navigate("ChatScreen", {
       fireStore: item?.data(),
-      id: currentUser?.detail[0].user_id,
+      // id: currentUser?.detail[0].user_id,
+      id:currentUser?.id
     });
   };
   return (
@@ -74,7 +96,7 @@ const Chatlist = ({ navigation }) => {
         <ScrollView>
           {users?.length > 0 &&
             users?.map((item, index) => {
-              console.log(item, "______________IMAGE");
+              // console.log(item, "______________IMAGE");
               const { name, location, features, img, receiverID, senderID } =
                 item?.data();
               return (
@@ -100,7 +122,7 @@ const Chatlist = ({ navigation }) => {
                         style={styles.avatarImg}
                       />
                     ) : (
-                      <Text style={{ color: "#fff", fontSize: 20 }}>
+                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "500" }}>
                         {name[0]}
                       </Text>
                     )}
@@ -130,7 +152,7 @@ const Chatlist = ({ navigation }) => {
     </View>
   );
 };
-export default Chatlist;
+
 const styles = StyleSheet.create({
   main: {
     flex: 1,
@@ -150,7 +172,7 @@ const styles = StyleSheet.create({
     height: "100%",
     resizeMode: "cover",
   },
-  name: { color: "#000", fontSize: 15, fontWeight: "800" },
+  name: { color: "#000", fontSize: 15, fontWeight: "600" },
   circle: {
     width: 45,
     height: 45,
@@ -168,6 +190,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+
+{  /* {---------------redux State ------------} */ }
+
+const mapStateToProps = (state) => ({
+  userData: state.userData,
+});
+
+{
+  /* {---------------redux Actions ------------} */
+}
+const ActionCreators = Object.assign({}, userActions);
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(ActionCreators, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chatlist);
+
 export const chatDeleteHandler = async (docID) => {
   console.log("------chatDeleteHandler------", docID);
   if (docID) {
