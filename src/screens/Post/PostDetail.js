@@ -178,6 +178,9 @@ class PostDetail extends Component {
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false}>
+
+          {console.log("post_images",data?.post_images)}
+
           {/* Images Viewer */}
           <ImageViewer
             Images={data?.post_images}
@@ -383,17 +386,17 @@ class PostDetail extends Component {
           </TouchableOpacity>
 
           {/* MSID */}
-          {console.log("data?.ms_id",this.props.userData?.user)}
-          <Text style={styles.posted_at}>MSID: {this.props?.userData?.user?.ms_id}</Text>
+          {console.log("data?.ms_id", data)}
+          <Text style={styles.posted_at}>MSID: {data?.ms_id}</Text>
 
-          <View style={{ flexDirection: "row", columnGap: 5,marginLeft:10,marginTop:5 }}>
-          <Text style={[styles.text, { fontWeight: "600" }]}>
-            Member Since:
-          </Text>
-          <Text style={[styles.text, { fontWeight: "400" }]}>
-            {moment(data?.member_since).format("YYYY-MM-DD")}
-          </Text>
-        </View>
+          <View style={{ flexDirection: "row", columnGap: 5, marginLeft: 10, marginTop: 5 }}>
+            <Text style={[styles.text, { fontWeight: "600" }]}>
+              Member Since:
+            </Text>
+            <Text style={[styles.text, { fontWeight: "400" }]}>
+              {moment(data?.member_since).format("YYYY-MM-DD")}
+            </Text>
+          </View>
 
           {
             !this.state.postUserData == "" &&

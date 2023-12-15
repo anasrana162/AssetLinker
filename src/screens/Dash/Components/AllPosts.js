@@ -116,8 +116,13 @@ const AllPosts = ({
                 )}
 
                 {/* Image */}
+
                 {item?.item.post_images[0] === "" ? (
-                  <View style={styles.itemImage} />
+                  <Image
+                    resizeMode="contain"
+                    source={require("../../../../assets/Assetlinker_A.png")}
+                    style={styles.itemImage}
+                  />
                 ) : (
                   <Image
                     source={{ uri: postImageURL + item?.item.post_images[0] }}
@@ -125,7 +130,7 @@ const AllPosts = ({
                   />
                 )}
                 {/* Plot Category (Bulding, shop etc) */}
-                {item?.item?.category == "Null" ? <></> :  <Text style={styles.propertyTypeText}>
+                {item?.item?.category == "Null" ? <></> : <Text style={styles.propertyTypeText}>
                   {item?.item?.category}
                 </Text>}
 

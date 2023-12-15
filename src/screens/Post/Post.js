@@ -560,7 +560,10 @@ const Post = (props) => {
           }
         })
         .catch((err) => {
-          console.log("Post Api Error", err?.response);
+          console.log("Post Api Error", err?.response?.data?.msg);
+          if(err?.response?.data?.msg =="Limit Exceeded for creating post please contact AssetsLinkers"){
+            alert("Limit Exceeded for creating post please contact AssetsLinkers")
+          }
           setImmediate(() => {
             setLoader(false);
             setCheck(true);

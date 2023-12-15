@@ -7,20 +7,43 @@ const ImageViewer = ({ Images, position }) => {
     // console.log("Images COmp", position)
 
     var imageSet = []
+
+
     for (let i = 0; i < Images.length; i++) {
         imageSet.push({
             url: "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/" + Images[i]
         })
     }
 
+
     return (
         <View style={styles.mainContainer}>
 
-            <Slideshow
-                dataSource={imageSet}
-                height={height / 3.2}
-                position={position}
-            />
+            {
+                Images[0] == "" ?
+                    <View style={{
+                        width:width,
+                        height:height/3.2,
+                        justifyContent:"center",
+                        alignItems:"center"
+                    }}>
+
+                        <Image
+                            source={require("../../../../assets/Assetlinker_A.png")}
+                            // resizeMode='cover'
+                            style={{
+                                width: 150,
+                                height: 150,
+                            }}
+                        />
+                    </View>
+                    :
+                    <Slideshow
+                        dataSource={imageSet}
+                        height={height / 3.2}
+                        position={position}
+                    />
+            }
 
         </View>
     )
