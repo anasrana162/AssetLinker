@@ -39,6 +39,12 @@ const MenuBar = ({ navProps, logout }) => {
                 logout()
                 break;
 
+                case "news":
+                    // 
+                    Linking.openURL(
+                        `https://assetslinkers.com/association-news/`,
+                    )
+
         }
     }
 
@@ -58,7 +64,9 @@ const MenuBar = ({ navProps, logout }) => {
                 </TouchableOpacity>
 
                 {/* Association News */}
-                <TouchableOpacity style={styles.touchable}>
+                <TouchableOpacity
+                onPress={() => onPress("news")}
+                style={styles.touchable}>
                     <Text style={styles.touchable_text}>Association News</Text>
                     <MaterialCommunityIcons name={"microphone"} size={24} color={"white"} />
                 </TouchableOpacity>

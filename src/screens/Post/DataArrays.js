@@ -52,7 +52,7 @@ export const PropertyCommercialCategories = [
     },
     {
         id: 5,
-        name: "Mise.Nine"
+        name: "Mezzanine"
     },
     {
         id: 6,
@@ -65,6 +65,10 @@ export const PropertyCommercialCategories = [
     {
         id: 8,
         name: "Others"
+    },
+    {
+        id: 9,
+        name: "Ground"
     },
 
 ];
@@ -133,7 +137,6 @@ export const Location_Bahria = [
     { id: 1, name: 'Karachi' },
     { id: 2, name: 'Lahore' },
     { id: 3, name: 'Pindi' },
-    { id: 4, name: 'Industrial' },
 ]
 export const Location_DHA_City = [
     { id: 1, name: 'Bhawalpur' },
@@ -142,6 +145,7 @@ export const Location_DHA_City = [
     { id: 4, name: 'Quetta' },
     { id: 5, name: 'Gujranwala' },
     { id: 6, name: 'Islamabad' },
+    { id: 7, name: 'Karachi' },
 ]
 export const furnishes = [
     { id: 1, name: 'Unfurnished' },

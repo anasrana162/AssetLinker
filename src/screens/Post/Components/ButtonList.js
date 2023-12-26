@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     },
     list_btn_text: {
         color: '#fff',
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: "600",
         alignSelf: 'center',
     },

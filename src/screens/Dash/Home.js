@@ -259,28 +259,28 @@ class Dash extends Component {
     var { Posts } = this.state;
 
     const filterData = Posts.filter((data) => {
-        const matches_property_type = data?.property_type
-          .toLowerCase()
-          .includes(txt.toLowerCase());
-      const matches_category = data?.category
+      const matches_property_type = data?.property_type == undefined ? "" : data?.property_type
         .toLowerCase()
         .includes(txt.toLowerCase());
-      const matches_rent_sale = data?.rent_sale
+      const matches_category = data?.category == undefined ? "" : data?.category
+        .toLowerCase()
+        .includes(txt.toLowerCase());
+      const matches_rent_sale = data?.rent_sale == undefined ? "" : data?.rent_sale
         .toLowerCase()
         .includes(txt?.toLowerCase());
       // const matches_open = data?.open
       //   .toLowerCase()
       //   .includes(txt?.toLowerCase());
-      const matches_price = data?.price
+      const matches_price = data?.price == undefined ? "" : data?.price
         .toLowerCase()
         .includes(txt?.toLowerCase());
-      const matches_location = JSON.parse(data?.Location)
+      const matches_location = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
         .location.toLowerCase()
         .includes(txt?.toLowerCase());
-      const matches_place = JSON.parse(data?.Location)
+      const matches_place = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
         .place.toLowerCase()
         .includes(txt?.toLowerCase());
-      console.log("data?.open", data?.open) //.replace(/\s/g, "")
+      // console.log("data?.open", data?.open) //.replace(/\s/g, "")
       // console.log(".toLowerCase().includes(txt?.toLowerCase())", JSON.parse(data?.Location).location.toLowerCase())
       return (
         matches_property_type ||
