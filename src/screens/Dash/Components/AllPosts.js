@@ -57,6 +57,13 @@ const AllPosts = ({
           numColumns={2}
           scrollEnabled={false}
           columnWrapperStyle={styles.inner_main}
+          ListEmptyComponent={() => {
+            return (
+              <View style={{ width: "100%", alignSelf: "center", alignItems: "center" }}>
+                <Text style={{ fontSize: 26, color: "black", marginTop: 100 }}>No Data Available</Text>
+              </View>
+            )
+          }}
           renderItem={(item, index) => {
             const docID = item?.item?.user_id + "" + item?.item?.id;
             const postID = "" + item?.item?.id;
@@ -135,7 +142,7 @@ const AllPosts = ({
                 </Text>}
 
                 {/* Property Type ("commercial",'Residential", Plot) */}
-                <Text style={[styles.propertyTypeText, { fontSize: 14, marginTop: 5 }]}>
+                <Text style={[styles.propertyTypeText, { fontSize: 14, marginTop: item?.item?.category == "Null" ? 5 : 0 }]}>
                   {item?.item?.property_type} / {item?.item?.rent_sale}
                   {/* {item?.item?.property_type} */}
                 </Text>
@@ -161,13 +168,13 @@ const AllPosts = ({
                       </Text>
                     </View>
                   )}
-                  <Text
+                  {/* <Text
                     style={[
                       styles.priceText,
                       { marginLeft: Location !== "Null" ? 5 : 0 },
                     ]}>
                     {item?.item?.property_type}
-                  </Text>
+                  </Text> */}
                 </View>
 
                 {/* Posted At */}
@@ -318,7 +325,7 @@ const styles = StyleSheet.create({
   },
   itemImage: {
     width: "100%",
-    height: 150,
+    height: 140,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
     backgroundColor: "#0002",

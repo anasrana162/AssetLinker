@@ -66,6 +66,7 @@ class Dash extends Component {
       openSearchBar: false,
       openPreFilterModal: false,
       searched: "",
+      loader: false,
     };
   }
 
@@ -73,8 +74,10 @@ class Dash extends Component {
     this.props.navigation.addListener("focus", async () => {
       if (this.props?.route?.params != undefined) {
         var { refresh } = this.props?.route?.params;
+        console.log("refresh", refresh)
         if (refresh == "refresh") {
           console.log("Callbacks initiated");
+          refresh = ""
           this.getPosts();
         }
       } else {
@@ -147,6 +150,8 @@ class Dash extends Component {
   }
 
   getPosts = () => {
+
+    this.setState({ loader: true })
     AssetLinkers.get(
       "https://devstaging.a2zcreatorz.com/assetLinkerProject/api/get_property"
     )
@@ -156,10 +161,12 @@ class Dash extends Component {
           this.setState({
             Posts: res?.data?.property,
             FilteredPosts: res?.data?.property,
+            loader: false
           });
         }
       })
       .catch((err) => {
+        this.setState({ loader: false })
         console.log("Get Post api Error:  ", err?.response);
       });
   };
@@ -347,7 +354,7 @@ class Dash extends Component {
           />
 
           {/* Posts Component */}
-          {this?.state?.Posts ? (
+          {this?.state?.loader == false ? (
             <AllPosts
               data={
                 this.state.openSearchBar

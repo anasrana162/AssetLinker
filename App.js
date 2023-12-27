@@ -11,6 +11,7 @@ import {
   Animated,
   Modal,
   Text,
+  BackHandler,
   TouchableOpacity,
   Image,
 } from "react-native";
@@ -26,6 +27,10 @@ import codePush from 'react-native-code-push';
 
 // App center IOS Push Command
 // appcenter codepush release-react -a assetslinkers94-gmail.com/AssetsLinkers_IOS -d Staging
+
+// App center Android Push Command
+// appcenter codepush release-react -a assetslinkers94-gmail.com/AssetsLinkers_Android -d Staging
+
 
 const {
   StatusBarManager: { HEIGHT },
@@ -100,13 +105,14 @@ class App extends Component {
     codePush.sync(
       {
         installMode: codePush.InstallMode.IMMEDIATE,
-        updateDialog: {
-          appendReleaseDescription: false,
-          // optionalIgnoreButtonLabel: 'Close',
-          optionalInstallButtonLabel: 'Install',
-          optionalUpdateMessage: 'New update available. Install update',
-          title: 'Update Required',
-        },
+        // updateDialog: {
+        //   appendReleaseDescription: false,
+          
+        //   // optionalIgnoreButtonLabel: 'Close',
+        //   optionalInstallButtonLabel: 'Install',
+        //   optionalUpdateMessage: 'New update available. Install update',
+        //   title: 'Update Required',
+        // },
       },
       this.codePushStatusDidChange.bind(this),
       this.codePushDownloadDidProgress.bind(this),
@@ -249,10 +255,10 @@ class App extends Component {
               style={styles.modalOuterCont}>
               <View
                 style={styles.modalInnerCont}>
-                {/* <Image
-                  source={require('./assets/aljabirlogo.png')}
+                <Image
+                  source={require('./assets/logo.png')}
                   style={styles.imageModal}
-                /> */}
+                />
                 <Text
                   style={styles.titleModalEN}>
                   App is updating, please wait.
@@ -279,7 +285,7 @@ class App extends Component {
   };
 };
 
-export default App;
+export default codePush(codePush.CheckFrequency.ON_APP_START)(App);
 
 const styles = StyleSheet.create({
   container: {
@@ -334,7 +340,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 10,
     position: 'absolute',
-    bottom: 29,
+    bottom: 48,
     left: 35,
     zIndex: 50,
   },
@@ -346,10 +352,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#EBECED',
   },
   imageModal: {
-    width: 120,
-    height: 90,
+    width: 220,
+    height: 75,
     alignSelf: 'center',
     marginTop: 0,
-    marginBottom: 10,
+    marginBottom: 20,
+  },
+  progressBar: {
+    height: 30,
+    width: '90%',
+    alignSelf: 'center',
+    borderRadius: 10,
+    backgroundColor: '#EBECED',
   },
 });

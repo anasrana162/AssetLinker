@@ -561,7 +561,7 @@ const Post = (props) => {
         })
         .catch((err) => {
           console.log("Post Api Error", err?.response?.data?.msg);
-          if(err?.response?.data?.msg =="Limit Exceeded for creating post please contact AssetsLinkers"){
+          if (err?.response?.data?.msg == "Limit Exceeded for creating post please contact AssetsLinkers") {
             alert("Limit Exceeded for creating post please contact AssetsLinkers")
           }
           setImmediate(() => {
@@ -631,7 +631,7 @@ const Post = (props) => {
           rooms: rooms,
           phase: "Null",
           Location: locationMain,
-          address: "Null",
+          address: address,
           area_unit: area_unit,
           main_features: main_features,
           details: details,
@@ -754,6 +754,13 @@ const Post = (props) => {
         //     return alert("Please select Construction Status open value!")
         // }
         if (location == null || location == "" || location == "Location") {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Please select Location!");
+        }
+        if (locationMain == null || locationMain == "" || locationMain == "Location") {
           setImmediate(() => {
             setCheck(false);
             setLoader(false);
@@ -896,6 +903,13 @@ const Post = (props) => {
           });
           return alert("Please select Location!");
         }
+        if (locationMain == null || locationMain == "" || locationMain == "Location") {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Please select Location!");
+        }
         if (main_features == null || main_features == "") {
           setImmediate(() => {
             setCheck(false);
@@ -993,6 +1007,13 @@ const Post = (props) => {
           return alert("Please select phase!");
         }
         if (location == null || location == "") {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Please select Location!");
+        }
+        if (locationMain == null || locationMain == "" || locationMain == "Location") {
           setImmediate(() => {
             setCheck(false);
             setLoader(false);

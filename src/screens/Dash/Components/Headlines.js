@@ -26,8 +26,8 @@ const Headlines = () => {
                     repeatSpacer={50}
                     marqueeDelay={1000}
                     scrollSpeed={5000}>
-                    Super long piece of text is long. The quick brown fox jumps over the
-                    lazy dog.
+                    We are recognized for exceeding client expectations and
+                    delivering great results through dedication, ease of process, and extraordinary services to our worldwide clients.
                 </TextTicker>
             </TouchableOpacity>
         </View>
@@ -44,6 +44,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         flexDirection: 'row',
         alignItems: 'center',
-        zIndex:100,
+        zIndex: 100,
     },
 })
