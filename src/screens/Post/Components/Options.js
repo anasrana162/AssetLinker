@@ -127,6 +127,7 @@ const Options = ({
                 {/* {(Category_Selected == "Plot" && yardSelected == true) && */}
                 <CustomTextInp
                     titleEN={ "Enter Number *"}
+                    keyboardType={"numeric"}
                     onChangeText={(txt) => onChangeText(txt, "yards")}
                     placeholder={selectedAreaUnit == "Others" ? "ex. 100" : ""}
                 />
@@ -255,10 +256,10 @@ const Options = ({
                 } */}
 
                 {/* Main Features */}
-                <CustomTextInp
+                {/* <CustomTextInp
                     titleEN={"Main Features *"}
                     onChangeText={(txt) => onChangeText(txt, "main_features")}
-                />
+                /> */}
 
                 {/* Deatails */}
                 <CustomTextInp

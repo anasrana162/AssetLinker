@@ -55,6 +55,8 @@
     "react-native-select-dropdown": "^3.4.0",
     "react-native-simple-toast": "^3.0.1",
     "react-native-snap-carousel": "^3.9.1",
+    "react-native-sound-player": "^0.13.2",
+    "react-native-sound-recorder": "^1.5.0",
     "react-native-text-ticker": "^1.14.0",
     "react-native-toast-message": "^2.1.6",
     "react-native-uuid": "^2.0.1",

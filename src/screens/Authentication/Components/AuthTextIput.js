@@ -2,12 +2,12 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 import React from 'react'
 import { Colors } from '../../../config'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-const AuthTextIput = ({ placeholder, placeholderTextColor, onChangeText, style, keyboardType, showEye, showPhoneCode }) => {
+const AuthTextIput = ({ placeholder, placeholderTextColor, onChangeText, style,inner_view_style, keyboardType, showEye, showPhoneCode }) => {
 
     const [secureTextEntry, setSecureTextEntry] = React.useState(false)
     return (
         <View style={[styles.mainContainer, style]}>
-            <View style={styles.inner_view}>
+            <View style={[styles.inner_view,inner_view_style]}>
                 <TextInput
                     placeholder={placeholder}
                     placeholderTextColor={placeholderTextColor}
@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
     mainContainer: {
         width: "100%",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        // backgroundColor:"green"
     },
     inner_view: {
         width: "75%",

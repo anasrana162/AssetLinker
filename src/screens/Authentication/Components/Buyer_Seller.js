@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, NativeModules, Dimensions, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, NativeModules, KeyboardAvoidingView, Dimensions, TouchableOpacity } from 'react-native'
 import React from 'react'
 import AuthTextIput from './AuthTextIput'
 import { Colors } from '../../../config'
@@ -10,34 +10,41 @@ const height = Dimensions.get("screen").height - HEIGHT
 const Buyer_Seller = ({ onChangeFormattedText, onChangeText, }) => {
     return (
         <View style={styles.mainContainer}>
-            {/* Name */}
-            <AuthTextIput
-                placeholder={"Name*"}
-                placeholderTextColor={Colors.secondary}
-                onChangeText={(text) => onChangeText(text, "Name")}
-            />
+            <KeyboardAvoidingView
+                enabled
+                behavior='position'
+                keyboardVerticalOffset={300}
+            >
+                {/* Name */}
+                <AuthTextIput
+                    placeholder={"Name*"}
+                    placeholderTextColor={Colors.secondary}
+                    onChangeText={(text) => onChangeText(text, "Name")}
+                    inner_view_style={{ width: width - 95 }}
+                />
 
-            {/* Mobile no */}
-            <PhoneInput
-                // ref={phoneInput}
-                defaultValue={''}
-                defaultCode="PK"
-                layout="first"
-                containerStyle={styles.PhoneTxtInp_cont}
-                textContainerStyle={{
-                    // height: 50,
-                    height: 45,
-                    // marginTop: -5,
-                    alignItems: "center",
-                    backgroundColor: 'transparent',
-                    color: "black"
-                }}
+                {/* Mobile no */}
+                <PhoneInput
+                    // ref={phoneInput}
+                    defaultValue={''}
+                    defaultCode="PK"
+                    layout="first"
+                    containerStyle={styles.PhoneTxtInp_cont}
+                    textContainerStyle={{
+                        // height: 50,
+                        height: 45,
+                        // marginTop: -5,
+                        alignItems: "center",
+                        backgroundColor: 'transparent',
+                        color: "black"
+                    }}
 
-                codeTextStyle={{ height:45,marginTop:20 }}
-                textInputStyle={{ fontSize: 13, color: 'black', width: "100%", height: 45, }}
-                onChangeFormattedText={onChangeFormattedText}
-            />
-            {/* <AuthTextIput
+                    codeTextStyle={{ height: 45, marginTop: 20 }}
+                    textInputStyle={{ fontSize: 13, color: 'black', width: "100%", height: 45, }}
+                    onChangeFormattedText={onChangeFormattedText}
+                />
+
+                {/* <AuthTextIput
                 placeholder={"Phone"}
                 placeholderTextColor={Colors.secondary}
                 onChangeText={onChangeFormattedText}
@@ -46,31 +53,36 @@ const Buyer_Seller = ({ onChangeFormattedText, onChangeText, }) => {
             /> */}
 
 
-            {/* Email */}
-            <AuthTextIput
-                placeholder={"Email*"}
-                placeholderTextColor={Colors.secondary}
-                onChangeText={(text) => onChangeText(text, "email")}
-            />
+                {/* Email */}
 
-            {/* Password */}
-            <AuthTextIput
-                placeholder={"Password*"}
-                placeholderTextColor={Colors.secondary}
-                onChangeText={(text) => onChangeText(text, "password")}
-                showEye={true}
-            />
+                <AuthTextIput
+                    placeholder={"Email*"}
+                    placeholderTextColor={Colors.secondary}
+                    onChangeText={(text) => onChangeText(text, "email")}
+                    inner_view_style={{ width: width - 95 }}
+                />
 
-            <Text style={styles.warning_text}>Password must be 6 characters long, should contain atleast 1 uppercase,1 lowercase and 1 digit</Text>
 
-            {/* Confrim Password */}
-            <AuthTextIput
-                placeholder={"Confirm Password*"}
-                placeholderTextColor={Colors.secondary}
-                onChangeText={(text) => onChangeText(text, "confirm_password")}
-                showEye={true}
-            />
+                {/* Password */}
+                <AuthTextIput
+                    placeholder={"Password*"}
+                    placeholderTextColor={Colors.secondary}
+                    onChangeText={(text) => onChangeText(text, "password")}
+                    showEye={true}
+                    inner_view_style={{ width: width - 95 }}
+                />
 
+                <Text style={styles.warning_text}>Password must be 6 characters long, should contain atleast 1 uppercase,1 lowercase and 1 digit</Text>
+
+                {/* Confrim Password */}
+                <AuthTextIput
+                    placeholder={"Confirm Password*"}
+                    placeholderTextColor={Colors.secondary}
+                    onChangeText={(text) => onChangeText(text, "confirm_password")}
+                    showEye={true}
+                    inner_view_style={{ width: width - 95 }}
+                />
+            </KeyboardAvoidingView>
 
         </View>
     )
@@ -84,7 +96,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: 30,
-        marginBottom: 30
+        marginBottom: 30,
+        zIndex: 400
     },
     PhoneTxtInp_cont: {
         width: width - 95,

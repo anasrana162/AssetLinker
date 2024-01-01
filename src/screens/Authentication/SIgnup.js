@@ -1,4 +1,4 @@
-import { Text, StyleSheet, ScrollView, View, NativeModules, Dimensions, TouchableOpacity, Image, ImageBackground, ActivityIndicator } from 'react-native'
+import { Text, StyleSheet, ScrollView, View, KeyboardAvoidingView, NativeModules, Dimensions, TouchableOpacity, Image, ImageBackground, ActivityIndicator } from 'react-native'
 import React, { Component } from 'react'
 import AssetLinkers, * as Api from '../../api/AssetLinkers'
 const { StatusBarManager: { HEIGHT } } = NativeModules;
@@ -648,16 +648,20 @@ export default class Signup extends Component {
                     resizeMode="cover"
                     style={styles.BackgroundImage}>
 
-                    {/* Logo */}
-                    <Image
-                        source={require('../../../assets/logo.png')}
-                        style={styles.logo}
-                        resizeMode='contain'
-                    />
+                    <ScrollView
+                        style={{ width: "100%" }}
+                        showsVerticalScrollIndicator={false}
+                    >
 
-                    {/* Screen Title */}
-                    <Text style={styles.screenTitle}>Register</Text>
-                    <ScrollView style={{ width: "100%" }}>
+                        {/* Logo */}
+                        <Image
+                            source={require('../../../assets/logo.png')}
+                            style={styles.logo}
+                            resizeMode='contain'
+                        />
+
+                        {/* Screen Title */}
+                        <Text style={styles.screenTitle}>Register</Text>
                         {/* User Roles */}
                         <RolesType
                             data={this.state.userRoles == null ? [] : this.state.userRoles}
@@ -669,9 +673,15 @@ export default class Signup extends Component {
                         <ImageSelector imagePath={(uri) => this.imageSelected(uri)} />
 
 
-
+                        {/* <KeyboardAvoidingView
+                            style={{ flex: 1 }}
+                            enabled
+                            behavior='position'
+                        // keyboardVerticalOffset={40}
+                        > */}
 
                         {/* Real Estate Consultant Role */}
+
 
                         {
                             this.state.role == "estate_agent" &&
@@ -682,6 +692,7 @@ export default class Signup extends Component {
                                 selectedLocation={this.state.selectArea}
                             />
                         }
+
 
                         {/* Builder Role */}
 
@@ -704,6 +715,8 @@ export default class Signup extends Component {
                                 onChangeText={(text, key) => this.onChangeText(text, key)}
                             />
                         }
+
+
                         {/* Signup Button */}
 
                         <TouchableOpacity
@@ -765,13 +778,15 @@ const styles = StyleSheet.create({
     logo: {
         width: width - 80,
         height: 100,
-        marginTop: 30
+        marginTop: 30,
+        alignSelf: "center"
     },
     screenTitle: {
         fontSize: 28,
         fontWeight: "600",
         color: Colors.main,
         marginTop: 20,
+        alignSelf: "center"
     },
     signup_btn: {
         width: 140,

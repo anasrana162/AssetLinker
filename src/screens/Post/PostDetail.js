@@ -196,14 +196,14 @@ class PostDetail extends Component {
           <Text style={styles.priceText}>Price: {data?.price} PKR</Text>
 
           {/* Main Features */}
-          <Text style={styles.posted_at}>Main Features:</Text>
+          {/* <Text style={styles.posted_at}>Main Features:</Text>
           <Text
             style={[
               styles.main_features_text,
               { fontWeight: "300", fontSize: 15 },
             ]}>
             {data?.main_features}
-          </Text>
+          </Text> */}
 
           {/* Location */}
           <View
@@ -281,7 +281,7 @@ class PostDetail extends Component {
             {/* Yards*/}
             {data?.yards !== "Null" && (
               <View style={styles.inner_moreDetailCont}>
-                <Text style={styles.gridText2}>Yards</Text>
+                <Text style={styles.gridText2}>Area Unit</Text>
                 <Text style={styles.gridText1}>{data?.yards.toLowerCase()}</Text>
               </View>
             )}
@@ -502,14 +502,14 @@ const styles = StyleSheet.create({
     color: "white",
   },
   gridText1: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "400",
     color: Colors.black,
     textAlign: "right",
   },
   gridText2: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 14,
+    fontWeight: "500",
     color: Colors.black,
   },
   propertyTypeText: {

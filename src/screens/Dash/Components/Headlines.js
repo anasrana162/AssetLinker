@@ -21,10 +21,10 @@ const Headlines = () => {
                 }>
                 <TextTicker
                     style={{ fontSize: 15, color: 'black' }}
-                    duration={8000}
+                    duration={13000}
                     loop
                     repeatSpacer={50}
-                    marqueeDelay={1000}
+                    marqueeDelay={4000}
                     scrollSpeed={5000}>
                     We are recognized for exceeding client expectations and
                     delivering great results through dedication, ease of process, and extraordinary services to our worldwide clients.

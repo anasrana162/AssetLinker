@@ -47,7 +47,7 @@ const UserProfileButton = ({ navProps, data, screenName }) => {
         {/* Designation */}
 
         {/* User Name */}
-        <View style={{
+        {/* <View style={{
           flexDirection: "row",
           marginTop: (data?.detail[0]?.designation == undefined ||
             data?.detail[0]?.designation == "") ? 0 : 10,
@@ -60,29 +60,33 @@ const UserProfileButton = ({ navProps, data, screenName }) => {
             data?.detail[0]?.designation == undefined ||
             data?.detail[0]?.designation == "") ?
             <></>
-            :
-            <View style={{
-              width: 60,
-              height: 25,
-              backgroundColor: Colors.blue,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 5,
+            : */}
 
-            }}>
-              <Text style={[styles.text, { fontWeight: "800", fontSize: 14, color: "white" }]}>{data?.detail[0]?.designation}</Text>
-            </View>}
+        {/* } */}
 
 
 
 
-        </View>
+        {/* </View> */}
         <Text style={[styles.text, {
-          fontWeight: "700",
+          fontWeight: "500",
           marginBottom: (data?.detail[0]?.designation == undefined ||
-            data?.detail[0]?.designation == "") ? -5 : 5,
+            data?.detail[0]?.designation == "") ? -3 : 3,
         }]}
         >{data?.name}</Text>
+
+        <View style={{
+          width: 60,
+          height: 25,
+          backgroundColor: Colors.blue,
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: 5,
+          // marginVertical: 3
+        }}>
+          <Text style={[styles.text, { fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }]}>{data?.detail[0]?.designation}</Text>
+        </View>
+
         {/* <View style={{ flexDirection: "row", columnGap: 5 }}>
           <Text style={[styles.text, { fontWeight: "600" }]}>
             Member Since:

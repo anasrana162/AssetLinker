@@ -28,6 +28,7 @@ import AccountDetail from "../screens/Account/AccountDetail";
 import UserProfileDetail from "../screens/Account/UserProfileDetail";
 import ChatScreen from "../screens/Chat/ChatScreen";
 import Chatlist from "../screens/Chat/Chatlist";
+import AssociationNews from "../screens/Dash/AssociationNews";
 
 const Stack = createNativeStackNavigator();
 
@@ -48,7 +49,7 @@ export default Navigation = () => {
         <Stack.Screen name="Forgot" component={ForgetPassword} />
         <Stack.Screen name="OTP" component={Otp} />
         <Stack.Screen name="ChangePassword" component={ChangePassword} />
-
+        <Stack.Screen name="AssociationNews" component={AssociationNews} />
         <Stack.Screen name="Dash" component={Dash} />
         <Stack.Screen name="Post" component={Post} />
         <Stack.Screen name="PostDetail" component={PostDetail} />

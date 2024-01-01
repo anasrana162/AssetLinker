@@ -39,11 +39,11 @@ const MenuBar = ({ navProps, logout }) => {
                 logout()
                 break;
 
-                case "news":
-                    // 
-                    Linking.openURL(
-                        `https://assetslinkers.com/association-news/`,
-                    )
+            case "news":
+                navProps.navigate("AssociationNews")
+                // Linking.openURL(
+                //     `https://assetslinkers.com/association-news/`,
+                // )
 
         }
     }
@@ -65,8 +65,8 @@ const MenuBar = ({ navProps, logout }) => {
 
                 {/* Association News */}
                 <TouchableOpacity
-                onPress={() => onPress("news")}
-                style={styles.touchable}>
+                    onPress={() => onPress("news")}
+                    style={styles.touchable}>
                     <Text style={styles.touchable_text}>Association News</Text>
                     <MaterialCommunityIcons name={"microphone"} size={24} color={"white"} />
                 </TouchableOpacity>
@@ -136,8 +136,8 @@ const styles = StyleSheet.create({
         width: 80,
         //  height: 100,
         backgroundColor: "white",
-        alignSelf:"flex-end",
-        marginRight:5,
+        alignSelf: "flex-end",
+        marginRight: 5,
         // position: "absolute",
         // right: 5,
         // bottom: -61,

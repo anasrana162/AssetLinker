@@ -140,6 +140,14 @@ const Post = (props) => {
     setYardsNumber("");
     setFurnished("");
     setRooms("Null");
+    setPlotYards([
+      { id: 1, name: 'ACRE' },
+      { id: 2, name: 'KANAL' },
+      { id: 3, name: 'YARDS' },
+      { id: 4, name: 'MARLA' },
+      { id: 5, name: 'Sq.FEET' },
+      { id: 6, name: 'Others' },
+    ])
     // switch (val) {
     //     case "Commercial":
     //         setCategory(val);
@@ -375,12 +383,14 @@ const Post = (props) => {
           case 'Shop':
             setPlotYards([
               { id: 1, name: 'Sq.FEET' },
+              { id: 2, name: 'YARDS' },
             ])
             break;
 
           case 'Office':
             setPlotYards([
               { id: 1, name: 'Sq.FEET' },
+              { id: 2, name: 'YARDS' },
             ])
             break;
 
@@ -390,7 +400,7 @@ const Post = (props) => {
               { id: 2, name: 'YARDS' },
             ])
             break;
-          case 'Mise.Nine':
+          case 'Mezzanine':
             setPlotYards([
               { id: 1, name: 'Sq.FEET' },
               { id: 2, name: 'YARDS' },
@@ -406,9 +416,20 @@ const Post = (props) => {
               { id: 6, name: 'Others' },
             ])
             break;
-          case 'PentHouse':
+          case 'Ground':
             setPlotYards([
-              { id: 1, name: 'YARDS' },
+              { id: 1, name: 'ACRE' },
+              { id: 2, name: 'KANAL' },
+              { id: 3, name: 'YARDS' },
+              { id: 4, name: 'MARLA' },
+              { id: 5, name: 'Sq.FEET' },
+              { id: 6, name: 'Others' },
+            ])
+            break;
+          case 'Pent House':
+            setPlotYards([
+              { id: 1, name: 'Sq.FEET' },
+              { id: 2, name: 'YARDS' },
             ])
             break;
           case 'Others':
@@ -435,34 +456,22 @@ const Post = (props) => {
         switch (val) {
           case 'Bangalow':
             setPlotYards([
-              { id: 1, name: 'ACRE' },
-              { id: 2, name: 'KANAL' },
-              { id: 3, name: 'YARDS' },
-              { id: 4, name: 'MARLA' },
-              { id: 5, name: 'Sq.FEET' },
-              { id: 6, name: 'Others' },
+              { id: 1, name: 'Sq.FEET' },
+              { id: 2, name: 'YARDS' },
             ])
             break;
 
           case 'Farm House':
             setPlotYards([
-              { id: 1, name: 'ACRE' },
-              { id: 2, name: 'KANAL' },
-              { id: 3, name: 'YARDS' },
-              { id: 4, name: 'MARLA' },
-              { id: 5, name: 'Sq.FEET' },
-              { id: 6, name: 'Others' },
+              { id: 1, name: 'Sq.FEET' },
+              { id: 2, name: 'YARDS' },
             ])
             break;
 
           case 'Town House':
             setPlotYards([
-              { id: 1, name: 'ACRE' },
-              { id: 2, name: 'KANAL' },
-              { id: 3, name: 'YARDS' },
-              { id: 4, name: 'MARLA' },
-              { id: 5, name: 'Sq.FEET' },
-              { id: 6, name: 'Others' },
+              { id: 1, name: 'Sq.FEET' },
+              { id: 2, name: 'YARDS' },
             ])
             break;
 
@@ -473,9 +482,10 @@ const Post = (props) => {
             ])
             break;
 
-          case 'PentHouse':
+          case 'Pent House':
             setPlotYards([
-              { id: 1, name: 'YARDS' },
+              { id: 1, name: 'Sq.FEET' },
+              { id: 2, name: 'YARDS' },
             ])
             break;
           case 'Others':
@@ -774,13 +784,13 @@ const Post = (props) => {
           });
           return alert("Please enter Address!");
         }
-        if (main_features == null || main_features == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please add Main features!");
-        }
+        // if (main_features == null || main_features == "") {
+        //   setImmediate(() => {
+        //     setCheck(false);
+        //     setLoader(false);
+        //   });
+        //   return alert("Please add Main features!");
+        // }
         if (details == null || details == "") {
           setImmediate(() => {
             setCheck(false);
@@ -910,13 +920,13 @@ const Post = (props) => {
           });
           return alert("Please select Location!");
         }
-        if (main_features == null || main_features == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please add Main features!");
-        }
+        // if (main_features == null || main_features == "") {
+        //   setImmediate(() => {
+        //     setCheck(false);
+        //     setLoader(false);
+        //   });
+        //   return alert("Please add Main features!");
+        // }
         if (details == null || details == "") {
           setImmediate(() => {
             setCheck(false);
@@ -1027,13 +1037,13 @@ const Post = (props) => {
           });
           return alert("Please enter Address!");
         }
-        if (main_features == null || main_features == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please add Main features!");
-        }
+        // if (main_features == null || main_features == "") {
+        //   setImmediate(() => {
+        //     setCheck(false);
+        //     setLoader(false);
+        //   });
+        //   return alert("Please add Main features!");
+        // }
         if (details == null || details == "") {
           setImmediate(() => {
             setCheck(false);

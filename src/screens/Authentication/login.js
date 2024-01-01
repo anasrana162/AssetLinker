@@ -1,4 +1,4 @@
-import { Text, StyleSheet, ScrollView, View, NativeModules, Dimensions, TouchableOpacity, Image, ImageBackground, ActivityIndicator } from 'react-native'
+import { Text, StyleSheet, ScrollView, View, NativeModules, Dimensions, TouchableOpacity, Image, ImageBackground, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
 import React, { Component } from 'react'
 import AssetLinkers, * as Api from '../../api/AssetLinkers'
 const { StatusBarManager: { HEIGHT } } = NativeModules;
@@ -86,7 +86,7 @@ class Login extends Component {
             return alert("Enter correct password")
         }
 
-       // console.log("Mobile NUmber Fianl", "0" + mobile.slice(3))
+        // console.log("Mobile NUmber Fianl", "0" + mobile.slice(3))
         this.cancelRequest()
         await AssetLinkers.post("/loginApi", {
             "phone": mobile.trim(),
@@ -138,6 +138,7 @@ class Login extends Component {
                         showsVerticalScrollIndicator={false}
                         style={{ width: "100%", }}>
 
+
                         {/* Logo */}
                         <Image
                             source={require('../../../assets/logo.png')}
@@ -145,44 +146,55 @@ class Login extends Component {
                             resizeMode='contain'
                         />
 
+
                         {/* Screen Title */}
                         <Text style={styles.screenTitle}>Login</Text>
 
-                        <PhoneInput
-                            // ref={phoneInput}
-                            defaultValue={''}
-                            defaultCode="PK"
-                            layout="first"
-                            containerStyle={styles.PhoneTxtInp_cont}
-                            textContainerStyle={{
-                                // height: 50,
-                                height: 45,
-                                // marginTop: -5,
-                                alignItems: "center",
-                                // borderWidth: 1,
-                                backgroundColor: 'transparent',
-                                color: "black"
-                            }}
+                        <KeyboardAvoidingView
+                            style={{ flex: 1 }}
+                            enabled
+                            behavior='position'
+                        // keyboardVerticalOffset={40}
+                        >
 
-                            codeTextStyle={{ height: 45, marginTop: 20 }}
-                            textInputStyle={{ fontSize: 13, color: 'black', width: "100%", height: 45, }}
-                            onChangeFormattedText={(txt) => this.onChangeFormattedText(txt)}
-                        />
-                        {/* <AuthTextIput
+
+                            <PhoneInput
+                                // ref={phoneInput}
+                                defaultValue={''}
+                                defaultCode="PK"
+                                layout="first"
+                                containerStyle={styles.PhoneTxtInp_cont}
+                                textContainerStyle={{
+                                    // height: 50,
+                                    height: 45,
+                                    // marginTop: -5,
+                                    alignItems: "center",
+                                    // borderWidth: 1,
+                                    backgroundColor: 'transparent',
+                                    color: "black"
+                                }}
+
+                                codeTextStyle={{ height: 45, marginTop: 20 }}
+                                textInputStyle={{ fontSize: 13, color: 'black', width: "100%", height: 45, }}
+                                onChangeFormattedText={(txt) => this.onChangeFormattedText(txt)}
+                            />
+                            {/* <AuthTextIput
                             placeholder={"Phone"}
                             placeholderTextColor={Colors.secondary}
                             onChangeText={(text) => this.onChangeFormattedText(text)}
                             // style={{ marginBottom: 20 }}
                             // showEye={true}
                         /> */}
-                        <AuthTextIput
-                            placeholder={"Password"}
-                            placeholderTextColor={Colors.secondary}
-                            onChangeText={(text) => this.onChangeText(text)}
-                            style={{ marginBottom: 20 }}
-                            showEye={true}
-                        />
 
+                            <AuthTextIput
+                                placeholder={"Password"}
+                                placeholderTextColor={Colors.secondary}
+                                onChangeText={(text) => this.onChangeText(text)}
+                                style={{ marginBottom: 20 }}
+                                showEye={true}
+                            />
+
+                        </KeyboardAvoidingView>
 
                         {/* Signup Button */}
 
@@ -210,7 +222,7 @@ class Login extends Component {
                             text={"Forget Passsword"}
                             navProps={this.props.navigation}
                             navToScreenName={"Forgot"}
-                            style={{ marginBottom: 400 }}
+                        // style={{ marginBottom: 400 }}
                         />
 
                     </ScrollView>

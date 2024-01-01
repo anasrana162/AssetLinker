@@ -312,7 +312,7 @@ class Dash extends Component {
   };
 
   render() {
-    // console.log("Props:  ",this.props?.userData?.user?.detail[0])
+    // console.log("Props:  ",this.props?.userData?.user)
 
     return (
       <View style={styles.mainContainer}>

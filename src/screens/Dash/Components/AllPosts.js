@@ -142,8 +142,9 @@ const AllPosts = ({
                 </Text>}
 
                 {/* Property Type ("commercial",'Residential", Plot) */}
-                <Text style={[styles.propertyTypeText, { fontSize: 14, marginTop: item?.item?.category == "Null" ? 5 : 0 }]}>
-                  {item?.item?.property_type} / {item?.item?.rent_sale}
+                <Text style={[styles.propertyTypeText, { fontSize: 14, fontWeight: "400", marginTop: item?.item?.category == "Null" ? 5 : 0 }]}>
+                  {item?.item?.property_type} /
+                  <Text style={[styles.propertyTypeText, { fontSize: 14 }]}> {item?.item?.rent_sale}</Text>
                   {/* {item?.item?.property_type} */}
                 </Text>
                 {/* {item?.item?.category == "Null" ? <></> : <Text style={styles.plotCategory}>
@@ -176,6 +177,13 @@ const AllPosts = ({
                     {item?.item?.property_type}
                   </Text> */}
                 </View>
+                <Text
+                  style={[
+                    styles.priceText,
+                    { marginTop: 5, marginLeft: 5 },
+                  ]}>
+                  {item?.item?.price}
+                </Text>
 
                 {/* Posted At */}
                 <Text style={styles.posted_at}>
@@ -311,7 +319,7 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     width: width / 2.15,
-    height: 275,
+    height: 300,
     backgroundColor: "white",
     borderRadius: 10,
     borderWidth: 1,
@@ -325,7 +333,7 @@ const styles = StyleSheet.create({
   },
   itemImage: {
     width: "100%",
-    height: 140,
+    height: 160,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
     backgroundColor: "#0002",
@@ -336,6 +344,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
     marginTop: 5,
     marginLeft: 5,
+    letterSpacing: 0.5,
   },
 
   plotCategory: {
@@ -369,10 +378,11 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
   priceText: {
-    fontWeight: "400",
+    fontWeight: "600",
     fontSize: 12,
     color: Colors.black,
     marginRight: 5,
+    letterSpacing: 0.5
   },
   posted_at: {
     fontWeight: "600",
