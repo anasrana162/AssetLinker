@@ -179,7 +179,7 @@ class PostDetail extends Component {
 
         <ScrollView showsVerticalScrollIndicator={false}>
 
-          {console.log("post_images",data?.post_images)}
+          {/* {console.log("post_images",data?.post_images)} */}
 
           {/* Images Viewer */}
           <ImageViewer

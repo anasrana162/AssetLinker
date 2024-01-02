@@ -35,5 +35,5 @@ export default Colors = {
   black: "black",
   lightGrey: "rgba(189, 189, 189)",
   lightblack: "rgb(38,38,38)",
-  playBAckColor: "rgb(65,58,65)",
+  playBackColor: "rgb(65,58,65)",
 };

@@ -1,8 +1,8 @@
 const baseURL = "http://173.249.10.7:8066/";
 const socketURL = "http://173.249.10.7:8066/";
-const postImageURL =
-  "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/";
+const postImageURL = "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/";
 
+const newsPostImageURL = "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/ceo_post/"
 const defaultTimeout = 30000;
 
-export { baseURL, socketURL, postImageURL, defaultTimeout };
+export { baseURL, socketURL, postImageURL, defaultTimeout,newsPostImageURL };
