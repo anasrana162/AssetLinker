@@ -20,7 +20,15 @@ import React, { Component } from "react";
 import { Colors } from "../../config";
 import Feather from "react-native-vector-icons/Feather"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
+import Entypo from "react-native-vector-icons/Entypo"
 import LottieView from 'lottie-react-native';
+import SoundRecorder from 'react-native-sound-recorder';
+import SoundPlayer from 'react-native-sound-player'
+import RNFS from "react-native-fs";
+import * as ImageCropPicker from 'react-native-image-crop-picker';
+import {
+    Image as ImageCompressor,
+} from 'react-native-compressor';
 
 const {
     StatusBarManager: { HEIGHT },
@@ -35,18 +43,41 @@ import { bindActionCreators } from "redux";
 import { newsPostImageURL } from "../../config/Common";
 
 class AssociationNews extends Component {
+
+
     constructor(props) {
         super(props);
+        this.animationRef = React.createRef();
         this.state = {
             loader: false,
             postData: [],
             mic_color: false,
-            mic_pressed_color: false,
+            mic_pressed: false,
+            isPlaying: false,
+            isPaused: false,
+            recorded: "",
+            recordedToShow: "",
+            postText: "",
+            imagesToShow: [],
+            imagesToPost: [],
+            autoFocus: false,
+            selectedAudioToPlay: "",
+            posting: false,
         };
     }
+    _onFinishedPlayingSubscription = null
 
     componentDidMount = () => {
+
+        _onFinishedPlayingSubscription = SoundPlayer.addEventListener('FinishedPlaying', ({ success }) => {
+            console.log('finished playing', success)
+            this.animationRef.current?.reset();
+            setImmediate(() => {
+                this.setState({ isPlaying: false, selectedAudioToPlay: "" })
+            })
+        })
         this.getPosts()
+
     }
 
     getPosts = () => {
@@ -64,10 +95,263 @@ class AssociationNews extends Component {
         })
     }
 
-    onRecord = () => {
+    Post = () => {
+        var { userData: { user } } = this.props
         setImmediate(() => {
-            this.setState({ mic_pressed_color: !this.state.mic_pressed_color, mic_color: !this.state.mic_color })
+            this.setState({
+                posting: true,
+            })
         })
+        AssetLinkers.post("add_news_post", {
+            user_id: user?.id,
+            post_description: this.state.postText,
+            post_audio: this.state.recorded,
+            images: this.state.imagesToPost
+        }).then((res) => {
+            console.log("Association News Post API Result:", res?.data)
+            this.getPosts()
+            setImmediate(() => {
+                this.setState({
+                    recorded: "",
+                    postText: "",
+                    imagesToShow: [],
+                    imagesToPost: [],
+                    autoFocus: false,
+                    selectedAudioToPlay: "",
+                    posting: false,
+                })
+            })
+        }).catch((err) => {
+            console.log("Association News Post API ERR", err.response)
+            setImmediate(() => {
+                this.setState({
+                    posting: false,
+                })
+            })
+        })
+    }
+
+    onRecord = () => {
+
+        if (this.state.mic_pressed == true) {
+            setImmediate(() => {
+                this.setState({ mic_pressed: false, mic_color: !this.state.mic_color })
+            })
+            SoundRecorder.stop()
+                .then(async (result) => {
+                    console.log('stopped recording, audio file saved at: ', result);
+                    const uri = await RNFS.readFile(result?.path, "base64")
+                        .then((res) => {
+                            return "data:audio/mp3;base64," + res;
+                        })
+                        .catch((err) => {
+                            console.log("Error IN BASE^$ Convertion", err);
+                        });
+
+                    console.log("Base 64 URI ======", uri)
+                    this.setState({
+                        recorded: uri
+                    })
+
+                });
+        } else {
+
+            setImmediate(() => {
+                this.setState({ mic_pressed: true, mic_color: !this.state.mic_color })
+            })
+            SoundRecorder.start(SoundRecorder.PATH_CACHE + '/' + this.props.userData?.user.id + '_' + new Date().getTime() + '.mp3')
+                .then(function () {
+                    console.log('started recording');
+                });
+
+        }
+
+
+    }
+
+    playAudio = (audioPath) => {
+        setImmediate(() => {
+            this.setState({ isPlaying: false, selectedAudioToPlay: "" })
+        })
+        this.animationRef.current?.play();
+        SoundPlayer.playUrl(newsPostImageURL + audioPath)
+        // console.log(SoundPlayer.seek(2))
+        setImmediate(() => {
+            this.setState({ isPlaying: true, selectedAudioToPlay: audioPath })
+        })
+    }
+
+    pauseAudio = () => {
+        if (this.state.isPaused == true) {
+            SoundPlayer.resume()
+            this.animationRef.current?.play();
+            this.setState({ isPaused: false })
+        } else {
+            SoundPlayer.pause()
+            this.animationRef.current?.pause();
+            this.setState({ isPaused: true })
+        }
+    }
+
+    openCamera = () => {
+        var { imagesToShow, imagesToPost } = this.state
+        ImageCropPicker.openCamera({
+            mediaType: 'photo',
+
+        }).then(async image => {
+            const result = await ImageCompressor.compress(data.path, {
+                quality: 0.8,
+
+            });
+            const uri = await RNFS.readFile(result, "base64")
+                .then((res) => {
+                    return "data:image/png/jpeg/jpg;base64," + res;
+                })
+                .catch((err) => {
+                    console.log("Error IN BASE^$ Convertion", err);
+                });
+
+            imagesToShow.push(result)
+            imagesToPost.push(uri)
+            this.setState({
+                imagesToPost,
+                imagesToShow,
+            })
+        });
+    }
+
+    openGallery = () => {
+
+        var { imagesToShow, imagesToPost } = this.state
+
+        ImageCropPicker.openPicker({
+            multiple: true,
+            maxFiles: 5,
+            mediaType: 'photo',
+        }).then(async image => {
+            // actionSheetRef.current.hide();
+
+            console.log("Image Picker Result", image)
+
+            if (Array.isArray(image)) {
+
+                image.map(async (data, index) => {
+                    const result = await ImageCompressor.compress(data.path, {
+                        quality: 0.8,
+
+                    });
+
+                    // console.log("Image COmpressor Results", result)
+                    const uri = await RNFS.readFile(result, "base64")
+                        .then((res) => {
+                            return "data:image/png/jpeg/jpg;base64," + res;
+                        })
+                        .catch((err) => {
+                            console.log("Error IN BASE^$ Convertion", err);
+                        });
+
+                    imagesToShow.push(result)
+                    imagesToPost.push(uri)
+                    this.setState({
+                        imagesToPost,
+                        imagesToShow,
+                    })
+
+                })
+
+            } else {
+
+                const result = await ImageCompressor.compress(data.path, {
+                    quality: 0.8,
+                });
+                const uri = await RNFS.readFile(result, "base64")
+                    .then((res) => {
+                        return "data:image/png/jpeg/jpg;base64," + res;
+                    })
+                    .catch((err) => {
+                        console.log("Error IN BASE^$ Convertion", err);
+                    });
+
+                imagesToShow.push(result)
+                imagesToPost.push(uri)
+                this.setState({
+                    imagesToPost,
+                    imagesToShow,
+                })
+            }
+
+            // onImageChange(result, image.mime, 'photo');
+        });
+    }
+
+    removeImage = (selectImageIndex) => {
+        var { imagesToShow, imagesToPost } = this.state
+
+        imagesToShow.splice(selectImageIndex, 1)
+        imagesToPost.splice(selectImageIndex, 1)
+        this.setState({
+            imagesToPost,
+            imagesToShow,
+        })
+        console.log("imaimagesToShow after splice", imagesToShow)
+
+    }
+    Footer = () => {
+        return (
+            <View style={styles.addPostCont}>
+                {this.state.mic_pressed ?
+                    <View style={styles.micRecordingCont}>
+                        <TouchableOpacity
+                            onPress={() => this.onRecord()}
+                        >
+                            <LottieView source={require('../../animations/mic.json')} style={{ width: 50, height: 50, marginLeft: 10, }} autoPlay loop />
+                        </TouchableOpacity>
+                        <Text style={styles.recordText}>Recording</Text>
+                    </View>
+                    :
+                    <>
+                        <TouchableOpacity
+                            style={[styles.micButton, {
+                                // backgroundColor: this.state.mic_pressed ? Colors.color1 : "white"
+                            }]}
+                            onPress={() => this.onRecord()}
+                            activeOpacity={0.4}
+                        >
+                            <Feather name="mic" size={24} color={this.state.mic_color ? "green" : "black"} />
+                        </TouchableOpacity>
+
+                        <TextInput
+                            value={this.state.postText}
+                            style={styles.addPostTxtInp}
+                            placeholder="What's on your mind?"
+                            placeholderTextColor={Colors?.timerColor}
+                            autoFocus={this.state.autoFocus}
+                            onChangeText={(txt) => this.setState({ postText: txt, autoFocus: true })}
+                            onSubmitEditing={() => this.setState({ autoFocus: false })}
+                        />
+                    </>
+                }
+                <TouchableOpacity
+                    style={[styles.micButton, {
+                        // backgroundColor: this.state.mic_pressed ? Colors.color1 : "white"
+                    }]}
+                    onPress={() => this.openCamera()}
+                    activeOpacity={0.4}
+                >
+                    <Feather name="camera" size={24} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.micButton, {
+                        // backgroundColor: this.state.mic_pressed ? Colors.color1 : "white"
+                    }]}
+                    onPress={() => this.openGallery()}
+                    activeOpacity={0.4}
+                >
+                    <MaterialIcons name="photo-library" size={28} color="black" />
+                </TouchableOpacity>
+
+            </View>
+        )
     }
 
     render() {
@@ -96,6 +380,7 @@ class AssociationNews extends Component {
             var data = item?.item
             return (
                 <View style={styles.itemContainer}>
+
                     {/* User Data */}
                     <View style={styles.userDataCont}>
                         <Image
@@ -126,12 +411,17 @@ class AssociationNews extends Component {
                             </View>
                         </View>
                     </View>
+
                     {/* User Post Data */}
                     <View style={styles.postCont}>
+
+                        {/* Description */}
                         {
                             (data?.description == "" || data?.description == null || data?.description == "NULL") ? <></> :
                                 <Text style={styles.postDescription}>{data?.description}</Text>
                         }
+
+                        {/* Image Carousal */}
                         {
                             data?.post_images == "" ? <></> :
                                 <View style={styles.postImageBox}>
@@ -153,71 +443,226 @@ class AssociationNews extends Component {
                                 </View>
                         }
 
+                        {/* Audio  */}
+                        {
+                            (data?.audio == null || data?.audio == "" || data?.audio == "NULL") ? <></> :
+
+                                <View style={styles.itemAudioCont}>
+
+                                    {this.state.selectedAudioToPlay == data?.audio ?
+                                        <>
+                                            {this.state.isPlaying == true ?
+                                                <TouchableOpacity
+                                                    onPress={() => this.pauseAudio()}
+                                                    style={styles.audioPlayBtn}>
+                                                    <Feather name={this.state.isPaused ? "play-circle" : "pause-circle"} size={35} color="black" />
+                                                </TouchableOpacity>
+                                                :
+                                                <TouchableOpacity
+                                                    onPress={() => this.playAudio(data?.audio)}
+                                                    style={styles.audioPlayBtn}>
+                                                    <Feather name="play-circle" size={35} color="black" />
+                                                </TouchableOpacity>
+                                            }
+
+                                            <LottieView
+                                                source={require('../../animations/Audio_Playing.json')}
+                                                style={{ width: 80, height: 60, marginLeft: 10, }}
+                                                ref={this.animationRef}
+                                                autoPlay
+                                                // pause={true}
+                                                loop
+                                            />
+                                        </>
+                                        :
+                                        <>
+                                            <TouchableOpacity
+                                                onPress={() => this.playAudio(data?.audio)}
+                                                style={styles.audioPlayBtn}>
+                                                <Feather name="play-circle" size={35} color="black" />
+                                            </TouchableOpacity>
+                                            <LottieView
+                                                source={require('../../animations/Audio_Playing.json')}
+                                                style={{ width: 80, height: 60, marginLeft: 10, }}
+                                                // ref={this.animationRef}
+                                                // autoPlay
+                                                // pause={true}
+                                                loop
+                                            />
+                                        </>
+                                    }
+
+                                </View>
+                        }
+
                     </View>
+
+
                 </View>
             )
         })
 
+        const AddPost = () => {
+            var { userData: { user } } = this.props
+            return (
+                <View style={styles.postPreviewCont}>
+                    <View style={styles.userDataCont}>
+                        <Image
+                            source={{
+                                uri: "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/userProfile/"
+                                    + user?.image
+                            }}
+                            style={{
+                                width: 50,
+                                height: 50,
+                                borderRadius: 60,
+                                marginHorizontal: 10,
+
+                            }}
+                        />
+                        <View style={styles.userDataTextCont}>
+                            <Text style={styles.userName}>{user?.name}</Text>
+                            <View style={{
+                                width: 60,
+                                height: 25,
+                                backgroundColor: Colors.blue,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                borderRadius: 5,
+                                marginVertical: 3
+                            }}>
+                                <Text style={{ fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }}>{user?.detail[0]?.designation}</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <ScrollView style={{ width: "95%" }}>
+                        {/* <Text style={{ fontWeight: "500", fontSize: 16, color: Colors.black, letterSpacing: 1 }}>Description: </Text> */}
+                        <Text style={{ fontWeight: "500", fontSize: 14, color: Colors.black, letterSpacing: 1, }}>{this.state.postText}</Text>
+
+                        {/* Images Selected */}
+                        {this.state.imagesToShow.length != 0 && <View style={styles.postImageBox}>
+                            <ScrollView horizontal={true} pagingEnabled>
+
+                                {
+                                    this.state?.imagesToShow.map((image, index) => {
+                                        console.log("image", image)
+                                        return (
+                                            <View>
+                                                <Image
+                                                    source={{ uri: image }}
+                                                    style={{ width: width - 20, height: 200 }}
+                                                    resizeMode='cover'
+                                                />
+                                                <TouchableOpacity
+                                                    onPress={() => this.removeImage(index)}
+                                                    style={{
+                                                        width: 30,
+                                                        height: 30,
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        backgroundColor: "white",
+                                                        borderRadius: 40,
+                                                        position: "absolute",
+                                                        right: 10,
+                                                        top: 10,
+                                                        zIndex: 200
+                                                    }}>
+                                                    <Entypo name="cross" size={30} color="black" />
+                                                </TouchableOpacity>
+                                            </View>
+                                        )
+                                    })
+                                }
+                            </ScrollView>
+                        </View>}
+
+                        <TouchableOpacity
+                            onPress={() => this.Post()}
+                            style={{
+                                width: 150,
+                                height: 45,
+                                backgroundColor: Colors.main,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                borderRadius: 10,
+                                marginTop: 30,
+                                alignSelf: "center"
+                            }}>
+                            {
+                                this.state.posting ?
+                                    <ActivityIndicator size={"large"} color={"white"} />
+                                    :
+                                    <Text style={{ fontSize: 16, fontWeight: "600", color: "white", letterSpacing: 0.5 }}>Post</Text>
+                            }
+                        </TouchableOpacity>
+
+                        {/* Audio Selected */}
+                        {/* {
+                            this.state.recorded == "" ? <></> :
+
+                                <View style={styles.itemAudioCont}>
+
+                                    {this.state.isPlaying == true ?
+                                        <TouchableOpacity
+                                            onPress={() => this.pauseAudio()}
+                                            style={styles.audioPlayBtn}>
+                                            <Feather name={this.state.isPaused ? "play-circle" : "pause-circle"} size={35} color="black" />
+                                        </TouchableOpacity>
+                                        :
+                                        <TouchableOpacity
+                                            onPress={() => this.playAudio(data?.audio)}
+                                            style={styles.audioPlayBtn}>
+                                            <Feather name="play-circle" size={35} color="black" />
+                                        </TouchableOpacity>
+                                    }
+
+                                    <LottieView
+                                        source={require('../../animations/Audio_Playing.json')}
+                                        style={{ width: 80, height: 60, marginLeft: 10, }}
+                                        ref={this.animationRef}
+                                        // autoPlay
+                                        // pause={true}
+                                        loop
+                                    />
+                                </View>
+                        } */}
+
+                    </ScrollView>
+                </View>
+            )
+        }
+
         return (
             <View style={styles.mainContainer}>
+
+                {/* Header */}
                 <ListHeaderComponent />
-                <FlatList
-                    data={this.state.postData}
-                    // ListHeaderComponent={ListHeaderComponent}
-                    ListEmptyComponent={ListEmptyComponent}
-                    renderItem={renderItem}
-                />
 
-                <View style={styles.addPostCont}>
-                    {this.state.mic_pressed_color ?
-                        <View style={styles.micRecordingCont}>
-                            <TouchableOpacity
-                            onPress={()=>this.onRecord()}
-                            >
-
-                            <LottieView source={require('../../animations/mic.json')} style={{width:50,height:50,marginLeft:10,}} autoPlay loop />
-                            </TouchableOpacity>
-                            <Text style={styles.recordText}>Recording</Text>
-                        </View>
-                        :
+                {
+                    (this.state.recorded == "" &&
+                        this.state.postText == "" &&
+                        this.state.imagesToPost.length == 0) ?
                         <>
-                            <TouchableOpacity
-                                style={[styles.micButton, {
-                                    // backgroundColor: this.state.mic_pressed_color ? Colors.color1 : "white"
-                                }]}
-                                onPress={() => this.onRecord()}
-                                activeOpacity={0.4}
-                            >
-                                <Feather name="mic" size={24} color={this.state.mic_color ? "green" : "black"} />
-                            </TouchableOpacity>
-
-                            <TextInput
-                                style={styles.addPostTxtInp}
-                                placeholder="What's on your mind?"
-                                placeholderTextColor={Colors.lightGrey}
+                            {/* Content List */}
+                            <FlatList
+                                data={this.state.postData}
+                                // ListHeaderComponent={ListHeaderComponent}
+                                ListEmptyComponent={ListEmptyComponent}
+                                renderItem={renderItem}
                             />
                         </>
-                    }
-                            <TouchableOpacity
-                                style={[styles.micButton, {
-                                    // backgroundColor: this.state.mic_pressed_color ? Colors.color1 : "white"
-                                }]}
-                                // onPress={() => this.onRecord()}
-                                activeOpacity={0.4}
-                            >
-                                <Feather name="camera" size={24} color="black" />
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.micButton, {
-                                    // backgroundColor: this.state.mic_pressed_color ? Colors.color1 : "white"
-                                }]}
-                                // onPress={() => this.onRecord()}
-                                activeOpacity={0.4}
-                            >
-                                <MaterialIcons name="photo-library" size={28} color="black" />
-                            </TouchableOpacity>
+                        :
+                        <>
+                            {/* Modal Add Post */}
+                            < AddPost />
+                        </>
+                }
 
-                </View>
+                {/* Footer For CEO Posting  */}
+                {
+                    user?.allow_to_post == 1 &&
+                    <this.Footer />
+                }
 
             </View >
         )
@@ -265,6 +710,13 @@ const styles = StyleSheet.create({
 
         elevation: 5,
     },
+    postPreviewCont: {
+        width: width,
+        height: height - 130,
+        paddingVertical: 10,
+        alignItems: "center",
+        backgroundColor: "white"
+    },
     postCont: {
         width: "95%",
         alignSelf: "center",
@@ -289,12 +741,40 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         color: Colors.dateText
     },
+    itemAudioCont: {
+        // width: "70%",
+        padding: 10,
+        height: 55,
+        backgroundColor: "white",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        elevation: 3,
+        borderRadius: 10,
+        marginLeft: 10,
+        marginTop: 20,
+    },
+    audioPlayBtn: {
+        width: 40,
+        height: 40,
+        // marginLeft: 5,
+        backgroundColor: "white",
+        justifyContent: "center",
+        alignItems: "center"
+    },
     micRecordingCont: {
         width: "60%",
         height: 40,
-        flexDirection:"row",
-        justifyContent:"flex-start",
-        alignItems:"center"
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center"
         // borderRadius: 20,
         // borderWidth: 0.3,
     },
@@ -305,11 +785,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderRadius: 25,
     },
-    recordText:{
+    recordText: {
         color: "crimson",
         fontSize: 16,
         fontWeight: "500",
-        marginLeft:10,
+        marginLeft: 10,
     },
     userName: {
         color: Colors.lightblack,

@@ -36,12 +36,12 @@ const UserProfileButton = ({ navProps, data, screenName }) => {
 
         {/* if real _estate_name is empty show firm_name */}
         {/* Real Estate Name */}
-        {(data?.detail[0]?.frim_name == undefined || data?.detail[0]?.frim_name == "") ? <></> :
+        {(data?.detail[0]?.frim_name == undefined || data?.detail[0]?.frim_name == "" || data?.detail[0]?.frim_name == null) ? <></> :
           <Text style={[styles.text, { fontWeight: "700" }]}>{data?.detail[0]?.frim_name}</Text>}
 
         {/* if firm_name is empty show real_estate_name */}
         {/* Firm Name */}
-        {(data?.detail[0]?.real_estate_name == undefined || data?.detail[0]?.real_estate_name == "") ? <></> :
+        {(data?.detail[0]?.real_estate_name == undefined || data?.detail[0]?.real_estate_name == "" || data?.detail[0]?.real_estate_name == null) ? <></> :
           <Text style={[styles.text, { fontWeight: "700" }]}>{data?.detail[0]?.real_estate_name}</Text>}
 
         {/* Designation */}
@@ -71,21 +71,24 @@ const UserProfileButton = ({ navProps, data, screenName }) => {
         <Text style={[styles.text, {
           fontWeight: "500",
           marginBottom: (data?.detail[0]?.designation == undefined ||
-            data?.detail[0]?.designation == "") ? -3 : 3,
+            data?.detail[0]?.designation == "" || data?.detail[0]?.designation == null || data?.detail[0]?.designation == "NULL") ? -3 : 3,
         }]}
         >{data?.name}</Text>
 
-        <View style={{
-          width: 60,
-          height: 25,
-          backgroundColor: Colors.blue,
-          justifyContent: "center",
-          alignItems: "center",
-          borderRadius: 5,
-          // marginVertical: 3
-        }}>
-          <Text style={[styles.text, { fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }]}>{data?.detail[0]?.designation}</Text>
-        </View>
+        {(data?.detail[0]?.designation == undefined ||
+          data?.detail[0]?.designation == "" || data?.detail[0]?.designation == null || data?.detail[0]?.designation == "NULL") ? <></>
+          :
+          <View style={{
+            width: 60,
+            height: 25,
+            backgroundColor: Colors.blue,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 5,
+            // marginVertical: 3
+          }}>
+            <Text style={[styles.text, { fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }]}>{data?.detail[0]?.designation}</Text>
+          </View>}
 
         {/* <View style={{ flexDirection: "row", columnGap: 5 }}>
           <Text style={[styles.text, { fontWeight: "600" }]}>

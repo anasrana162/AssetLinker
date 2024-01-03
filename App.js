@@ -96,6 +96,20 @@ class App extends Component {
           });
         }
       });
+      check(PERMISSIONS.ANDROID.RECORD_AUDIO).then((result) => {
+        if (result === "granted") {
+          console.log("Permission for Mic Granted");
+        } else {
+          console.log("Checking Permissions");
+          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, {
+            title: "Camera",
+            message: "Asset Linker wants to access your " + "Mic.",
+
+            buttonNegative: "Cancel",
+            buttonPositive: "OK",
+          });
+        }
+      });
     }
   };
 

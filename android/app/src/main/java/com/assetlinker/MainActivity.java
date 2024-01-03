@@ -4,7 +4,7 @@ import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
-com.kevinresol.react_native_sound_recorder.RNSoundRecorderPackage;
+import com.kevinresol.react_native_sound_recorder.RNSoundRecorderPackage;
 
 public class MainActivity extends ReactActivity {
 
