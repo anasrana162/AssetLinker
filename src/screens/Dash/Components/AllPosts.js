@@ -215,7 +215,8 @@ const AllPosts = ({
                           item?.item?.is_favourite == 1 ||
                             item?.item?.is_favourite == undefined
                             ? "red"
-                            : Colors.DarkGrey
+                            :
+                             Colors.DarkGrey
                         }
                       />
                     </TouchableOpacity>

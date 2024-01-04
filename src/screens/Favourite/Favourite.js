@@ -115,7 +115,7 @@ class Favourite extends Component {
             "post_id": postID,
         }).then((res) => {
             if (res?.data) {
-                console.log("Add to favourite api Response:  ", res?.data)
+                console.log("Remove from favourite api Response:  ", res?.data)
                 Toast.show({
                     type: 'success',
                     text1: 'Removed From Favourites!',
@@ -125,7 +125,7 @@ class Favourite extends Component {
 
             }
         }).catch((err) => {
-            console.log("Add to favourite api  Error:  ", err?.response)
+            console.log("Remove from favourite api  Error:  ", err?.response)
         })
 
 

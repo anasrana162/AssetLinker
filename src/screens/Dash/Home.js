@@ -159,7 +159,7 @@ class Dash extends Component {
         // console.log("Get Post api Data:  ", res?.data?.property[0])
         if (res?.data) {
           this.setState({
-            Posts: res?.data?.property,
+            Posts: res?.data?.property.reverse(),
             FilteredPosts: res?.data?.property,
             loader: false
           });
@@ -209,7 +209,7 @@ class Dash extends Component {
         )
           .then((res) => {
             if (res?.data) {
-              console.log("Add to favourite api Response:  ", res?.data);
+              console.log("Remove from favourite api Response:  ", res?.data);
               Toast.show({
                 type: "success",
                 text1: "Removed From Favourites!",
@@ -219,7 +219,7 @@ class Dash extends Component {
             }
           })
           .catch((err) => {
-            console.log("Add to favourite api  Error:  ", err?.response);
+            console.log("Remove from favourite api  Error:  ", err?.response);
           });
         break;
     }
@@ -351,6 +351,7 @@ class Dash extends Component {
             position={this.state.position}
             dataSource={this.state.sliderImages}
             containerStyle={{ marginBottom: 10 }}
+            // onPress={(item,index)=>{console.log("Item from slideshow",item)}}
           />
 
           {/* Posts Component */}
@@ -359,7 +360,7 @@ class Dash extends Component {
               data={
                 this.state.openSearchBar
                   ? this.state.FilteredPosts
-                  : this.state.Posts
+                  : this.state.Posts 
               }
               navProps={this.props.navigation}
               userID={this.props.userData?.user?.id}
