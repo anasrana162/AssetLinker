@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     width: width / 2.15,
-    height: 300,
+    height: 320,
     backgroundColor: "white",
     borderRadius: 10,
     borderWidth: 1,

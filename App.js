@@ -14,11 +14,12 @@ import {
   BackHandler,
   TouchableOpacity,
   Image,
+  
 } from "react-native";
 import { Provider } from "react-redux";
 import Navigation from "./src/navigation/Navigation";
 import Toast from "react-native-toast-message";
-import { check, PERMISSIONS } from "react-native-permissions";
+import { check, PERMISSIONS, RESULTS } from "react-native-permissions";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ProgressBar } from "react-native-paper";
 
@@ -61,56 +62,101 @@ class App extends Component {
     this.syncImmediate()
   }
 
+  // mediaImagesPermission=()=>{
+  //   check(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES).then((result) => {
+  //     if (result === "granted") {
+  //       console.log("Permission for Gallery Granted");
+  //     } else {
+  //       console.log("Checking Permissions");
+  //       PermissionsAndroid.request(
+  //         PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+  //         {
+  //           title: "Camera",
+  //           message: "Asset Linker wants to access your " + "Media Gallery.",
+
+  //           buttonNegative: "Cancel",
+  //           buttonPositive: "OK",
+  //         }
+  //       );
+  //     }
+  //   });
+  // }
+
+  // camerPermission=()=>{
+  //   check(PERMISSIONS.ANDROID.CAMERA).then((result) => {
+  //     if (result === "granted") {
+  //       console.log("Permission for Camera Granted");
+  //     } else {
+  //       console.log("Checking Permissions");
+  //       PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
+  //         title: "Camera",
+  //         message: "Asset Linker wants to access your " + "Camera.",
+
+  //         buttonNegative: "Cancel",
+  //         buttonPositive: "OK",
+  //       });
+  //     }
+  //   });
+  // }
+
+  // micPermission=()=>{
+  //   check(PERMISSIONS.ANDROID.RECORD_AUDIO).then((result) => {
+  //     if (result === "granted") {
+  //       console.log("Permission for Mic Granted");
+  //     } else {
+  //       console.log("Checking Permissions");
+  //       PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, {
+  //         title: "Camera",
+  //         message: "Asset Linker wants to access your " + "Mic.",
+
+  //         buttonNegative: "Cancel",
+  //         buttonPositive: "OK",
+  //       });
+  //     }
+  //   });
+  
+  // }
+
+  requestMultiplePermissions=()=>{
+PermissionsAndroid.requestMultiple([
+  PERMISSIONS.ANDROID.CAMERA,
+  PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
+  PERMISSIONS.ANDROID.RECORD_AUDIO
+]).then(result => {
+  if (
+    result[PERMISSIONS.ANDROID.CAMERA]=== RESULTS.DENIED ||
+    result[PERMISSIONS.ANDROID.CAMERA]=== RESULTS.BLOCKED ||
+    result[PERMISSIONS.ANDROID.READ_MEDIA_IMAGES]=== RESULTS.DENIED||
+    result[PERMISSIONS.ANDROID.READ_MEDIA_IMAGES]=== RESULTS.BLOCKED||
+    result[PERMISSIONS.ANDROID.RECORD_AUDIO] === RESULTS.DENIED ||
+    result[PERMISSIONS.ANDROID.RECORD_AUDIO] === RESULTS.BLOCKED 
+  ) {
+    alert("Cannot Proceed without required Permissions")
+    BackHandler.exitApp()
+    console.log('could not get any result. Please try later.');
+  }
+
+  if (
+    result[PERMISSIONS.ANDROID.CAMERA] === RESULTS.GRANTED &&
+    result[PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE] === RESULTS.GRANTED &&
+    result[PERMISSIONS.ANDROID.RECORD_AUDIO] === RESULTS.GRANTED 
+  ) {
+    console.log('granted for all permissions');
+    // do smthing here
+  }
+});
+  }
+
   requestPermissions = async () => {
     if (Platform.OS == "ios") {
       // props.navigation.navigate("Plan Map Screen", { flag: 2 })
     } else {
-      check(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES).then((result) => {
-        if (result === "granted") {
-          console.log("Permission for Gallery Granted");
-        } else {
-          console.log("Checking Permissions");
-          PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-            {
-              title: "Camera",
-              message: "Asset Linker wants to access your " + "Media Gallery.",
-
-              buttonNegative: "Cancel",
-              buttonPositive: "OK",
-            }
-          );
-        }
-      });
-      check(PERMISSIONS.ANDROID.CAMERA).then((result) => {
-        if (result === "granted") {
-          console.log("Permission for Camera Granted");
-        } else {
-          console.log("Checking Permissions");
-          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
-            title: "Camera",
-            message: "Asset Linker wants to access your " + "Camera.",
-
-            buttonNegative: "Cancel",
-            buttonPositive: "OK",
-          });
-        }
-      });
-      check(PERMISSIONS.ANDROID.RECORD_AUDIO).then((result) => {
-        if (result === "granted") {
-          console.log("Permission for Mic Granted");
-        } else {
-          console.log("Checking Permissions");
-          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, {
-            title: "Camera",
-            message: "Asset Linker wants to access your " + "Mic.",
-
-            buttonNegative: "Cancel",
-            buttonPositive: "OK",
-          });
-        }
-      });
+      this.requestMultiplePermissions()
+    //  this.mediaImagesPermission()
+    //  this.camerPermission()
+    //  this.micPermission()
     }
+
   };
 
 

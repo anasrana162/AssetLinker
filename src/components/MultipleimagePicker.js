@@ -22,9 +22,9 @@ export default ImagePick = ({
       }).then(async image => {
         actionSheetRef.current.hide();
         const result = await ImageCompressor.compress(image.path, {
-          maxHeight: 400,
-          maxWidth: 400,
-          quality: 1,
+          // maxHeight: 400,
+          // maxWidth: 400,
+          quality: 0.8,
         
         });
         onImageChange(result, image.mime, 'photo');

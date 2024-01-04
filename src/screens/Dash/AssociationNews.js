@@ -56,6 +56,7 @@ class AssociationNews extends Component {
             isPlaying: false,
             isPaused: false,
             recorded: "",
+            audioPath: "",
             recordedToShow: "",
             postText: "",
             imagesToShow: [],
@@ -63,6 +64,9 @@ class AssociationNews extends Component {
             autoFocus: false,
             selectedAudioToPlay: "",
             posting: false,
+            postDeleteID: "",
+            openDeleteModal: false,
+            confirmModal: false
         };
     }
     _onFinishedPlayingSubscription = null
@@ -131,6 +135,27 @@ class AssociationNews extends Component {
         })
     }
 
+    deletePost = () => {
+        var { userData: { user } } = this.props
+        AssetLinkers.post("delete_news_post?post_id=" + this.state.postDeleteID).then((res) => {
+            console.log("Delete News Association Post API Result", res?.data)
+            this.setState({
+                openDeleteModal:false,
+                postDeleteID:"",
+                confirmModal:false,
+            })
+            this.getPosts()
+        }).catch((err) => {
+            console.log("Delete News Association Post API Error", err)
+        })
+    }
+    deleteModalOpen = (post_id) => {
+        this.setState({
+            postDeleteID: post_id,
+            openDeleteModal: true
+        })
+    }
+
     onRecord = () => {
 
         if (this.state.mic_pressed == true) {
@@ -159,8 +184,15 @@ class AssociationNews extends Component {
             setImmediate(() => {
                 this.setState({ mic_pressed: true, mic_color: !this.state.mic_color })
             })
-            SoundRecorder.start(SoundRecorder.PATH_CACHE + '/' + this.props.userData?.user.id + '_' + new Date().getTime() + '.mp3')
-                .then(function () {
+            // console.log("SoundRecorder.PATH_CACHE",SoundRecorder.PATH_DOCUMENT)
+            var file = SoundRecorder.PATH_CACHE + '/' + this.props.userData?.user.id + '_' + new Date().getTime() + '.mp3'
+            SoundRecorder.start(file)
+                .then(() => {
+                    setImmediate(() => {
+                        this.setState({
+                            audioPath: file
+                        })
+                    })
                     console.log('started recording');
                 });
 
@@ -178,6 +210,17 @@ class AssociationNews extends Component {
         // console.log(SoundPlayer.seek(2))
         setImmediate(() => {
             this.setState({ isPlaying: true, selectedAudioToPlay: audioPath })
+        })
+    }
+    playLocalAudio = () => {
+        setImmediate(() => {
+            this.setState({ isPlaying: false, })
+        })
+        this.animationRef.current?.play();
+        SoundPlayer.playUrl(this.state.audioPath)
+        // console.log(SoundPlayer.seek(2))
+        setImmediate(() => {
+            this.setState({ isPlaying: true, })
         })
     }
 
@@ -410,7 +453,37 @@ class AssociationNews extends Component {
                                 <Text style={{ fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }}>{data?.designation}</Text>
                             </View>
                         </View>
+
+                        {/* Delete Button */}
+                        {user?.ms_id == data?.ms_id && (
+                            <TouchableOpacity
+                                onPressIn={() => this.deleteModalOpen(data?.post_id)}
+                                style={styles.optionBtn}>
+                                <Entypo
+                                    name="dots-three-horizontal"
+                                    size={25}
+                                    color="white"
+                                />
+                            </TouchableOpacity>
+                        )}
                     </View>
+
+                    {this.state.openDeleteModal && data?.post_id == this.state.postDeleteID &&
+                        <TouchableOpacity
+                            onPress={() => this.setState({ openDeleteModal: false })}
+                            activeOpacity={0.5}
+                            style={styles.fade}></TouchableOpacity>
+                    }
+                    {this.state.openDeleteModal && data?.post_id == this.state.postDeleteID &&
+                        <View style={styles.deleteBtn_cont}>
+                            <TouchableOpacity
+                                onPress={() => this.setState({ confirmModal: !this.state.confirmModal })}
+                                activeOpacity={0.5}
+                                style={styles.delete_btn}>
+                                <Text style={styles.delete_text}>Delete</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
 
                     {/* User Post Data */}
                     <View style={styles.postCont}>
@@ -576,6 +649,37 @@ class AssociationNews extends Component {
                             </ScrollView>
                         </View>}
 
+                        {/* Audio Selected */}
+                        {
+                            this.state.recorded == "" ? <></> :
+
+                                <View style={[styles.itemAudioCont,{width:"40%"}]}>
+
+                                    {this.state.isPlaying == true ?
+                                        <TouchableOpacity
+                                            onPress={() => this.pauseAudio()}
+                                            style={styles.audioPlayBtn}>
+                                            <Feather name={this.state.isPaused ? "play-circle" : "pause-circle"} size={35} color="black" />
+                                        </TouchableOpacity>
+                                        :
+                                        <TouchableOpacity
+                                            onPress={() => this.playLocalAudio()}
+                                            style={styles.audioPlayBtn}>
+                                            <Feather name="play-circle" size={35} color="black" />
+                                        </TouchableOpacity>
+                                    }
+
+                                    <LottieView
+                                        source={require('../../animations/Audio_Playing.json')}
+                                        style={{ width: 80, height: 60, marginLeft: 10, }}
+                                        ref={this.animationRef}
+                                        // autoPlay
+                                        // pause={true}
+                                        loop
+                                    />
+                                </View>
+                        }
+
                         <TouchableOpacity
                             onPress={() => this.Post()}
                             style={{
@@ -595,37 +699,6 @@ class AssociationNews extends Component {
                                     <Text style={{ fontSize: 16, fontWeight: "600", color: "white", letterSpacing: 0.5 }}>Post</Text>
                             }
                         </TouchableOpacity>
-
-                        {/* Audio Selected */}
-                        {/* {
-                            this.state.recorded == "" ? <></> :
-
-                                <View style={styles.itemAudioCont}>
-
-                                    {this.state.isPlaying == true ?
-                                        <TouchableOpacity
-                                            onPress={() => this.pauseAudio()}
-                                            style={styles.audioPlayBtn}>
-                                            <Feather name={this.state.isPaused ? "play-circle" : "pause-circle"} size={35} color="black" />
-                                        </TouchableOpacity>
-                                        :
-                                        <TouchableOpacity
-                                            onPress={() => this.playAudio(data?.audio)}
-                                            style={styles.audioPlayBtn}>
-                                            <Feather name="play-circle" size={35} color="black" />
-                                        </TouchableOpacity>
-                                    }
-
-                                    <LottieView
-                                        source={require('../../animations/Audio_Playing.json')}
-                                        style={{ width: 80, height: 60, marginLeft: 10, }}
-                                        ref={this.animationRef}
-                                        // autoPlay
-                                        // pause={true}
-                                        loop
-                                    />
-                                </View>
-                        } */}
 
                     </ScrollView>
                 </View>
@@ -664,6 +737,37 @@ class AssociationNews extends Component {
                     <this.Footer />
                 }
 
+                {/* Modal Delete Post */}
+
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={this.state.confirmModal}>
+                    <TouchableOpacity
+                        style={styles.confirmModalCont}
+                        onPress={() =>
+                            this.setState({ confirmModal: false })
+                        }></TouchableOpacity>
+                    <View style={styles.confirmModal_mainCont}>
+                        <Text style={styles.confirmModalTitle}>
+                            Are you Sure you want to delete this Post? , this can't be undone!
+                        </Text>
+
+                        <View style={styles.flex_direc}>
+                            <TouchableOpacity
+                                onPress={() => this.deletePost()}
+                                style={styles.yes_no_btn}>
+                                <Text style={styles.yes_no_text}>Yes</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => this.setState({ confirmModal: false })}
+                                style={styles.yes_no_btn}>
+                                <Text style={styles.yes_no_text}>NO</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+
             </View >
         )
     }
@@ -699,6 +803,8 @@ const styles = StyleSheet.create({
         width: width,
         // height: 300,
         marginVertical: 5,
+        justifyContent: "center",
+        alignItems: "center",
         backgroundColor: "white",
         shadowColor: "#000",
         shadowOffset: {
@@ -709,6 +815,100 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
 
         elevation: 5,
+    },
+    confirmModalCont: {
+        width: width,
+        height: Dimensions.get("screen").height,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: Colors.fadedBackground,
+    },
+    confirmModal_mainCont: {
+        width: width - 100,
+        height: 200,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "white",
+        borderRadius: 10,
+        position: "absolute",
+        top: height / 2.2,
+        left: 50,
+        // right: 0,
+        zIndex: 200,
+    },
+    flex_direc: {
+        width: "40%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    confirmModalTitle: {
+        fontWeight: "600",
+        color: Colors.black,
+        fontSize: 16,
+        width: "80%",
+        alignSelf: "center",
+        textAlign: "left",
+    },
+    yes_no_btn: {
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: Colors.blue,
+        borderRadius: 10,
+        marginTop: 10,
+    },
+    yes_no_text: {
+        fontSize: 16,
+        fontWeight: "600",
+        color: "white",
+    },
+    optionBtn: {
+        paddingHorizontal: 4,
+        paddingVertical: 1,
+        backgroundColor: Colors.fadedBackground,
+        position: "absolute",
+        right: 5,
+        top: 10,
+        zIndex: 100,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 20,
+    },
+    fade: {
+        width: "100%",
+        height: "100%",
+        backgroundColor: Colors.fadedBackground,
+        position: "absolute",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 80,
+    },
+    deleteBtn_cont: {
+        width: 140,
+        // height: 40,
+        borderRadius: 10,
+        backgroundColor: "white",
+        position: "absolute",
+        // top: 70,
+        alignSelf: "center",
+        zIndex: 150,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    delete_btn: {
+        width: 120,
+        height: 30,
+        marginVertical: 5,
+        justifyContent: "center",
+        alignItems: "center",
+        // backgroundColor:"red"
+    },
+    delete_text: {
+        fontWeight: "600",
+        fontSize: 14,
+        color: "crimson",
     },
     postPreviewCont: {
         width: width,

@@ -196,9 +196,9 @@ const Post = (props) => {
         const arr = path?.map(async (item) => {
           console.log("Working Image selector1");
           const result = await ImageCompressor.compress(item.path, {
-            maxHeight: 400,
-            maxWidth: 400,
-            quality: 1,
+            // maxHeight: 400,
+            // maxWidth: 400,
+            quality: 0.8,
           });
           // let imageObject = {
           //     uri: result,

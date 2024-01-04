@@ -55,7 +55,7 @@ const ImageSelector = ({
                                             height: Dimensions.get('window').height * 0.11,
                                             width: Dimensions.get('window').height * 0.11,
                                             borderRadius: 10,
-                                            resizeMode: 'contain',
+                                            resizeMode: 'cover',
                                         }}
                                         source={{ uri: item }}
                                     />
