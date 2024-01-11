@@ -21,6 +21,7 @@ import { Colors } from "../../config";
 import Feather from "react-native-vector-icons/Feather"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import Entypo from "react-native-vector-icons/Entypo"
+import Ionicons from "react-native-vector-icons/Ionicons"
 import LottieView from 'lottie-react-native';
 import SoundRecorder from 'react-native-sound-recorder';
 import SoundPlayer from 'react-native-sound-player'
@@ -140,9 +141,9 @@ class AssociationNews extends Component {
         AssetLinkers.post("delete_news_post?post_id=" + this.state.postDeleteID).then((res) => {
             console.log("Delete News Association Post API Result", res?.data)
             this.setState({
-                openDeleteModal:false,
-                postDeleteID:"",
-                confirmModal:false,
+                openDeleteModal: false,
+                postDeleteID: "",
+                confirmModal: false,
             })
             this.getPosts()
         }).catch((err) => {
@@ -404,6 +405,12 @@ class AssociationNews extends Component {
         const ListHeaderComponent = () => {
             return (
                 <View style={styles.header}>
+                    {/* Go back */}
+                    <TouchableOpacity
+                        style={styles.headerBtn}
+                        onPress={() => this.props.navigation.navigate("Dash")}>
+                        <Ionicons name="chevron-back" size={30} color="white" />
+                    </TouchableOpacity>
                     <Text style={styles.title}>Association News</Text>
                 </View>
             )
@@ -653,7 +660,7 @@ class AssociationNews extends Component {
                         {
                             this.state.recorded == "" ? <></> :
 
-                                <View style={[styles.itemAudioCont,{width:"40%"}]}>
+                                <View style={[styles.itemAudioCont, { width: "40%" }]}>
 
                                     {this.state.isPlaying == true ?
                                         <TouchableOpacity
@@ -798,6 +805,15 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "white",
+    },
+    headerBtn: {
+        width: 45,
+        height: 45,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 30,
+        position:"absolute",
+        left:5,
     },
     itemContainer: {
         width: width,

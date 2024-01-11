@@ -72,7 +72,9 @@ class Dash extends Component {
 
   checkCallBacks = () => {
     this.props.navigation.addListener("focus", async () => {
-      if (this.props?.route?.params != undefined) {
+      if (this.props?.route?.params == undefined) {
+        console.log("No callabacks");
+      } else {
         var { refresh } = this.props?.route?.params;
         console.log("refresh", refresh)
         if (refresh == "refresh") {
@@ -80,8 +82,7 @@ class Dash extends Component {
           refresh = ""
           this.getPosts();
         }
-      } else {
-        console.log("No callabacks");
+        
         //this.ScrollToRefresh();
       }
       //  console.log("Refreshing");
@@ -159,7 +160,7 @@ class Dash extends Component {
         // console.log("Get Post api Data:  ", res?.data?.property[0])
         if (res?.data) {
           this.setState({
-            Posts: res?.data?.property.reverse(),
+            Posts: res?.data?.property,
             FilteredPosts: res?.data?.property,
             loader: false
           });

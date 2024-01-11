@@ -54,7 +54,7 @@ class PostDetail extends Component {
       this.props?.route?.params?.data;
     switch (key) {
       case "goback":
-        this.props.navigation.navigate("Dash", { refresh: "refresh" });
+        this.props.navigation.navigate("Dash");
         break;
       case "share":
         Linking.openURL(`https://assetslinkers.com`);

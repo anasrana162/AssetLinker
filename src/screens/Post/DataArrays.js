@@ -74,10 +74,10 @@ export const PropertyCommercialCategories = [
 ];
 export const listOfArea = [
     {
-        name: 'Bahria Town',
+        name: 'DHA',
     },
     {
-        name: 'DHA',
+        name: 'Bahria Town',
     },
     {
         name: 'Clifton',

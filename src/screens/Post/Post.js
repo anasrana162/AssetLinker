@@ -547,7 +547,7 @@ const Post = (props) => {
 
     if (dataForApi?.check == true) {
       setImmediate(() => {
-        setLoader(false);
+        // setLoader(false);
         setCheck(true);
       });
       console.log("working API");
@@ -574,6 +574,11 @@ const Post = (props) => {
           if (err?.response?.data?.msg == "Limit Exceeded for creating post please contact AssetsLinkers") {
             alert("Limit Exceeded for creating post please contact AssetsLinkers")
           }
+          Toast.show({
+            type: "success",
+            text1: "Post Failed please try again!",
+            visibilityTime: 2000,
+          });
           setImmediate(() => {
             setLoader(false);
             setCheck(true);

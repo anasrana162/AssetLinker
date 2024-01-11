@@ -53,7 +53,7 @@ class MyProfile extends Component {
     var { id } = this.props?.userData?.user;
     AssetLinkers.get(
       "https://devstaging.a2zcreatorz.com/assetLinkerProject/api/get_property/" +
-        id
+      id
     )
       .then((res) => {
         if (res?.data) {
@@ -202,8 +202,16 @@ class MyProfile extends Component {
                 borderWidth: 4,
                 borderColor: Colors.blue,
                 borderRadius: 80,
+                justifyContent: "center",
+                alignItems: "center",
+                width: 100,
+                height: 100,
               }}
             >
+              <Image
+                source={require('../../../assets/placeholder.jpg')}
+                style={[styles.image, { position: "absolute", }]}
+              />
               <Image
                 source={{
                   uri:
@@ -370,6 +378,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 80,
+    borderWidth: 4,
     // marginLeft: 10,
     // marginRight: 30
   },
