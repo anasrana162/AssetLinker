@@ -146,6 +146,7 @@ export const Location_DHA_City = [
     { id: 5, name: 'Gujranwala' },
     { id: 6, name: 'Islamabad' },
     { id: 7, name: 'Karachi' },
+    { id: 8, name: 'DHA City Karachi' },
 ]
 export const furnishes = [
     { id: 1, name: 'Unfurnished' },

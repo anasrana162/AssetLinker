@@ -26,7 +26,7 @@ const ImageSelector = ({ imagePath, style }) => {
         <Image
           source={
             path == ""
-              ? require("../../../../assets/placeholder.jpeg")
+              ? require("../../../../assets/placeholderPost.jpeg")
               : { uri: path }
           }
           style={styles.imageStyle}

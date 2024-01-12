@@ -1,15 +1,24 @@
-import { StyleSheet, Text, View, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native'
 import React from 'react'
 const width = Dimensions.get("screen").width
-const Header = () => {
+import Ionicons from "react-native-vector-icons/Ionicons";
+const Header = ({ navProps }) => {
     return (
         <>
+
             <View style={styles.header}>
+                {/* Go back */}
+                <TouchableOpacity
+                    style={[styles.headerBtn, { marginLeft: 5 }]}
+                    onPress={() => navProps.pop()}>
+                    <Ionicons name="chevron-back" size={30} color="white" />
+                </TouchableOpacity>
                 <Text style={styles.header_text}>POST</Text>
             </View>
 
             <View
                 style={styles.include_some_details}>
+
                 <Text style={styles.include_some_details_text}>
                     Include some details
                 </Text>
@@ -33,21 +42,32 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         color: "white",
     },
-    
-  include_some_details: {
-    height: 50,
-    width: "100%",
-    alignSelf:"center",
-    backgroundColor: '#EEEEEE',
-    alignItems: 'flex-start',
 
-    justifyContent: 'center',
-  },
+    include_some_details: {
+        height: 50,
+        width: "100%",
+        alignSelf: "center",
+        backgroundColor: '#EEEEEE',
+        alignItems: 'flex-start',
 
-  include_some_details_text: {
-    fontSize: 19,
-    fontWeight: '500',
-    color: 'black',
-    marginLeft:10
-  },
+        justifyContent: 'center',
+    },
+
+    include_some_details_text: {
+        fontSize: 19,
+        fontWeight: '500',
+        color: 'black',
+        marginLeft: 10
+    },
+    headerBtn: {
+        width: 45,
+        height: 45,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 30,
+        position: "absolute",
+        left: 0,
+        top: 0,
+        zIndex: 100
+    },
 })

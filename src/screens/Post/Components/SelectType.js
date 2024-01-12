@@ -5,7 +5,7 @@ const width = Dimensions.get("screen").width
 
 const SelectType = ({ Property_Types, Category_Selected, sale_Rent }) => {
 
-    const [selected_cat, setSelected_cat] = React.useState("Commercial")
+    const [selected_cat, setSelected_cat] = React.useState("")
 
     const SelectedCategory = (val) => {
         // console.log("selected Value", val)

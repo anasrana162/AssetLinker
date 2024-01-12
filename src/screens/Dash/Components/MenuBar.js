@@ -13,6 +13,7 @@ const MenuBar = ({ navProps, logout }) => {
     const [openDropdown, setOpenDropDown] = useState(false)
     const data = [
         { label: 'Profile', value: '2', icon: 'supervised-user-circle' },
+        { label: 'Contact Us', value: '2', icon: 'supervised-user-circle' },
         // {label: 'Notification', value: '1', icon: 'notifications-none'},
         { label: 'Logout', value: '2', icon: 'logout' },
     ];
@@ -22,6 +23,11 @@ const MenuBar = ({ navProps, logout }) => {
             case "magazine":
                 Linking.openURL(
                     `https://assetslinkers.com`,
+                )
+                break;
+            case "Contact Us":
+                Linking.openURL(
+                    `https://assetslinkers.com/contact-us/`,
                 )
                 break;
 

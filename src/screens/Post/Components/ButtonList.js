@@ -7,7 +7,7 @@ const ButtonList = ({ data, titleSale,onSelectValue,style,styleTitle }) => {
 
     return (
         <View style={[styles.button_list_cont,style]}>
-            <Text style={[styles.title,styleTitle]}>{titleSale}</Text>
+            {titleSale == "" ? <></>:<Text style={[styles.title,styleTitle]}>{titleSale}</Text>}
 
             {/* Type list */}
             <View style={styles.horizontal_list_cont}>

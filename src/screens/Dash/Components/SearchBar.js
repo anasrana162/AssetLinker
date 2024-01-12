@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         borderWidth: 0.5,
         paddingHorizontal: 10,
+        color:"black"
     },
     crossContainer: {
         width: "100%",

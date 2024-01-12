@@ -100,7 +100,7 @@ const CustomerContainer = ({ data }) => {
           source={
             data?.image
               ? { uri: `${ImagePath}/${data?.image}` }
-              : require("../../../assets/placeholder.jpeg")
+              : require("../../../assets/placeholderPost.jpeg")
           }
           style={styles.img}
         />
@@ -112,9 +112,13 @@ const CustomerContainer = ({ data }) => {
             data?.detail[0]?.frim_name ||
             data?.name}
         </Text>
+        {data?.detail[0]?.designation == undefined || data?.detail[0]?.designation == "" ? <></> :
+          <Text style={styles.designation}>
+            {data?.detail[0]?.designation}
+          </Text>}
         <View style={styles.tagContainer}>
           <Text style={styles.tagLabel}>
-            {data?.user_type.replace("_", " ")}
+            {data?.user_type == "estate_agent" ? "State Consultant" : data?.user_type.replace("_", " ")}
           </Text>
         </View>
       </View>
@@ -174,7 +178,7 @@ const styles = StyleSheet.create({
   },
   customerMain: {
     width: width - 20,
-    height: 80,
+    height: 90,
     borderBottomColor: "#ddd",
     borderBottomWidth: 1,
     flexDirection: "row",
@@ -183,11 +187,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   img: { width: 60, height: 60, borderRadius: 10 },
-  name: { color: "#000", fontWeight: "600", fontSize: 16 },
+  name: { color: "black", fontWeight: "600", fontSize: 16 },
+  designation: { color: "black", fontWeight: "600", fontSize: 14,letterSpacing:1 },
   tagContainer: {
     backgroundColor: Colors.blue,
     borderRadius: 20,
-    width: 100,
+    width: 110,
   },
   tagLabel: {
     color: "#fff",
@@ -201,7 +206,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
   },
-  box2: { width: "48%", rowGap: 15 },
+  box2: { width: "48%", rowGap: 5 },
   box3: { width: "30%", rowGap: 15, paddingLeft: 15 },
   viewBTN: {
     flexDirection: "row",

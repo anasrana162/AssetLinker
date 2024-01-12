@@ -7,7 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 
-const LocationDropDown = ({ showModal, title,titleMain }) => {
+const LocationDropDown = ({ showModal, title, titleMain }) => {
 
     return (
         <>
@@ -17,8 +17,9 @@ const LocationDropDown = ({ showModal, title,titleMain }) => {
                     onPress={showModal}
                     style={styles.dropdown_cont}>
                     <EvilIcons name="location" size={24} color="black" />
+                    {console.log("Title", title)}
                     <Text style={{ color: 'black', fontWeight: "500", fontSize: 18 }}>
-                        {title}
+                        {title == "DHA, DHA City Karachi" ? "DHA City Karachi" : title}
                     </Text>
                     <AntDesign name="down" size={24} color="grey" />
 

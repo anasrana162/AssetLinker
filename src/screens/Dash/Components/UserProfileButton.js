@@ -16,13 +16,10 @@ const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 const UserProfileButton = ({ navProps, data, screenName }) => {
-  // console.log("data", data)
+  console.log("data", data)
   return (
-    <TouchableOpacity
-      activeOpacity={0.7}
-      onPress={() =>
-        navProps.navigate("UserProfileDetail", { user_id: data?.id })
-      }
+    <View
+
       style={styles.mainContainer}>
       <Image
         source={{
@@ -108,12 +105,15 @@ const UserProfileButton = ({ navProps, data, screenName }) => {
               created_at: data?.member_since,
               image: data?.image,
               name: data?.name,
+              designation: data?.detail[0]?.designation == undefined ? "" : data?.detail[0]?.designation
             });
           }}
           style={{
             marginTop: (data?.detail[0]?.designation == undefined ||
               data?.detail[0]?.designation == "") ? -5 : 5,
             flexDirection: "row",
+            paddingVertical: 5,
+            // backgroundColor:"red"
             // marginLeft: 2
           }}>
 
@@ -128,14 +128,22 @@ const UserProfileButton = ({ navProps, data, screenName }) => {
 
         </TouchableOpacity>
       </View>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() =>
+          navProps.navigate("UserProfileDetail", { user_id: data?.id })
+        }
+        style={{ paddingLeft: 10, position: "absolute", right: 30 }}
+      >
 
-      <Feather
-        name="chevron-right"
-        size={30}
-        color="black"
-        style={{ position: "absolute", right: 30 }}
-      />
-    </TouchableOpacity>
+        <Feather
+          name="chevron-right"
+          size={30}
+          color="black"
+        // style={{  }}
+        />
+      </TouchableOpacity>
+    </View>
   );
 };
 

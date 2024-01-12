@@ -66,6 +66,7 @@ const Post = (props) => {
   // States
   const [sale_Rent, setSale_Rent] = useState("Rent");
   const [rooms, setRooms] = useState("Null");
+  const [readyToSubmit, setReadyToSubmit] = useState("Null");
   const [yards, setYards] = useState("");
   const [yards_Unit, setYards_Unit] = useState("");
   const [PlotYards, setPlotYards] = useState([
@@ -548,6 +549,7 @@ const Post = (props) => {
     if (dataForApi?.check == true) {
       setImmediate(() => {
         // setLoader(false);
+        setReadyToSubmit(true)
         setCheck(true);
       });
       console.log("working API");
@@ -1066,12 +1068,149 @@ const Post = (props) => {
     }
   };
 
-  // console.log("category Post SCreen", images)
+  const checkDataForSubmitBtn = () => {
+    var {
+      userData: {
+        user: { id },
+      },
+    } = props;
+    // console.log("Category1", category);
+    var check = true
+    switch (category) {
+      case "Commercial":
+        if (id == null || id == "") {
+          return check = false
+        }
+        if (sale_Rent == null || sale_Rent == "") {
+
+          return check = false
+        }
+
+        if (category == null || category == "") {
+          return check = false
+        }
+        if (price == null || price == "") {
+          return check = false
+        }
+        if (propertyCategory == null || propertyCategory == "") {
+          return check = false
+        }
+        if (yards == null || yards == "") {
+          return check = false
+        }
+        if (yardsNumber == null || yardsNumber == "") {
+          return check = false
+        }
+        if (yards == "Others" && (yardsNumber == "" || yards_Unit == "")) {
+          return check = false
+        }
+
+        if (location == null || location == "" || location == "Location") {
+          return check = false
+        }
+        if (locationMain == null || locationMain == "" || locationMain == "Location") {
+          return check = false
+        }
+        if (address == null || address == "") {
+          return check = false
+        }
+        if (details == null || details == "") {
+          return check = false
+        }
+        return check = true;
+      // return check = false;
+
+      case "Residential":
+        if (id == null || id == "") {
+          return check = false
+        }
+        if (sale_Rent == null || sale_Rent == "") {
+          return check = false
+        }
+
+        if (category == null || category == "") {
+          return check = false
+        }
+        if (price == null || price == "") {
+          return check = false
+        }
+        if (propertyCategory == null || propertyCategory == "") {
+          return check = false
+        }
+        if (yards == null || yards == "") {
+          return check = false
+        }
+        if (yardsNumber == null || yardsNumber == "") {
+          return check = false
+        }
+        if (address == null || address == "") {
+          return check = false
+        }
+
+
+        if (location == null || location == "") {
+          return check = false
+        }
+        if (locationMain == null || locationMain == "" || locationMain == "Location") {
+          return check = false
+        }
+
+        if (details == null || details == "") {
+          return check = false
+        }
+        return check = true;
+
+      case "Plot":
+        if (id == null || id == "") {
+          return check = false
+        }
+        if (sale_Rent == null || sale_Rent == "") {
+          return check = false
+        }
+
+        if (category == null || category == "") {
+          return check = false
+        }
+        if (price == null || price == "") {
+          return check = false
+        }
+        if (yards == null || yards == "") {
+          return check = false
+        }
+        if (yardsNumber == null || yardsNumber == "") {
+          return check = false
+        }
+
+        if (phase == null || phase == "") {
+          return check = false
+        }
+        if (location == null || location == "") {
+          return check = false
+        }
+        if (locationMain == null || locationMain == "" || locationMain == "Location") {
+          return check = false
+        }
+        if (address == null || address == "") {
+          return check = false
+        }
+        if (details == null || details == "") {
+          return check = false
+        }
+        return check = true;
+      // if (check == false) {
+      //     return false
+      // } else {
+      //     return true
+      // }
+    }
+  };
+var stateCheck = checkDataForSubmitBtn()
+  console.log("category Post SCreen", stateCheck)
   return (
     <View style={styles.mainContainer}>
       {/* {console.log(props)} */}
       {/* Header */}
-      <Header />
+      <Header navProps={props.navigation} />
 
       <ScrollView style={{ width: "100%" }}>
         {/* Sale/Rent */}
@@ -1141,8 +1280,10 @@ const Post = (props) => {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={onSubmitPress}
-          disabled={loader}
-          style={styles.submit_btn}
+          disabled={!stateCheck}
+          style={[styles.submit_btn, {
+            backgroundColor: stateCheck == true ? "#2C74B3" : "#000"
+          }]}
         >
           {loader == true ? (
             <ActivityIndicator size={"small"} color={"white"} />
@@ -1164,7 +1305,15 @@ const Post = (props) => {
               : Location_Bahria
         }
         show={locationDropDownOpen}
-        onDismiss={() => setLocationDropDownOpen(!locationDropDownOpen)}
+        onDismiss={() => {
+          setLocationDropDownOpen(!locationDropDownOpen)
+          // setLocation({
+          //   location: "Null",
+          //   place: "Null",
+          //   valueToShow: "Null",
+          // })
+          setDropdownDataChange(false);
+        }}
         title={"Select Location"}
         onSelect={(val) => {
           // setLocation(val)

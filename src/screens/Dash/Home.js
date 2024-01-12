@@ -82,7 +82,7 @@ class Dash extends Component {
           refresh = ""
           this.getPosts();
         }
-        
+
         //this.ScrollToRefresh();
       }
       //  console.log("Refreshing");
@@ -267,6 +267,9 @@ class Dash extends Component {
     var { Posts } = this.state;
 
     const filterData = Posts.filter((data) => {
+
+      var locationParser = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
+      // console.log("locationParser",locationParser)
       const matches_property_type = data?.property_type == undefined ? "" : data?.property_type
         .toLowerCase()
         .includes(txt.toLowerCase());
@@ -282,12 +285,20 @@ class Dash extends Component {
       const matches_price = data?.price == undefined ? "" : data?.price
         .toLowerCase()
         .includes(txt?.toLowerCase());
-      const matches_location = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
+      // const matches_location = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
+      //   .location.toLowerCase()
+      //   .includes(txt?.toLowerCase());
+      // // const matches_location_place = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)?.place
+      // //   .location.toLowerCase()
+      // //   .includes(txt?.toLowerCase());
+      // const matches_place = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
+      //   .place.toLowerCase()
+      //   .includes(txt?.toLowerCase());
+      const matches_place_location = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
         .location.toLowerCase()
-        .includes(txt?.toLowerCase());
-      const matches_place = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
-        .place.toLowerCase()
-        .includes(txt?.toLowerCase());
+        .includes(txt?.toLowerCase()) + JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
+          .place.toLowerCase()
+          .includes(txt?.toLowerCase());
       // console.log("data?.open", data?.open) //.replace(/\s/g, "")
       // console.log(".toLowerCase().includes(txt?.toLowerCase())", JSON.parse(data?.Location).location.toLowerCase())
       return (
@@ -296,8 +307,11 @@ class Dash extends Component {
         matches_rent_sale ||
         // matches_open ||
         matches_price ||
-        matches_location ||
-        matches_place
+        // matches_location ||
+        // matches_place ||
+        matches_place_location
+        // ||
+        // matches_location_place
       );
       // || matches_rent_sale | matches_price
     });
@@ -352,7 +366,7 @@ class Dash extends Component {
             position={this.state.position}
             dataSource={this.state.sliderImages}
             containerStyle={{ marginBottom: 10 }}
-            // onPress={(item,index)=>{console.log("Item from slideshow",item)}}
+          // onPress={(item,index)=>{console.log("Item from slideshow",item)}}
           />
 
           {/* Posts Component */}
@@ -361,7 +375,7 @@ class Dash extends Component {
               data={
                 this.state.openSearchBar
                   ? this.state.FilteredPosts
-                  : this.state.Posts 
+                  : this.state.Posts
               }
               navProps={this.props.navigation}
               userID={this.props.userData?.user?.id}

@@ -180,9 +180,9 @@ const AllPosts = ({
                 <Text
                   style={[
                     styles.priceText,
-                    { marginTop: 5, marginLeft: 5 },
+                    { marginTop: 5, marginLeft: 5 ,fontSize:15,fontWeight:"700"},
                   ]}>
-                  {item?.item?.price}
+                  Rs.{item?.item?.price}
                 </Text>
 
                 {/* Posted At */}

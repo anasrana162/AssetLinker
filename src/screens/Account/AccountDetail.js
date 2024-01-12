@@ -178,7 +178,7 @@ class AccountDetail extends Component {
   };
 
   render() {
-    var { user_id, name, image, created_at } = this.props?.route?.params;
+    var { user_id, name, image, created_at, designation } = this.props?.route?.params;
     const memberSince = moment(created_at).format("YYYY/MM/DD");
 
     // console.log(memberSince);
@@ -208,8 +208,22 @@ class AccountDetail extends Component {
               source={{ uri: `${ImagePath}/${image}` }}
               style={styles.image}
             />
+            {console.log("designation", designation)}
             <View style={styles.inner_cont}>
               <Text style={styles.text}>{name}</Text>
+              {designation == "" ? <></> :
+                  <View style={{
+                    width: 60,
+                    height: 25,
+                    backgroundColor: Colors.blue,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 5,
+                    marginVertical:3
+                    // marginVertical: 3
+                  }}>
+                    <Text style={[styles.text, { fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }]}>{designation}</Text>
+                  </View>}
               <View
                 style={{
                   flexDirection: "row",
