@@ -386,7 +386,7 @@ class PostDetail extends Component {
           </TouchableOpacity>
 
           {/* MSID */}
-          {console.log("data?.ms_id", data)}
+          {/* {console.log("data?.ms_id", data)} */}
           <Text style={styles.posted_at}>MSID: {data?.ms_id}</Text>
 
           <View style={{ flexDirection: "row", columnGap: 5, marginLeft: 10, marginTop: 5 }}>

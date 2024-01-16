@@ -31,6 +31,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
 import * as userActions from "../../redux/actions/user";
 import { bindActionCreators } from "redux";
+
 import Headlines from "./Components/Headlines";
 import Slideshow from "react-native-image-slider-show";
 import TabNavigator from "../../components/TabNavigator";

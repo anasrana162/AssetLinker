@@ -5,13 +5,22 @@ import {
   NativeModules,
   Dimensions,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import React, { Component } from "react";
 import Colors from "../../config/Colors";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import AssetLinkers from "../../api/AssetLinkers";
+import AssetLinkers , { ImagePath }  from "../../api/AssetLinkers";
 import LoadingModal from "../../components/LoadingModal";
+import moment from "moment";
+
+{
+  /* {---------------Redux Imports------------} */
+}
+import { connect } from "react-redux";
+import * as userActions from "../../redux/actions/user";
+import { bindActionCreators } from "redux";
 
 const {
   StatusBarManager: { HEIGHT },
@@ -19,7 +28,7 @@ const {
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height - HEIGHT;
 
-export default class Account extends Component {
+class Account extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,7 +56,7 @@ export default class Account extends Component {
           console.log(item, "=========Consultant===========");
         } else if (item?.user_type === "builder") {
           builder.push(item)
-          this.setState({ builder});
+          this.setState({ builder });
           console.log(item, "=========builder===========");
         }
       });
@@ -80,6 +89,13 @@ export default class Account extends Component {
   }
 
   render() {
+
+    // var { user_id, name, image, created_at, designation } = this.props?.route?.params;
+    console.log("userData",this.props)
+
+    var { userData: { user: { name, image, created_at, detail } } } = this.props
+    const memberSince = moment(created_at).format("YYYY/MM/DD");
+
     // console.log(this.state.all, "=========All Users===========");
     const accountCategory = ["buyer / seller", "builder", "consultant", "all"];
     const LongButton = ({ label }) => (
@@ -102,6 +118,7 @@ export default class Account extends Component {
       <>
         <LoadingModal loading={loading} />
         <View style={styles.mainContainer}>
+          {/* Go back */}
           <TouchableOpacity
             onPress={() => this.props?.navigation.pop()}
             style={{
@@ -109,11 +126,56 @@ export default class Account extends Component {
               flexDirection: "row",
               alignItems: "center",
               marginLeft: 10,
-              marginBottom: 20
+              marginBottom: 0
             }}>
             <AntDesign name="leftcircleo" size={30} color="black" />
             <Text style={{ fontSize: 14, color: "black", fontWeight: "500", marginLeft: 5, }}>Go Back</Text>
           </TouchableOpacity>
+
+
+          {/* Profile Info Cont */}
+
+          <View style={styles.pContainer}>
+            <Image
+              source={{ uri: `${ImagePath}/${image}` }}
+              style={styles.image}
+            />
+            {/* {console.log("designation", designation)} */}
+            <View style={styles.inner_cont}>
+              <Text style={styles.text}>{name}</Text>
+              {detail[0]?.designation == "" || detail[0]?.designation == undefined ? <></> :
+                <View style={{
+                  width: 60,
+                  height: 25,
+                  backgroundColor: Colors.blue,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 5,
+                  marginVertical: 3
+                  // marginVertical: 3
+                }}>
+                  <Text style={[styles.text, { fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }]}>{detail[0]?.designation}</Text>
+                </View>}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  columnGap: 5,
+                }}>
+                <Text
+                  style={[styles.text, { fontSize: 13, fontWeight: "300" }]}>
+                  Member Since:
+                </Text>
+                <Text
+                  style={[styles.text, { fontSize: 13, fontWeight: "300" }]}>
+                  {memberSince}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          
+
           {accountCategory.map((catName, index) => (
             <LongButton label={catName} key={index} />
           ))}
@@ -122,6 +184,21 @@ export default class Account extends Component {
     );
   }
 }
+  /* {---------------redux State ------------} */
+
+const mapStateToProps = (state) => ({
+  userData: state.userData,
+});
+
+{
+  /* {---------------redux Actions ------------} */
+}
+const ActionCreators = Object.assign({}, userActions);
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(ActionCreators, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Account);
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -132,6 +209,35 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     paddingTop: 20,
+  },
+  pContainer: {
+    width: width,
+    height: 130,
+    // borderWidth: 1,
+    marginVertical: 20,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  inner_cont: {
+    width: "60%",
+    height: "100%",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    // borderWidth: 1
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 80,
+    marginLeft: 10,
+    marginRight: 30,
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: Colors.black,
   },
   longBTN: {
     backgroundColor: Colors.apple,

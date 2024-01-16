@@ -141,10 +141,14 @@ const AllPosts = ({
                   {item?.item?.category}
                 </Text>}
 
+                {item?.item?.property_type.toLowerCase() == "plot" ?  <Text numberOfLines={1} style={[styles.propertyTypeText,{fontSize:14,width:160}]}>
+                  {item?.item?.phase}
+                </Text>:<></>}
+
                 {/* Property Type ("commercial",'Residential", Plot) */}
-                <Text style={[styles.propertyTypeText, { fontSize: 14, fontWeight: "400", marginTop: item?.item?.category == "Null" ? 5 : 0 }]}>
+                <Text style={[styles.propertyTypeText, { fontSize: 14, fontWeight: "600", marginTop: item?.item?.category == "Null" ? 5 : 0 }]}>
                   {item?.item?.property_type} /
-                  <Text style={[styles.propertyTypeText, { fontSize: 14 }]}> {item?.item?.rent_sale}</Text>
+                  <Text style={[styles.propertyTypeText, { fontSize: 14 ,fontWeight: "400"}]}> {item?.item?.rent_sale}</Text>
                   {/* {item?.item?.property_type} */}
                 </Text>
                 {/* {item?.item?.category == "Null" ? <></> : <Text style={styles.plotCategory}>

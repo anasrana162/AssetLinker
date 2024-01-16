@@ -16,7 +16,7 @@ const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 const UserProfileButton = ({ navProps, data, screenName }) => {
-  console.log("data", data)
+  // console.log("data", data)
   return (
     <View
 

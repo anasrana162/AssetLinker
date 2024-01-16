@@ -16,6 +16,7 @@ import DropDown from '../Post/Components/DropDown';
 import Links from './Components/Links';
 import Builder from './Components/Builder';
 import Buyer_Seller from './Components/Buyer_Seller';
+import { listOfArea, Location_DHA_City, Location_Bahria } from '../Post/DataArrays';
 
 export default class Signup extends Component {
 
@@ -34,6 +35,7 @@ export default class Signup extends Component {
             name: null,
             firmName: null,
             selectArea: null,
+            LocationMain: "",
             realEstateName: '',
             mobile: null,
             email: null,
@@ -47,6 +49,8 @@ export default class Signup extends Component {
             address: null,
             userRoles: null, // new
             locationDropDownOpen: false, // new
+            dropdownDataChange: false,
+            dropdownSV: "",
             defaultSelectedRoleType: {
                 id: 1,
                 name: "Real Estate Consultant",
@@ -152,7 +156,7 @@ export default class Signup extends Component {
 
     checkConditionsForConsultant = () => {
 
-        var { name, realEstateName, mobile, email, password, confirmPassword, image, role, selectArea, address } = this.state
+        var { name, realEstateName, mobile, email, password, confirmPassword, image, role, selectArea, LocationMain, address } = this.state
 
 
         if (image == null) {
@@ -225,7 +229,7 @@ export default class Signup extends Component {
             })
             return alert("Password does not match!")
         }
-        if (selectArea == null) {
+        if (LocationMain == "") {
             console.log("location setting false")
             setImmediate(() => {
                 this.setState({
@@ -259,7 +263,7 @@ export default class Signup extends Component {
                 "email": email.toLowerCase(),
                 "password": password,
                 "password_confirmation": confirmPassword,
-                "location": selectArea,
+                "location": LocationMain,
                 "address": address,
                 "image": image
             }
@@ -267,7 +271,7 @@ export default class Signup extends Component {
     }
 
     checkConditionsForBuilder = () => {
-        var { name, firmName, mobile, email, landline, password, confirmPassword, image, selectArea, address } = this.state
+        var { name, firmName, mobile, email, landline, password, confirmPassword, image, selectArea, LocationMain, address } = this.state
 
 
         if (image == null) {
@@ -350,7 +354,7 @@ export default class Signup extends Component {
             })
             return alert("Password does not match!")
         }
-        if (selectArea == null) {
+        if (LocationMain == "") {
             console.log("location setting false")
             setImmediate(() => {
                 this.setState({
@@ -385,7 +389,7 @@ export default class Signup extends Component {
                 "email": email,
                 "password": password,
                 "password_confirmation": confirmPassword,
-                "location": selectArea,
+                "location": LocationMain,
                 "address": address,
                 "image": image
             }
@@ -609,36 +613,51 @@ export default class Signup extends Component {
 
     }
 
-    setLocation = (loc) => {
-        //  console.log(loc)
-        setImmediate(() => {
-            this.setState({
-                selectArea: loc,
-                locationDropDownOpen: false
-            })
-        })
+    setLocation = (val, key) => {
+        //  console.log("LOcatin: ",val,"     Key:  ",key)
+
+        switch (key) {
+            case "location":
+                let obj = {
+                    location: val,
+                    place: "Null",
+                    valueToShow: val,
+                };
+                this.setState({ selectArea: obj })
+                // console.log("location recieved", val);
+                break;
+            case "loc_bahria":
+                let objj = {
+                    location: this.state.selectArea?.location,
+                    place: val,
+                    valueToShow: this.state.selectArea?.location + ", " + val,
+                };
+                this.setState({
+                    selectArea: objj,
+                    LocationMain: JSON.stringify(objj),
+                })
+                // console.log("loc_bahria: ", objj);
+                break;
+            case "loc_dha":
+                let objjj = {
+                    location: this.state.selectArea?.location,
+                    place: val,
+                    valueToShow: this.state.selectArea?.location + ", " + val,
+                };
+                this.setState({
+                    selectArea: objjj,
+                    LocationMain: JSON.stringify(objjj),
+                })
+                console.log("loc_dha: ", objjj);
+
+                break;
+        }
+
+
     }
 
 
     render() {
-
-        const listOfArea = [
-            {
-                name: 'Bahria Town',
-            },
-            {
-                name: 'DHA city',
-            },
-            {
-                name: 'DHA',
-            },
-            {
-                name: 'Clifton',
-            },
-            {
-                name: 'MDA',
-            },
-        ];
 
         return (
             <View style={styles.mainContainer}>
@@ -746,11 +765,62 @@ export default class Signup extends Component {
                     {/* Dropdown for Location */}
 
                     <DropDown
-                        data={listOfArea}
+                        data={
+                            // listOfArea
+                            this.state.dropdownDataChange == false
+                                ? listOfArea
+                                : this.state.dropdownSV == "DHA"
+                                    ? Location_DHA_City
+                                    : Location_Bahria
+                        }
                         show={this.state.locationDropDownOpen}
-                        onDismiss={() => this.setState({ locationDropDownOpen: !this.state.locationDropDownOpen })}
+                        onDismiss={() => this.setState({
+                            locationDropDownOpen: !this.state.locationDropDownOpen,
+                            dropdownDataChange: false,
+                            
+                        })}
                         // title={"Select Location"}
-                        onSelect={(val) => this.setLocation(val)}
+                        // onSelect={(val) => this.setLocation(val)}
+                        onSelect={(val) => {
+                            // setLocation(val)
+                            if (this.state.dropdownDataChange == false) {
+                                console.log("location Value Slected:", val);
+                                //   setDropdownSV(val);
+                                this.setState({ dropdownSV: val })
+                                if (val == "Bahria Town" || val == "DHA") {
+                                    this.setState({ dropdownDataChange: true,selectArea:null })
+
+                                }
+                                this.setLocation(val, 'location')
+                                // valueAssigner(val, "location");
+                                if (val == "Clifton" || val == "MDA") {
+                                    this.setState({ dropdownDataChange: false,selectArea:null })
+                                }
+                            }
+                            if (this.state.dropdownSV == "Bahria Town") {
+
+                                this.setLocation(val, "loc_bahria")
+                                this.setState({
+                                    dropdownDataChange: false,
+                                    dropdownSV: "",
+                                    locationDropDownOpen: false
+                                })
+                                // setDropdownDataChange(false);
+                                // setDropdownSV("");
+                                // setLocationDropDownOpen(false);
+                            }
+                            if (this.state.dropdownSV == "DHA") {
+                                this.setLocation(val, "loc_dha");
+                                this.setState({
+                                    dropdownDataChange: false,
+                                    dropdownSV: "",
+                                    locationDropDownOpen: false
+                                })
+                                // setDropdownDataChange(false);
+                                // setDropdownSV("");
+                                // setLocationDropDownOpen(false);
+                            }
+                        }}
                     />
                     <View style={{ width: width, height: 45, position: "absolute", bottom: 0, backgroundColor: "#3081bf" }}></View>
 

@@ -180,11 +180,11 @@ class AccountDetail extends Component {
   render() {
     var { user_id, name, image, created_at, designation } = this.props?.route?.params;
     const memberSince = moment(created_at).format("YYYY/MM/DD");
+    var { userData: { user } } = this.props
 
     // console.log(memberSince);
     // console.log(user_id, "~~~~~~~~~~~~~", memberSince);
-    // console.log("-----------+_+_+_+_+-------------", this.props?.route?.params);
-
+    // console.log("-----------+_+_+_+_+-------------", this.props?.userData?.user?.id)
     return (
       <View style={styles.mainContainer}>
         <ScrollView>
@@ -208,22 +208,22 @@ class AccountDetail extends Component {
               source={{ uri: `${ImagePath}/${image}` }}
               style={styles.image}
             />
-            {console.log("designation", designation)}
+            {/* {console.log("designation", designation)} */}
             <View style={styles.inner_cont}>
               <Text style={styles.text}>{name}</Text>
               {designation == "" ? <></> :
-                  <View style={{
-                    width: 60,
-                    height: 25,
-                    backgroundColor: Colors.blue,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: 5,
-                    marginVertical:3
-                    // marginVertical: 3
-                  }}>
-                    <Text style={[styles.text, { fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }]}>{designation}</Text>
-                  </View>}
+                <View style={{
+                  width: 60,
+                  height: 25,
+                  backgroundColor: Colors.blue,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 5,
+                  marginVertical: 3
+                  // marginVertical: 3
+                }}>
+                  <Text style={[styles.text, { fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }]}>{designation}</Text>
+                </View>}
               <View
                 style={{
                   flexDirection: "row",
@@ -250,7 +250,7 @@ class AccountDetail extends Component {
           {/* Posts Component */}
           {this?.state?.Posts ? (
             <AllPosts
-              userID={user_id}
+              userID={user?.id}
               data={this.state.Posts}
               navProps={this.props.navigation}
               openDeletePostModal={(postID) => this.openDeletePostModal(postID)}

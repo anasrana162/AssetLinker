@@ -32,7 +32,7 @@ const BottomBar = ({ data, id, user_cellno }) => {
     }
   };
 
-  console.log(data?.user_id, "-----BOTTOM BAR");
+  // console.log(data?.user_id, "-----BOTTOM BAR");
 
   return (
     <View style={styles.bottomView}>

@@ -113,12 +113,21 @@ const CustomerContainer = ({ data }) => {
             data?.name}
         </Text>
         {data?.detail[0]?.designation == undefined || data?.detail[0]?.designation == "" ? <></> :
-          <Text style={styles.designation}>
-            {data?.detail[0]?.designation}
-          </Text>}
+          <View style={{
+            width: 50,
+            height: 20,
+            borderRadius: 10,
+            justifyContent: "center",
+            alignItems: 'center',
+            backgroundColor: Colors.blue,
+          }}>
+            <Text style={styles.designation}>
+              {data?.detail[0]?.designation}
+            </Text>
+          </View>}
         <View style={styles.tagContainer}>
           <Text style={styles.tagLabel}>
-            {data?.user_type == "estate_agent" ? "State Consultant" : data?.user_type.replace("_", " ")}
+            {data?.user_type == "estate_agent" ? "Est Cons" : data?.user_type.replace("_", " ")}
           </Text>
         </View>
       </View>
@@ -188,7 +197,7 @@ const styles = StyleSheet.create({
   },
   img: { width: 60, height: 60, borderRadius: 10 },
   name: { color: "black", fontWeight: "600", fontSize: 16 },
-  designation: { color: "black", fontWeight: "600", fontSize: 14,letterSpacing:1 },
+  designation: { color: "white", fontWeight: "600", fontSize: 14, letterSpacing: 1 },
   tagContainer: {
     backgroundColor: Colors.blue,
     borderRadius: 20,
@@ -206,7 +215,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
   },
-  box2: { width: "48%", rowGap: 5 },
+  box2: { width: "48%", rowGap: 3 },
   box3: { width: "30%", rowGap: 15, paddingLeft: 15 },
   viewBTN: {
     flexDirection: "row",
