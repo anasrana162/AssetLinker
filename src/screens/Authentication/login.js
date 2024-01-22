@@ -269,14 +269,14 @@ const styles = StyleSheet.create({
     logo: {
         width: width - 80,
         height: 100,
-        marginTop: 150,
+        marginTop: 100,
         alignSelf: "center",
     },
     screenTitle: {
         fontSize: 28,
         fontWeight: "600",
         color: Colors.main,
-        marginTop: 60,
+        marginTop: 50,
         alignSelf: "center",
     },
     signup_btn: {

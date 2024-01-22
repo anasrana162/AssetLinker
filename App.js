@@ -14,7 +14,7 @@ import {
   BackHandler,
   TouchableOpacity,
   Image,
-  
+
 } from "react-native";
 import { Provider } from "react-redux";
 import Navigation from "./src/navigation/Navigation";
@@ -114,37 +114,37 @@ class App extends Component {
   //       });
   //     }
   //   });
-  
+
   // }
 
-  requestMultiplePermissions=()=>{
-PermissionsAndroid.requestMultiple([
-  PERMISSIONS.ANDROID.CAMERA,
-  PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
-  PERMISSIONS.ANDROID.RECORD_AUDIO
-]).then(result => {
-  if (
-    result[PERMISSIONS.ANDROID.CAMERA]=== RESULTS.DENIED ||
-    result[PERMISSIONS.ANDROID.CAMERA]=== RESULTS.BLOCKED ||
-    result[PERMISSIONS.ANDROID.READ_MEDIA_IMAGES]=== RESULTS.DENIED||
-    result[PERMISSIONS.ANDROID.READ_MEDIA_IMAGES]=== RESULTS.BLOCKED||
-    result[PERMISSIONS.ANDROID.RECORD_AUDIO] === RESULTS.DENIED ||
-    result[PERMISSIONS.ANDROID.RECORD_AUDIO] === RESULTS.BLOCKED 
-  ) {
-    alert("Cannot Proceed without required Permissions")
-    BackHandler.exitApp()
-    console.log('could not get any result. Please try later.');
-  }
+  requestMultiplePermissions = () => {
+    PermissionsAndroid.requestMultiple([
+      PERMISSIONS.ANDROID.CAMERA,
+      PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
+      PERMISSIONS.ANDROID.RECORD_AUDIO
+    ]).then(result => {
+      if (
+        result[PERMISSIONS.ANDROID.CAMERA] === RESULTS.DENIED ||
+        result[PERMISSIONS.ANDROID.CAMERA] === RESULTS.BLOCKED ||
+        result[PERMISSIONS.ANDROID.READ_MEDIA_IMAGES] === RESULTS.DENIED ||
+        result[PERMISSIONS.ANDROID.READ_MEDIA_IMAGES] === RESULTS.BLOCKED ||
+        result[PERMISSIONS.ANDROID.RECORD_AUDIO] === RESULTS.DENIED ||
+        result[PERMISSIONS.ANDROID.RECORD_AUDIO] === RESULTS.BLOCKED
+      ) {
+        alert("Cannot Proceed without required Permissions")
+        BackHandler.exitApp()
+        console.log('could not get any result. Please try later.');
+      }
 
-  if (
-    result[PERMISSIONS.ANDROID.CAMERA] === RESULTS.GRANTED &&
-    result[PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE] === RESULTS.GRANTED &&
-    result[PERMISSIONS.ANDROID.RECORD_AUDIO] === RESULTS.GRANTED 
-  ) {
-    console.log('granted for all permissions');
-    // do smthing here
-  }
-});
+      if (
+        result[PERMISSIONS.ANDROID.CAMERA] === RESULTS.GRANTED &&
+        result[PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE] === RESULTS.GRANTED &&
+        result[PERMISSIONS.ANDROID.RECORD_AUDIO] === RESULTS.GRANTED
+      ) {
+        console.log('granted for all permissions');
+        // do smthing here
+      }
+    });
   }
 
   requestPermissions = async () => {
@@ -152,9 +152,9 @@ PermissionsAndroid.requestMultiple([
       // props.navigation.navigate("Plan Map Screen", { flag: 2 })
     } else {
       this.requestMultiplePermissions()
-    //  this.mediaImagesPermission()
-    //  this.camerPermission()
-    //  this.micPermission()
+      //  this.mediaImagesPermission()
+      //  this.camerPermission()
+      //  this.micPermission()
     }
 
   };
@@ -167,7 +167,7 @@ PermissionsAndroid.requestMultiple([
         installMode: codePush.InstallMode.IMMEDIATE,
         // updateDialog: {
         //   appendReleaseDescription: false,
-          
+
         //   // optionalIgnoreButtonLabel: 'Close',
         //   optionalInstallButtonLabel: 'Install',
         //   optionalUpdateMessage: 'New update available. Install update',
@@ -304,38 +304,38 @@ PermissionsAndroid.requestMultiple([
 
               <Navigation />
               {/* <Loader /> */}
-                   {/* Code Push Update Modal */}
+              {/* Code Push Update Modal */}
 
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={this.state.update} //this.state.update
-          >
-            <View
-              style={styles.modalOuterCont}>
-              <View
-                style={styles.modalInnerCont}>
-                <Image
-                  source={require('./assets/logo.png')}
-                  style={styles.imageModal}
-                />
-                <Text
-                  style={styles.titleModalEN}>
-                  App is updating, please wait.
-                </Text>
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.state.update} //this.state.update
+              >
+                <View
+                  style={styles.modalOuterCont}>
+                  <View
+                    style={styles.modalInnerCont}>
+                    <Image
+                      source={require('./assets/logo.png')}
+                      style={styles.imageModal}
+                    />
+                    <Text
+                      style={styles.titleModalEN}>
+                      App is updating, please wait.
+                    </Text>
 
-                <Text
-                  style={styles.downloaded}>
-                  {this.state.downloaded}%
-                </Text>
-                <ProgressBar
-                  progress={0.01 * this.state.downloaded}
-                  color="#61CE70"
-                  style={styles.progressBar}
-                />
-              </View>
-            </View>
-          </Modal>
+                    <Text
+                      style={styles.downloaded}>
+                      {this.state.downloaded}%
+                    </Text>
+                    <ProgressBar
+                      progress={0.01 * this.state.downloaded}
+                      color="#61CE70"
+                      style={styles.progressBar}
+                    />
+                  </View>
+                </View>
+              </Modal>
               <Toast />
             </View>
           </View>
