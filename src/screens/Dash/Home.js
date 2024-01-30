@@ -328,7 +328,7 @@ class Dash extends Component {
   };
 
   render() {
-    console.log("Props:  ",height)
+    // console.log("Props:  ",height)
 
     return (
       <View style={styles.mainContainer}>
