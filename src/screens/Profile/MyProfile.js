@@ -72,7 +72,7 @@ class MyProfile extends Component {
     switch (is_favourite) {
       case 0:
         AssetLinkers.post(
-          "https://devstaging.a2zcreatorz.com/assetLinkerProject/api/save/favourite_post",
+          "save/favourite_post",
           {
             user_id: user_id,
             post_id: postID,
@@ -98,7 +98,7 @@ class MyProfile extends Component {
         console.log("remove like", user_id, postID);
 
         AssetLinkers.post(
-          "https://devstaging.a2zcreatorz.com/assetLinkerProject/api/remove/favourite_post",
+          "remove/favourite_post",
           {
             user_id: user_id,
             post_id: postID,

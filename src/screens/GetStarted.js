@@ -27,7 +27,7 @@ class GetStarted extends Component {
                     <Image
                         source={require('../../assets/logo.png')}
                         style={styles.logoImageSignIn}
-                    />
+                    /> 
                     {/* <Text style={styles.textSignIn}>Get Started</Text> */}
 
                     <View style={{ marginTop: height * 0.1 }}>

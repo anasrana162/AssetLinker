@@ -155,7 +155,7 @@ class Dash extends Component {
 
     this.setState({ loader: true })
     AssetLinkers.get(
-      "https://devstaging.a2zcreatorz.com/assetLinkerProject/api/get_property"
+      "get_property"
     )
       .then((res) => {
         // console.log("Get Post api Data:  ", res?.data?.property[0])
@@ -177,7 +177,7 @@ class Dash extends Component {
     switch (is_favourite) {
       case 0:
         AssetLinkers.post(
-          "https://devstaging.a2zcreatorz.com/assetLinkerProject/api/save/favourite_post",
+          "save/favourite_post",
           {
             user_id: user_id,
             post_id: postID,
