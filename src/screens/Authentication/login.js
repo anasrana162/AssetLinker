@@ -106,7 +106,11 @@ class Login extends Component {
                 actions.user(res?.data?.response)
                 console.log("Token", res?.data?.token)
                 AsyncStorage.setItem("@assetlinker_usertoken", JSON.stringify(res?.data?.token));
-                AsyncStorage.setItem("@assetlinker_userData", JSON.stringify(res?.data?.response));
+                // AsyncStorage.setItem("@assetlinker_userData", JSON.stringify(res?.data?.response));
+                AsyncStorage.setItem("@assetlinker_userCreds", JSON.stringify({
+                    phone: mobile.trim(),
+                    password: password.trim()
+                }));
                 setTimeout(() => {
                     this.setState({
                         loader: false

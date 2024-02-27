@@ -11,7 +11,7 @@ const camera = require("../assets/camera.png");
 export default CustomImagepicker = ({
   children,
   multiple = false,
-  onImageChange = () => {},
+  onImageChange = () => { },
   style,
 }) => {
   const actionSheetRef = useRef(null);
@@ -34,7 +34,13 @@ export default CustomImagepicker = ({
         // var imageUrl = ''
         const uri = await RNFS.readFile(result, "base64")
           .then((res) => {
-            return "data:image/png/jpeg/jpg;base64," + res;
+            let obj = {
+              apiPath: res,
+              appPath: "data:image/png/jpeg/jpg;base64," + res,
+            }
+
+            return obj
+            // return "data:image/png/jpeg/jpg;base64," + res;
           })
           .catch((err) => {
             console.log("Error IN BASE^$ Convertion", err);
@@ -57,7 +63,13 @@ export default CustomImagepicker = ({
         // console.log("result-----------------------", file);
         const uri = await RNFS.readFile(result, "base64")
           .then((res) => {
-            return "data:image/png/jpeg/jpg;base64," + res;
+            // return "data:image/png/jpeg/jpg;base64," + res;
+            let obj = {
+              apiPath: res,
+              appPath: "data:image/png/jpeg/jpg;base64," + res,
+            }
+
+            return obj
           })
           .catch((err) => {
             console.log("Error IN BASE^$ Convertion", err);

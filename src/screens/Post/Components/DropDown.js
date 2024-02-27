@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "white",
         borderRadius: 20,
-        marginBottom: 20,
+        marginBottom: 70,
     },
     data_item_cont: {
         width: "100%",

@@ -96,6 +96,7 @@ export default class Signup extends Component {
 
         if (check?.check == true) {
             this.cancelRequest()
+            console.log("OBJ before signup: ", check?.obj);
             await AssetLinkers.post('/register/user?user_type=' + this.state.role, check?.obj)
                 .then((res) => {
                     console.log("Response SignUp Api: ", res?.data)
@@ -624,7 +625,7 @@ export default class Signup extends Component {
                     valueToShow: val,
                 };
                 this.setState({ selectArea: obj })
-                // console.log("location recieved", val);
+                console.log("location recieved", val);
                 break;
             case "loc_bahria":
                 let objj = {
@@ -777,7 +778,7 @@ export default class Signup extends Component {
                         onDismiss={() => this.setState({
                             locationDropDownOpen: !this.state.locationDropDownOpen,
                             dropdownDataChange: false,
-                            
+
                         })}
                         // title={"Select Location"}
                         // onSelect={(val) => this.setLocation(val)}
@@ -788,14 +789,17 @@ export default class Signup extends Component {
                                 //   setDropdownSV(val);
                                 this.setState({ dropdownSV: val })
                                 if (val == "Bahria Town" || val == "DHA") {
-                                    this.setState({ dropdownDataChange: true,selectArea:null })
+                                    this.setState({ dropdownDataChange: true, selectArea: null })
 
                                 }
                                 this.setLocation(val, 'location')
-                                // valueAssigner(val, "location");
                                 if (val == "Clifton" || val == "MDA") {
-                                    this.setState({ dropdownDataChange: false,selectArea:null })
-                                }
+                                    this.setState({ locationDropDownOpen: false })
+                                  }
+                                // valueAssigner(val, "location");
+                                // if (val == "Clifton" || val == "MDA") {
+                                //     this.setState({ dropdownDataChange: false, selectArea: null })
+                                // }
                             }
                             if (this.state.dropdownSV == "Bahria Town") {
 

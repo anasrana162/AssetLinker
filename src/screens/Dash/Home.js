@@ -93,7 +93,7 @@ class Dash extends Component {
   logout = () => {
     var { actions, userData } = this.props;
     AsyncStorage.removeItem("@assetlinker_usertoken");
-    AsyncStorage.removeItem("@assetlinker_userData");
+    AsyncStorage.removeItem("@assetlinker_userCreds");
     actions?.userToken("");
     actions?.user("");
     setTimeout(() => {
@@ -158,11 +158,11 @@ class Dash extends Component {
       "get_property"
     )
       .then((res) => {
-        // console.log("Get Post api Data:  ", res?.data?.property[0])
+        // console.log("Get Post api Data:  ", res?.data?.property)
         if (res?.data) {
           this.setState({
-            Posts: res?.data?.property,
-            FilteredPosts: res?.data?.property,
+            Posts: (res?.data?.property).reverse(),
+            FilteredPosts: (res?.data?.property).reverse(),
             loader: false
           });
         }
@@ -173,13 +173,16 @@ class Dash extends Component {
       });
   };
 
-  addToFavourite = (user_id, postID, is_favourite) => {
+  addToFavourite = (postID, is_favourite) => {
+    console.log("working");
+    var { actions, userData: { user } } = this.props;
+    console.log("user",user?.id);
     switch (is_favourite) {
       case 0:
         AssetLinkers.post(
           "save/favourite_post",
           {
-            user_id: user_id,
+            user_id: user?.id,
             post_id: postID,
           }
         )
@@ -200,12 +203,12 @@ class Dash extends Component {
         break;
 
       case 1:
-        console.log("remove like", user_id, postID);
+        // console.log("remove like", , postID);
 
         AssetLinkers.post(
           "https://devstaging.a2zcreatorz.com/assetLinkerProject/api/remove/favourite_post",
           {
-            user_id: user_id,
+            user_id: user?.id,
             post_id: postID,
           }
         )
@@ -383,8 +386,8 @@ class Dash extends Component {
               openDeletePostModal={(postID, docID) =>
                 this.openDeletePostModal(postID, docID)
               }
-              onFavPress={(user_id, postID, is_favourite) =>
-                this.addToFavourite(user_id, postID, is_favourite)
+              onFavPress={(postID, is_favourite) =>
+                this.addToFavourite(postID, is_favourite)
               }
             // isFav={}
             />

@@ -14,15 +14,16 @@ const ImageSelector = ({ imagePath, style }) => {
         //   this.setState({ image: path, mime: mime });
         // }}
         onImageChange={(path) => {
-          //   console.log("path clg", path);
-          setPath(path);
-          imagePath(path);
+            // console.log("path clg", path);
+          setPath(path?.appPath);
+          imagePath(path?.apiPath);
           // this.setState({ image: path });
         }}
       >
         <FontAwesome name="camera" size={20} color={Colors.primary} />
       </CustomImagePicker>
       <View style={styles.imageCont}>
+        {/* {console.log("Image Path: ",path )} */}
         <Image
           source={
             path == ""

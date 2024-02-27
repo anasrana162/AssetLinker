@@ -52,7 +52,7 @@ class MyProfile extends Component {
     console.log("Working");
     var { id } = this.props?.userData?.user;
     AssetLinkers.get(
-      "https://devstaging.a2zcreatorz.com/assetLinkerProject/api/get_property/" +
+      "get_property/" +
       id
     )
       .then((res) => {

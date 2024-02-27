@@ -194,7 +194,7 @@ class EditProfile extends Component {
     //     "address": address,
 
     // }
-    console.log("Final OBJ", obj);
+    console.log("Final OBJ", user);
 
     AssetLinkers.post("update/user", obj)
       .then((res) => {

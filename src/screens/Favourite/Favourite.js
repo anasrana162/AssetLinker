@@ -89,10 +89,10 @@ class Favourite extends Component {
     getPosts = () => {
         var { id } = this.props?.userData?.user
 
-        AssetLinkers.post("https://devstaging.a2zcreatorz.com/assetLinkerProject/api/show/favourite_post", {
+        AssetLinkers.post("show/favourite_post", {
             user_id: id
         }).then((res) => {
-            console.log("Get Favourate Post api Data:  ", res?.data)
+            // console.log("Get Favourate Post api Data:  ", res?.data)
             if (res?.data) {
                 this.setState({
                     Posts: res?.data?.response
@@ -108,9 +108,9 @@ class Favourite extends Component {
     removeFromFavourite = (user_id, postID, is_favourite) => {
 
 
-        console.log("remove like", user_id, postID)
+        // console.log("remove like", user_id, postID)
 
-        AssetLinkers.post("https://devstaging.a2zcreatorz.com/assetLinkerProject/api/remove/favourite_post", {
+        AssetLinkers.post("remove/favourite_post", {
             "user_id": user_id,
             "post_id": postID,
         }).then((res) => {

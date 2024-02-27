@@ -212,13 +212,19 @@ const Post = (props) => {
 
           const uri = await RNFS.readFile(result, "base64")
             .then((res) => {
-              return "data:image/png/jpeg/jpg;base64," + res;
+              // return "data:image/png/jpeg/jpg;base64," + res;
+              let obj = {
+                apiPath: res,
+                appPath: "data:image/png/jpeg/jpg;base64," + res,
+              }
+  
+              return obj
             })
             .catch((err) => {
               console.log("Error IN BASE^$ Convertion", err);
             });
           // console.log("Selected Images",uri)
-          multipleImages.push(uri);
+          multipleImages.push(uri.apiPath);
           multipleImagePaths.push(result);
         });
         await Promise.all(arr);
@@ -250,12 +256,18 @@ const Post = (props) => {
         });
         const uri = await RNFS.readFile(result, "base64")
           .then((res) => {
-            return "data:image/png/jpeg/jpg;base64," + res;
+            // return "data:image/png/jpeg/jpg;base64," + res;
+            let obj = {
+              apiPath: res,
+              appPath: "data:image/png/jpeg/jpg;base64," + res,
+            }
+
+            return obj
           })
           .catch((err) => {
             console.log("Error IN BASE^$ Convertion", err);
           });
-        getExistingGalleryAssets.push(uri);
+        getExistingGalleryAssets.push(uri.apiPath);
         getExistingGalleryAssetsPaths.push(path);
         setImagesPaths(getExistingGalleryAssetsPaths);
         // setMultipleAssetsPost(getExistingGalleryAssets);

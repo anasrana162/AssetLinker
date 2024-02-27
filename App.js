@@ -28,10 +28,10 @@ import codePush from 'react-native-code-push';
 
 // App center IOS Push Command
 // appcenter codepush release-react -a assetslinkers94-gmail.com/AssetsLinkers_IOS -d Staging
-
+// new project: appcenter codepush release-react -a a2zcreatorzz-gmail.com/AssetsLinkers_IOS -d Staging
 // App center Android Push Command
 // appcenter codepush release-react -a assetslinkers94-gmail.com/AssetsLinkers_Android -d Staging
-
+ // new project:  appcenter codepush release-react -a a2zcreatorzz-gmail.com/AssetsLinkers_Android -d Staging
 
 const {
   StatusBarManager: { HEIGHT },

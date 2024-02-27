@@ -207,7 +207,6 @@ const AllPosts = ({
                     <TouchableOpacity
                       onPress={() =>
                         onFavPress(
-                          item?.item?.user_id,
                           item?.item?.id,
                           item?.item?.is_favourite
                         )
