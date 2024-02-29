@@ -73,6 +73,7 @@ class Dash extends Component {
 
   checkCallBacks = () => {
     this.props.navigation.addListener("focus", async () => {
+      console.log("checkcallbacks",this.props?.route?.params);
       if (this.props?.route?.params == undefined) {
         console.log("No callabacks");
       } else {
@@ -80,7 +81,8 @@ class Dash extends Component {
         console.log("refresh", refresh)
         if (refresh == "refresh") {
           console.log("Callbacks initiated");
-          refresh = ""
+          this.props.navigation.setParams({refresh: null});
+          this.setState({Posts:null,FilteredPosts:null})
           this.getPosts();
         }
 
@@ -162,7 +164,7 @@ class Dash extends Component {
         if (res?.data) {
           this.setState({
             Posts: (res?.data?.property).reverse(),
-            FilteredPosts: (res?.data?.property).reverse(),
+            FilteredPosts: res?.data?.property,
             loader: false
           });
         }
