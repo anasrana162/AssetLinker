@@ -31,6 +31,7 @@ const UserProfileDetail = (props) => {
     const getProfile = async () => {
       try {
         const res = await AssetLinkers.get(`/allUser/${id}`);
+        console.log("res?.data?.response",res?.data?.response);
         setProfile(res?.data?.response[0]);
       } catch (error) {
         console.log("GET User Profile Error: ", error);

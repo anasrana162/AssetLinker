@@ -81,12 +81,13 @@ const AllPosts = ({
                 key={String(index)}
                 disabled={showOption}
                 style={styles.itemContainer}
-                onPress={() =>
+                onPress={() =>{
+                  console.log(item);
                   navProps.navigate("PostDetail", {
                     data: item?.item,
                     location: Location?.location,
                     subLocation: Location?.place,
-                  })
+                  })}
                 }>
                 {userID == item?.item?.user_id && (
                   <TouchableOpacity
@@ -208,7 +209,8 @@ const AllPosts = ({
                       onPress={() =>
                         onFavPress(
                           item?.item?.id,
-                          item?.item?.is_favourite
+                          item?.item?.is_favourite,
+                          index,
                         )
                       }>
                       <AntDesign

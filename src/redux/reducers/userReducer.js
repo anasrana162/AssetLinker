@@ -1,11 +1,12 @@
 import {
-    TOKEN, USER,
+    TOKEN, USER,HOMEPOSTS
 } from '../constants';
 
 const initialState = {
     user: {},
     token: null,
-  
+    homeposts: null,
+
 };
 
 const userReducer = (state = initialState, action) => {
@@ -21,7 +22,12 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 user: action.payload
             };
-      
+        case HOMEPOSTS:
+            return {
+                ...state,
+                homeposts: action.payload
+            };
+
         default:
             return state;
     }

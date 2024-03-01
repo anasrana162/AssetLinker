@@ -179,6 +179,7 @@ class AccountDetail extends Component {
 
   render() {
     var { user_id, name, image, created_at, designation } = this.props?.route?.params;
+    // console.log(this.props?.route?.params);
     const memberSince = moment(created_at).format("YYYY/MM/DD");
     var { userData: { user } } = this.props
 
@@ -211,7 +212,7 @@ class AccountDetail extends Component {
             {/* {console.log("designation", designation)} */}
             <View style={styles.inner_cont}>
               <Text style={styles.text}>{name}</Text>
-              {designation == "" ? <></> :
+              {designation == "" || designation == undefined  ? <></> :
                 <View style={{
                   width: 60,
                   height: 25,

@@ -50,7 +50,7 @@ class PostDetail extends Component {
   }
 
   onPress = (key) => {
-    var { image, name, member_since, user_id } =
+    var { image, name, member_since, user_id, designation } =
       this.props?.route?.params?.data;
     switch (key) {
       case "goback":
@@ -65,6 +65,7 @@ class PostDetail extends Component {
           created_at: member_since,
           image: image,
           name: name,
+          // designation: designation
         });
         break;
     }

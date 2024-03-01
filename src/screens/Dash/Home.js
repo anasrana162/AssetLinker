@@ -68,12 +68,13 @@ class Dash extends Component {
       openPreFilterModal: false,
       searched: "",
       loader: false,
+      key: 0,
     };
   }
 
   checkCallBacks = () => {
     this.props.navigation.addListener("focus", async () => {
-      console.log("checkcallbacks",this.props?.route?.params);
+      console.log("checkcallbacks", this.props?.route?.params);
       if (this.props?.route?.params == undefined) {
         console.log("No callabacks");
       } else {
@@ -81,8 +82,8 @@ class Dash extends Component {
         console.log("refresh", refresh)
         if (refresh == "refresh") {
           console.log("Callbacks initiated");
-          this.props.navigation.setParams({refresh: null});
-          this.setState({Posts:null,FilteredPosts:null})
+          this.props.navigation.setParams({ refresh: null });
+          this.setState({ Posts: null, FilteredPosts: null })
           this.getPosts();
         }
 
@@ -154,13 +155,13 @@ class Dash extends Component {
   }
 
   getPosts = () => {
-
+    var { userData: { user: { id },actions } } = this.props;
     this.setState({ loader: true })
     AssetLinkers.get(
-      "get_property"
+      "get_propertyV2?id=" + id
     )
       .then((res) => {
-        // console.log("Get Post api Data:  ", res?.data?.property)
+        console.log("Get Post api Data:  ", res?.data?.property)
         if (res?.data) {
           this.setState({
             Posts: (res?.data?.property).reverse(),
@@ -175,10 +176,11 @@ class Dash extends Component {
       });
   };
 
-  addToFavourite = (postID, is_favourite) => {
+  addToFavourite = (postID, is_favourite, indexPost) => {
     console.log("working");
     var { actions, userData: { user } } = this.props;
-    console.log("user",user?.id);
+    var { Posts } = this.state
+    console.log("user", user?.id);
     switch (is_favourite) {
       case 0:
         AssetLinkers.post(
@@ -197,6 +199,16 @@ class Dash extends Component {
                 visibilityTime: 2000,
               });
               this.getPosts();
+
+              // Posts[indexPost].is_favourite = 1
+
+              // setImmediate(() => {
+              //   this.setState({ Posts, key: this.state.key + 1 })
+              // })
+
+
+
+
             }
           })
           .catch((err) => {
@@ -223,6 +235,11 @@ class Dash extends Component {
                 visibilityTime: 2000,
               });
               this.getPosts();
+              // Posts[indexPost].is_favourite = 0
+
+              // setImmediate(() => {
+              //   this.setState({ Posts, key: this.state.key + 1 })
+              // })
             }
           })
           .catch((err) => {
@@ -336,7 +353,7 @@ class Dash extends Component {
     // console.log("Props:  ",height)
 
     return (
-      <View style={styles.mainContainer}>
+      <View key={this.state.key} style={styles.mainContainer}>
         {/* Header */}
         <Header onSearchOpen={() => this.onSearchOpen("search bar")} />
 
@@ -378,6 +395,7 @@ class Dash extends Component {
           {/* Posts Component */}
           {this?.state?.loader == false ? (
             <AllPosts
+              key={this.state.key}
               data={
                 this.state.openSearchBar
                   ? this.state.FilteredPosts
@@ -388,8 +406,8 @@ class Dash extends Component {
               openDeletePostModal={(postID, docID) =>
                 this.openDeletePostModal(postID, docID)
               }
-              onFavPress={(postID, is_favourite) =>
-                this.addToFavourite(postID, is_favourite)
+              onFavPress={(postID, is_favourite, index) =>
+                this.addToFavourite(postID, is_favourite, index)
               }
             // isFav={}
             />
