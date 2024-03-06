@@ -120,35 +120,35 @@ const Post = (props) => {
   // Functions
   const onCategoryChange = (val) => {
     setCategory(val);
-    setSelectTypeData(sale_rent);
-    setPrice("");
-    setYards("");
-    setSelected_constructionStatus_corner("");
-    setSelected_constructionStatus_open("");
-    setFurnished("");
-    setBathrooms("");
-    setBedrooms("");
-    setArea_Unit("");
-    setAddress("");
-    setLocationMain("");
-    setLocation("Location");
-    setLoc_bahria("");
-    setLoc_dha("");
-    setdetails("");
-    setPropertyCategory("");
-    setLoader(false);
-    setCheck(true);
-    setYardsNumber("");
-    setFurnished("");
-    setRooms("Null");
-    setPlotYards([
-      { id: 1, name: 'ACRE' },
-      { id: 2, name: 'KANAL' },
-      { id: 3, name: 'YARDS' },
-      { id: 4, name: 'MARLA' },
-      { id: 5, name: 'Sq.FEET' },
-      { id: 6, name: 'Others' },
-    ])
+    // setSelectTypeData(sale_rent);
+    // setPrice("");
+    // setYards("");
+    // setSelected_constructionStatus_corner("");
+    // setSelected_constructionStatus_open("");
+    // setFurnished("");
+    // setBathrooms("");
+    // setBedrooms("");
+    // setArea_Unit("");
+    // setAddress("");
+    // setLocationMain("");
+    // setLocation("Location");
+    // setLoc_bahria("");
+    // setLoc_dha("");
+    // setdetails("");
+    // setPropertyCategory("");
+    // setLoader(false);
+    // setCheck(true);
+    // setYardsNumber("");
+    // setFurnished("");
+    // setRooms("Null");
+    // setPlotYards([
+    //   { id: 1, name: 'ACRE' },
+    //   { id: 2, name: 'KANAL' },
+    //   { id: 3, name: 'YARDS' },
+    //   { id: 4, name: 'MARLA' },
+    //   { id: 5, name: 'Sq.FEET' },
+    //   { id: 6, name: 'Others' },
+    // ])
     // switch (val) {
     //     case "Commercial":
     //         setCategory(val);
@@ -1134,40 +1134,51 @@ const Post = (props) => {
 
       case "Residential":
         if (id == null || id == "") {
+          console.log("Res ID");
           return check = false
         }
         if (sale_Rent == null || sale_Rent == "") {
+          console.log("Res sale_rent");
           return check = false
         }
 
         if (category == null || category == "") {
+          console.log("Res category");
           return check = false
         }
         if (price == null || price == "") {
+          console.log("Res price");
           return check = false
         }
         if (propertyCategory == null || propertyCategory == "") {
+          console.log("Res propertyCate");
           return check = false
         }
         if (yards == null || yards == "") {
+          console.log("Res yards");
           return check = false
         }
         if (yardsNumber == null || yardsNumber == "") {
+          console.log("Res yardsNum,ber");
           return check = false
         }
         if (address == null || address == "") {
+          console.log("Res address");
           return check = false
         }
 
 
         if (location == null || location == "") {
+          console.log("Res location");
           return check = false
         }
         if (locationMain == null || locationMain == "" || locationMain == "Location") {
+          console.log("Res locationMain");
           return check = false
         }
 
         if (details == null || details == "") {
+          console.log("Res details");
           return check = false
         }
         return check = true;
@@ -1217,7 +1228,7 @@ const Post = (props) => {
     }
   };
 var stateCheck = checkDataForSubmitBtn()
-  console.log("category Post SCreen", stateCheck)
+  // console.log("category Post SCreen", stateCheck)
   return (
     <View style={styles.mainContainer}>
       {/* {console.log(props)} */}

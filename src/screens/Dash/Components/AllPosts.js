@@ -32,8 +32,11 @@ const AllPosts = ({
   openDeletePostModal,
   navProps,
   onFavPress,
+  refreshKey,
 }) => {
   // STATES
+
+// console.log(data == null ? "": data[0]);
 
   const [showOption, setShowOption] = React.useState(false);
   const [itemId, setItemId] = React.useState("");
@@ -52,6 +55,7 @@ const AllPosts = ({
       <View style={styles.flatlist_cont}>
         <FlatList
           data={data}
+          key={refreshKey}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100, marginTop: 5 }}
           numColumns={2}
@@ -76,19 +80,12 @@ const AllPosts = ({
               // console.log("DATA FLATLIST IMAGES,", Location?.location)
             }
             return (
-              <TouchableOpacity
-                activeOpacity={0.7}
+              <View
+
                 key={String(index)}
-                disabled={showOption}
+
                 style={styles.itemContainer}
-                onPress={() =>{
-                  console.log(item);
-                  navProps.navigate("PostDetail", {
-                    data: item?.item,
-                    location: Location?.location,
-                    subLocation: Location?.place,
-                  })}
-                }>
+              >
                 {userID == item?.item?.user_id && (
                   <TouchableOpacity
                     onPressIn={() => onOptionPress(item?.item?.id)}
@@ -126,30 +123,60 @@ const AllPosts = ({
                 {/* Image */}
 
                 {item?.item.post_images[0] === "" ? (
-                  <Image
-                    resizeMode="contain"
-                    source={require("../../../../assets/Assetlinker_A.png")}
-                    style={styles.itemImage}
-                  />
+                  <TouchableOpacity
+                  style={styles.itemImage}
+                    activeOpacity={0.7}
+                    disabled={showOption}
+                    onPress={() => {
+                      console.log(item);
+                      navProps.navigate("PostDetail", {
+                        data: item?.item,
+                        location: Location?.location,
+                        subLocation: Location?.place,
+                      })
+                    }}
+                  >
+
+                    <Image
+                      resizeMode="contain"
+                      source={require("../../../../assets/Assetlinker_A.png")}
+                      style={styles.itemImage}
+                    />
+                  </TouchableOpacity>
                 ) : (
-                  <Image
-                    source={{ uri: postImageURL + item?.item.post_images[0] }}
-                    style={styles.itemImage}
-                  />
+                  <TouchableOpacity
+                  style={styles.itemImage}
+                  activeOpacity={0.7}
+                  disabled={showOption}
+                  onPress={() => {
+                    console.log(item);
+                    navProps.navigate("PostDetail", {
+                      data: item?.item,
+                      location: Location?.location,
+                      subLocation: Location?.place,
+                    })
+                  }}
+                  >
+
+                    <Image
+                      source={{ uri: postImageURL + item?.item.post_images[0] }}
+                      style={styles.itemImage}
+                    />
+                  </TouchableOpacity>
                 )}
                 {/* Plot Category (Bulding, shop etc) */}
                 {item?.item?.category == "Null" ? <></> : <Text style={styles.propertyTypeText}>
                   {item?.item?.category}
                 </Text>}
 
-                {item?.item?.property_type.toLowerCase() == "plot" ?  <Text numberOfLines={1} style={[styles.propertyTypeText,{fontSize:14,width:160}]}>
+                {item?.item?.property_type.toLowerCase() == "plot" ? <Text numberOfLines={1} style={[styles.propertyTypeText, { fontSize: 14, width: 160 }]}>
                   {item?.item?.phase}
-                </Text>:<></>}
+                </Text> : <></>}
 
                 {/* Property Type ("commercial",'Residential", Plot) */}
                 <Text style={[styles.propertyTypeText, { fontSize: 14, fontWeight: "600", marginTop: item?.item?.category == "Null" ? 5 : 0 }]}>
                   {item?.item?.property_type} /
-                  <Text style={[styles.propertyTypeText, { fontSize: 14 ,fontWeight: "400"}]}> {item?.item?.rent_sale}</Text>
+                  <Text style={[styles.propertyTypeText, { fontSize: 14, fontWeight: "400" }]}> {item?.item?.rent_sale}</Text>
                   {/* {item?.item?.property_type} */}
                 </Text>
                 {/* {item?.item?.category == "Null" ? <></> : <Text style={styles.plotCategory}>
@@ -185,7 +212,7 @@ const AllPosts = ({
                 <Text
                   style={[
                     styles.priceText,
-                    { marginTop: 5, marginLeft: 5 ,fontSize:15,fontWeight:"700"},
+                    { marginTop: 5, marginLeft: 5, fontSize: 15, fontWeight: "700" },
                   ]}>
                   Rs.{item?.item?.price}
                 </Text>
@@ -241,7 +268,7 @@ const AllPosts = ({
                     </TouchableOpacity>
                   </View>
                 </View>
-              </TouchableOpacity>
+              </View>
             );
           }}
         />

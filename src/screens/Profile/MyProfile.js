@@ -175,7 +175,7 @@ class MyProfile extends Component {
 
   render() {
     var { id, name, image, phone } = this.props?.userData?.user;
-console.log(his.props?.userData?.user);
+// console.log(his.props?.userData?.user);
     return (
       <View style={styles.mainContainer}>
         <ScrollView>

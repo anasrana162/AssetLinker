@@ -24,7 +24,7 @@ import { postImageURL } from "../../config/Common";
 import { connect } from "react-redux";
 import * as userActions from "../../redux/actions/user";
 import { bindActionCreators } from "redux";
-
+import Feather from "react-native-vector-icons/Feather"
 const {
   StatusBarManager: { HEIGHT },
 } = NativeModules;
@@ -75,11 +75,25 @@ const Chatlist = (props,) => {
     props.navigation.navigate("ChatScreen", {
       fireStore: item?.data(),
       // id: currentUser?.detail[0].user_id,
-      id:currentUser?.id
+      id: currentUser?.id
     });
   };
   return (
     <View style={styles.main}>
+      <View style={styles.headerCont}>
+
+        {/* Back Button */}
+        <TouchableOpacity
+          style={{ position: "absolute", left: 10 }}
+          onPress={() => props.navigation.goBack()}
+        >
+          <Feather name="chevron-left" size={30} color="white" />
+        </TouchableOpacity>
+
+        {/* Title */}
+        <Text style={styles.headerTitle}>Chats</Text>
+
+      </View>
       <LoadingModal loading={loading} bgc="transparent" />
       {!users?.length ? (
         <Text
@@ -165,6 +179,19 @@ const styles = StyleSheet.create({
     columnGap: 20,
     padding: 10,
     borderColor: "#ddd",
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: "600",
+    color: "white",
+  },
+  headerCont: {
+    width: width,
+    height: 60,
+    paddingVertical: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.blue
   },
   avatar: { color: "#fff", fontSize: 18, fontWeight: "500" },
   avatarImg: {

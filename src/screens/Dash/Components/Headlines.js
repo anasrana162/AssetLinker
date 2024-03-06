@@ -20,7 +20,7 @@ const Headlines = () => {
                     )
                 }>
                 <TextTicker
-                    style={{ fontSize: 15, color: 'black' }}
+                    style={{ fontSize: 15, color: 'black',alignSelf:"flex-start",width:width-50 }}
                     duration={13000}
                     loop
                     repeatSpacer={50}

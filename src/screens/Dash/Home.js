@@ -42,11 +42,12 @@ import SearchBar from "./Components/SearchBar";
 import FilterModal from "./Components/FilterModal";
 import { chatDeleteHandler } from "../Chat/Chatlist";
 import { deleteMessagesHandler } from "../Chat/ChatScreen";
+import Back_handler from "../../components/BackHandler";
 
 class Dash extends Component {
   constructor(props) {
     super(props);
-
+    var { userData: { homeposts } } = this.props;
     this.state = {
       position: 0,
       menuDropDown: false,
@@ -62,8 +63,8 @@ class Dash extends Component {
       openDeletePostModal: false,
       postID: "",
       docID: "",
-      Posts: null,
-      FilteredPosts: null,
+      Posts: homeposts,
+      FilteredPosts: homeposts,
       openSearchBar: false,
       openPreFilterModal: false,
       searched: "",
@@ -155,19 +156,23 @@ class Dash extends Component {
   }
 
   getPosts = () => {
-    var { userData: { user: { id },actions } } = this.props;
+    var { userData: { user: { id }, homeposts, }, actions } = this.props;
     this.setState({ loader: true })
     AssetLinkers.get(
       "get_propertyV2?id=" + id
     )
       .then((res) => {
-        console.log("Get Post api Data:  ", res?.data?.property)
+        // console.log("Get Post api Data:  ", res?.data?.property) 
         if (res?.data) {
-          this.setState({
-            Posts: (res?.data?.property).reverse(),
-            FilteredPosts: res?.data?.property,
-            loader: false
-          });
+          actions.homePosts((res?.data?.property).reverse())
+          setImmediate(() => {
+            this.setState({
+              Posts: homeposts,
+              FilteredPosts: homeposts,
+              loader: false,
+              // key: this.state.key + 1
+            });
+          })
         }
       })
       .catch((err) => {
@@ -177,10 +182,8 @@ class Dash extends Component {
   };
 
   addToFavourite = (postID, is_favourite, indexPost) => {
-    console.log("working");
-    var { actions, userData: { user } } = this.props;
-    var { Posts } = this.state
-    console.log("user", user?.id);
+    var { userData: { user } } = this.props;
+    // console.log("user", user?.id);
     switch (is_favourite) {
       case 0:
         AssetLinkers.post(
@@ -199,16 +202,6 @@ class Dash extends Component {
                 visibilityTime: 2000,
               });
               this.getPosts();
-
-              // Posts[indexPost].is_favourite = 1
-
-              // setImmediate(() => {
-              //   this.setState({ Posts, key: this.state.key + 1 })
-              // })
-
-
-
-
             }
           })
           .catch((err) => {
@@ -217,10 +210,8 @@ class Dash extends Component {
         break;
 
       case 1:
-        // console.log("remove like", , postID);
-
         AssetLinkers.post(
-          "https://devstaging.a2zcreatorz.com/assetLinkerProject/api/remove/favourite_post",
+          "remove/favourite_post",
           {
             user_id: user?.id,
             post_id: postID,
@@ -235,11 +226,6 @@ class Dash extends Component {
                 visibilityTime: 2000,
               });
               this.getPosts();
-              // Posts[indexPost].is_favourite = 0
-
-              // setImmediate(() => {
-              //   this.setState({ Posts, key: this.state.key + 1 })
-              // })
             }
           })
           .catch((err) => {
@@ -350,13 +336,17 @@ class Dash extends Component {
   };
 
   render() {
-    // console.log("Props:  ",height)
+    var { userData: { homeposts } } = this.props;
+    // console.log("Props:  ",homeposts)
 
     return (
-      <View key={this.state.key} style={styles.mainContainer}>
+      <View style={styles.mainContainer}>
         {/* Header */}
         <Header onSearchOpen={() => this.onSearchOpen("search bar")} />
-
+        <Back_handler
+          navProps={this.props?.navigation}
+          isGoBack={true}
+        />
         {/* Search Bar */}
         {this.state.openSearchBar && (
           <SearchBar
@@ -393,13 +383,20 @@ class Dash extends Component {
           />
 
           {/* Posts Component */}
-          {this?.state?.loader == false ? (
+
+          {homeposts == null ? (
+            <ActivityIndicator
+              size="large"
+              color={Colors.blue}
+              style={{ marginTop: 90 }}
+            />
+          ) : (
             <AllPosts
-              key={this.state.key}
+              // key={this.state.key}
               data={
                 this.state.openSearchBar
                   ? this.state.FilteredPosts
-                  : this.state.Posts
+                  : homeposts
               }
               navProps={this.props.navigation}
               userID={this.props.userData?.user?.id}
@@ -409,13 +406,6 @@ class Dash extends Component {
               onFavPress={(postID, is_favourite, index) =>
                 this.addToFavourite(postID, is_favourite, index)
               }
-            // isFav={}
-            />
-          ) : (
-            <ActivityIndicator
-              size="large"
-              color={Colors.blue}
-              style={{ marginTop: 90 }}
             />
           )}
         </ScrollView>

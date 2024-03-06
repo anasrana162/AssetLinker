@@ -17,7 +17,7 @@ const LocationDropDown = ({ showModal, title, titleMain }) => {
                     onPress={showModal}
                     style={styles.dropdown_cont}>
                     <EvilIcons name="location" size={24} color="black" />
-                    {console.log("Title", title)}
+                    {/* {console.log("Title", title)} */}
                     <Text style={{ color: 'black', fontWeight: "500", fontSize: 18 }}>
                         {title == "DHA, DHA City Karachi" ? "DHA City Karachi" : title}
                     </Text>
