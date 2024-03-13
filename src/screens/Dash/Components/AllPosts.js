@@ -138,8 +138,8 @@ const AllPosts = ({
                   >
 
                     <Image
-                      resizeMode="contain"
-                      source={require("../../../../assets/Assetlinker_A.png")}
+                      resizeMode="cover"
+                      source={require("../../../../assets/Assetlinker_A.jpg")}
                       style={styles.itemImage}
                     />
                   </TouchableOpacity>

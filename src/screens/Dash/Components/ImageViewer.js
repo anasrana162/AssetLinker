@@ -29,7 +29,7 @@ const ImageViewer = ({ Images, position }) => {
                     }}>
 
                         <Image
-                            source={require("../../../../assets/Assetlinker_A.png")}
+                            source={require("../../../../assets/Assetlinker_A.jpg")}
                             // resizeMode='cover'
                             style={{
                                 width: 150,
