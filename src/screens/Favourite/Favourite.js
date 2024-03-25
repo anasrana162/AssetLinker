@@ -105,13 +105,13 @@ class Favourite extends Component {
 
     }
 
-    removeFromFavourite = (user_id, postID, is_favourite) => {
+    removeFromFavourite = ( postID, is_favourite) => {
 
-
-        // console.log("remove like", user_id, postID)
+        var { id } = this.props?.userData?.user
+        console.log("remove like", id, postID)
 
         AssetLinkers.post("remove/favourite_post", {
-            "user_id": user_id,
+            "user_id": id,
             "post_id": postID,
         }).then((res) => {
             if (res?.data) {
@@ -170,7 +170,7 @@ class Favourite extends Component {
                         navProps={this.props.navigation}
                         userID={this.props.userData?.user?.id}
                         openDeletePostModal={(postID) => this.openDeletePostModal(postID)}
-                        onFavPress={(user_id, postID, is_favourite) => this.removeFromFavourite(user_id, postID, is_favourite)}
+                        onFavPress={(postID,  is_favourite) => this.removeFromFavourite(postID, is_favourite)}
                     // isFav={}
                     />
 
