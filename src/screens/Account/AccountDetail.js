@@ -178,7 +178,7 @@ class AccountDetail extends Component {
   };
 
   render() {
-    var { user_id, name, image, created_at, designation } = this.props?.route?.params;
+    var { user_id, name, image, created_at, designation, user_type } = this.props?.route?.params;
     // console.log(this.props?.route?.params);
     const memberSince = moment(created_at).format("YYYY/MM/DD");
     var { userData: { user } } = this.props
@@ -209,10 +209,14 @@ class AccountDetail extends Component {
               source={{ uri: `${ImagePath}/${image}` }}
               style={styles.image}
             />
-            {/* {console.log("designation", designation)} */}
+            {console.log("designation", user_type)}
             <View style={styles.inner_cont}>
+              {user_type == "" || user_type == undefined ?
+                <></>
+                :
+                <Text style={[styles.text, { fontWeight: "600", fontSize: 15, color: "black", letterSpacing: 1 }]}>{user_type}</Text>}
               <Text style={styles.text}>{name}</Text>
-              {designation == "" || designation == undefined  ? <></> :
+              {designation == "" || designation == undefined ? <></> :
                 <View style={{
                   width: 60,
                   height: 25,

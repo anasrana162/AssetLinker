@@ -99,6 +99,10 @@ class PostDetail extends Component {
     })
   }
 
+  // getUserDetail = async () => {
+  //   const res = await AssetLinkers.get("/allUser");
+  // }
+
   runSlideShow = () => {
     var { data } = this.props?.route?.params;
 

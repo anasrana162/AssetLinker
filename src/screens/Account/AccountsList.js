@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import { ImagePath } from "../../api/AssetLinkers";
 import { useEffect } from "react";
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import { cleanSingle } from "react-native-image-crop-picker";
 const {
   StatusBarManager: { HEIGHT },
 } = NativeModules;
@@ -55,6 +56,7 @@ const AccountsList = (props) => {
 
   return (
     <View style={styles.mainContainer}>
+      {/* {console.log(data)} */}
       <SearchBar onChangeText={(i) => setSearchInput(i)} navProps={props?.navigation} />
       <FlatList
         data={filteredData.length == 0 ? data : filteredData}
@@ -93,6 +95,18 @@ const SearchBar = ({ onChangeText, navProps }) => (
 const CustomerContainer = ({ data }) => {
   const navigation = useNavigation();
   const { user_id, created_at } = data?.detail[0];
+  var user_type = "";
+  switch (data?.user_type) {
+    case "buyer_seller":
+      user_type = "Buyer/Seller";
+      break;
+    case "estate_agent":
+      user_type = "Consultant";
+      break;
+    case "builder":
+      user_type = "Builder";
+      break;
+  }
   return (
     <View style={styles.customerMain}>
       <View style={{ width: "22%" }}>
@@ -127,10 +141,11 @@ const CustomerContainer = ({ data }) => {
           </View>}
         <View style={styles.tagContainer}>
           <Text style={styles.tagLabel}>
-            {data?.user_type == "estate_agent" ? "Est Cons" : data?.user_type.replace("_", " ")}
+            {user_type}
           </Text>
         </View>
       </View>
+
 
       {/* View Project Button */}
       <View style={styles.box3}>
@@ -142,6 +157,8 @@ const CustomerContainer = ({ data }) => {
               created_at: created_at,
               image: data?.image,
               name: data?.name,
+              designation: data?.detail[0]?.designation,
+              user_type: user_type,
             })
           }
           activeOpacity={0.5}

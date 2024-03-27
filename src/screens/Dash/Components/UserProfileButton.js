@@ -16,7 +16,19 @@ const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 const UserProfileButton = ({ navProps, data, screenName }) => {
-  // console.log("data", data)
+ 
+  var user_type = "";
+  switch (data?.user_type) {
+    case "buyer_seller":
+      user_type = "Buyer/Seller";
+      break;
+    case "estate_agent":
+      user_type = "Consultant";
+      break;
+    case "builder":
+      user_type = "Builder";
+      break;
+  }
   return (
     <View
 
@@ -105,7 +117,8 @@ const UserProfileButton = ({ navProps, data, screenName }) => {
               created_at: data?.member_since,
               image: data?.image,
               name: data?.name,
-              designation: data?.detail[0]?.designation == undefined ? "" : data?.detail[0]?.designation
+              designation: data?.detail[0]?.designation == undefined ? "" : data?.detail[0]?.designation,
+              user_type: user_type
             });
           }}
           style={{
@@ -127,6 +140,7 @@ const UserProfileButton = ({ navProps, data, screenName }) => {
           />
 
         </TouchableOpacity>
+
       </View>
       <TouchableOpacity
         activeOpacity={0.7}
