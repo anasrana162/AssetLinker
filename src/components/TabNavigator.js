@@ -13,10 +13,13 @@ const {
   StatusBarManager: { HEIGHT },
 } = NativeModules;
 const width = Dimensions.get("screen").width;
+const height = Dimensions.get("screen").height
 import { Colors } from "../config";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
+
 export default TabNavigator = ({ navProps, screenName }) => {
+  
   const data = [
     {
       id: 1,
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     backgroundColor: Colors.main,
     position: "absolute",
-    bottom: Platform.OS == "ios" ? 20 : 0,
+    bottom: Platform.OS == "ios" ? height <= 680 ? 0 : 20 : 0,
     padding: 7,
     zIndex: 1000,
   },

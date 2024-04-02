@@ -5,7 +5,7 @@ const height = Dimensions.get("screen").height
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MultipleimagePicker from '../../../components/MultipleimagePicker'
 
-
+const ImageURL = "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/"
 
 
 const ImageSelector = ({
@@ -49,7 +49,7 @@ const ImageSelector = ({
                                 <View
                                     style={{ position: 'relative', marginHorizontal: 5 }}
                                     key={index + 1}>
-                                 {/* {       console.log("Item in com",item)} */}
+                                    {/* {       console.log("Item in com",item)} */}
                                     <Image
                                         style={{
                                             height: Dimensions.get('window').height * 0.11,
@@ -57,6 +57,7 @@ const ImageSelector = ({
                                             borderRadius: 10,
                                             resizeMode: 'cover',
                                         }}
+                                       
                                         source={{ uri: item }}
                                     />
                                     <TouchableOpacity

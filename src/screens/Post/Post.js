@@ -53,6 +53,7 @@ import {
   Plots,
   Plots1,
   Phase1,
+  PropertyCommercialCategories1,
 } from "./DataArrays";
 
 {
@@ -120,6 +121,7 @@ const Post = (props) => {
   // Functions
   const onCategoryChange = (val) => {
     setCategory(val);
+    setPropertyCategory("");
     // setSelectTypeData(sale_rent);
     // setPrice("");
     // setYards("");
@@ -323,6 +325,7 @@ const Post = (props) => {
     switch (key) {
       case "sale/rent":
         setSale_Rent(val);
+        setPropertyCategory("");
         break;
 
       case "rooms":
@@ -668,31 +671,31 @@ const Post = (props) => {
         console.log("check1:", check1);
         return { check: check1, data: obj };
 
-      case "Plot":
-        const check2 = checkCategoryData();
-        obj = {
-          user_id: id,
-          rent_sale: sale_Rent,
-          property_type: category,
-          images: images,
-          price: price,
-          yards: yards == "Others" ? yardsNumber + " " + yards_Unit : yardsNumber + " " + yards.toLowerCase(),
-          category: "Null",
-          corner: selected_constructionStatus_corner,
-          open: selected_constructionStatus_open,
-          furnished: "Null",
-          bedrooms: "Null",
-          bathrooms: "Null",
-          rooms: rooms,
-          phase: phase + " " + phase1,
-          Location: locationMain,
-          address: address,
-          area_unit: "Null",
-          main_features: main_features,
-          details: details,
-        };
-        console.log("check2:", check2);
-        return { check: check2, data: obj };
+      // case "Plot":
+      //   const check2 = checkCategoryData();
+      //   obj = {
+      //     user_id: id,
+      //     rent_sale: sale_Rent,
+      //     property_type: category,
+      //     images: images,
+      //     price: price,
+      //     yards: yards == "Others" ? yardsNumber + " " + yards_Unit : yardsNumber + " " + yards.toLowerCase(),
+      //     category: "Null",
+      //     corner: selected_constructionStatus_corner,
+      //     open: selected_constructionStatus_open,
+      //     furnished: "Null",
+      //     bedrooms: "Null",
+      //     bathrooms: "Null",
+      //     rooms: rooms,
+      //     phase: phase + " " + phase1,
+      //     Location: locationMain,
+      //     address: address,
+      //     area_unit: "Null",
+      //     main_features: main_features,
+      //     details: details,
+      //   };
+      //   console.log("check2:", check2);
+      //   return { check: check2, data: obj };
     }
   };
 
@@ -963,115 +966,115 @@ const Post = (props) => {
 
         return check;
 
-      case "Plot":
-        if (id == null || id == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Network Error: Try to login again!");
-        }
-        if (sale_Rent == null || sale_Rent == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please select either Sale or Rent!");
-        }
-        // if (images == null || images == [] || images == "") {
-        //   setImmediate(() => {
-        //     setCheck(false);
-        //     setLoader(false);
-        //   });
-        //   return alert("Please select an image");
-        // }
-        if (category == null || category == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please select Type!");
-        }
-        if (price == null || price == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please enter Price!");
-        }
-        if (yards == null || yards == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please select Area Unit!");
-        }
-        if (yardsNumber == null || yardsNumber == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please Enter Area Value!");
-        }
+      // case "Plot":
+      //   if (id == null || id == "") {
+      //     setImmediate(() => {
+      //       setCheck(false);
+      //       setLoader(false);
+      //     });
+      //     return alert("Network Error: Try to login again!");
+      //   }
+      //   if (sale_Rent == null || sale_Rent == "") {
+      //     setImmediate(() => {
+      //       setCheck(false);
+      //       setLoader(false);
+      //     });
+      //     return alert("Please select either Sale or Rent!");
+      //   }
+      //   // if (images == null || images == [] || images == "") {
+      //   //   setImmediate(() => {
+      //   //     setCheck(false);
+      //   //     setLoader(false);
+      //   //   });
+      //   //   return alert("Please select an image");
+      //   // }
+      //   if (category == null || category == "") {
+      //     setImmediate(() => {
+      //       setCheck(false);
+      //       setLoader(false);
+      //     });
+      //     return alert("Please select Type!");
+      //   }
+      //   if (price == null || price == "") {
+      //     setImmediate(() => {
+      //       setCheck(false);
+      //       setLoader(false);
+      //     });
+      //     return alert("Please enter Price!");
+      //   }
+      //   if (yards == null || yards == "") {
+      //     setImmediate(() => {
+      //       setCheck(false);
+      //       setLoader(false);
+      //     });
+      //     return alert("Please select Area Unit!");
+      //   }
+      //   if (yardsNumber == null || yardsNumber == "") {
+      //     setImmediate(() => {
+      //       setCheck(false);
+      //       setLoader(false);
+      //     });
+      //     return alert("Please Enter Area Value!");
+      //   }
 
-        // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
-        //     setImmediate(() => {
-        //         setCheck(false)
-        //         setLoader(false)
-        //     })
-        //     return alert("Please select Construction Status Corner value!")
-        // }
-        // if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
-        //     setImmediate(() => {
-        //         setCheck(false)
-        //         setLoader(false)
-        //     })
-        //     return alert("Please select Construction Status open value!")
-        // }
+      //   // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
+      //   //     setImmediate(() => {
+      //   //         setCheck(false)
+      //   //         setLoader(false)
+      //   //     })
+      //   //     return alert("Please select Construction Status Corner value!")
+      //   // }
+      //   // if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
+      //   //     setImmediate(() => {
+      //   //         setCheck(false)
+      //   //         setLoader(false)
+      //   //     })
+      //   //     return alert("Please select Construction Status open value!")
+      //   // }
 
-        if (phase == null || phase == "") {
-          setImmediate(() => {
-            setCheck(false);
-          });
-          return alert("Please select phase!");
-        }
-        if (location == null || location == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please select Location!");
-        }
-        if (locationMain == null || locationMain == "" || locationMain == "Location") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please select Location!");
-        }
-        if (address == null || address == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please enter Address!");
-        }
-        // if (main_features == null || main_features == "") {
-        //   setImmediate(() => {
-        //     setCheck(false);
-        //     setLoader(false);
-        //   });
-        //   return alert("Please add Main features!");
-        // }
-        if (details == null || details == "") {
-          setImmediate(() => {
-            setCheck(false);
-            setLoader(false);
-          });
-          return alert("Please enter Details!");
-        }
-        console.log("Check", check);
-        return check;
+      //   if (phase == null || phase == "") {
+      //     setImmediate(() => {
+      //       setCheck(false);
+      //     });
+      //     return alert("Please select phase!");
+      //   }
+      //   if (location == null || location == "") {
+      //     setImmediate(() => {
+      //       setCheck(false);
+      //       setLoader(false);
+      //     });
+      //     return alert("Please select Location!");
+      //   }
+      //   if (locationMain == null || locationMain == "" || locationMain == "Location") {
+      //     setImmediate(() => {
+      //       setCheck(false);
+      //       setLoader(false);
+      //     });
+      //     return alert("Please select Location!");
+      //   }
+      //   if (address == null || address == "") {
+      //     setImmediate(() => {
+      //       setCheck(false);
+      //       setLoader(false);
+      //     });
+      //     return alert("Please enter Address!");
+      //   }
+      //   // if (main_features == null || main_features == "") {
+      //   //   setImmediate(() => {
+      //   //     setCheck(false);
+      //   //     setLoader(false);
+      //   //   });
+      //   //   return alert("Please add Main features!");
+      //   // }
+      //   if (details == null || details == "") {
+      //     setImmediate(() => {
+      //       setCheck(false);
+      //       setLoader(false);
+      //     });
+      //     return alert("Please enter Details!");
+      //   }
+      //   console.log("Check", check);
+      //   return check;
       // if (check == false) {
       //     return false
       // } else {
@@ -1183,48 +1186,44 @@ const Post = (props) => {
         }
         return check = true;
 
-      case "Plot":
-        if (id == null || id == "") {
-          return check = false
-        }
-        if (sale_Rent == null || sale_Rent == "") {
-          return check = false
-        }
+      // case "Plot":
+      //   if (id == null || id == "") {
+      //     return check = false
+      //   }
+      //   if (sale_Rent == null || sale_Rent == "") {
+      //     return check = false
+      //   }
 
-        if (category == null || category == "") {
-          return check = false
-        }
-        if (price == null || price == "") {
-          return check = false
-        }
-        if (yards == null || yards == "") {
-          return check = false
-        }
-        if (yardsNumber == null || yardsNumber == "") {
-          return check = false
-        }
+      //   if (category == null || category == "") {
+      //     return check = false
+      //   }
+      //   if (price == null || price == "") {
+      //     return check = false
+      //   }
+      //   if (yards == null || yards == "") {
+      //     return check = false
+      //   }
+      //   if (yardsNumber == null || yardsNumber == "") {
+      //     return check = false
+      //   }
 
-        if (phase == null || phase == "") {
-          return check = false
-        }
-        if (location == null || location == "") {
-          return check = false
-        }
-        if (locationMain == null || locationMain == "" || locationMain == "Location") {
-          return check = false
-        }
-        if (address == null || address == "") {
-          return check = false
-        }
-        if (details == null || details == "") {
-          return check = false
-        }
-        return check = true;
-      // if (check == false) {
-      //     return false
-      // } else {
-      //     return true
-      // }
+      //   if (phase == null || phase == "") {
+      //     return check = false
+      //   }
+      //   if (location == null || location == "") {
+      //     return check = false
+      //   }
+      //   if (locationMain == null || locationMain == "" || locationMain == "Location") {
+      //     return check = false
+      //   }
+      //   if (address == null || address == "") {
+      //     return check = false
+      //   }
+      //   if (details == null || details == "") {
+      //     return check = false
+      //   }
+      //   return check = true;
+  
     }
   };
 var stateCheck = checkDataForSubmitBtn()
@@ -1275,7 +1274,7 @@ var stateCheck = checkDataForSubmitBtn()
         <Options
           Category_Selected={category}
           selectTypeData={selectTypeData} // Property Types
-          commercialCategories={PropertyCommercialCategories} //data  Comercial Categories
+          commercialCategories={sale_Rent == "Rent"? PropertyCommercialCategories1 : PropertyCommercialCategories} //data  Comercial Categories
           residentialCategories={ResidentialCategories} //data  Residential Categories
           onSelectValue={(val, key) => valueAssigner(val, key)}
           propertyCategorySelected={propertyCategoryOthers} // old value :propertyCategory  // Commercial/Residential selected Property

@@ -126,7 +126,7 @@ const Options = ({
                 {/* } */}
                 {/* {(Category_Selected == "Plot" && yardSelected == true) && */}
                 <CustomTextInp
-                    titleEN={ "Enter Number *"}
+                    titleEN={"Enter Number *"}
                     keyboardType={"numeric"}
                     onChangeText={(txt) => onChangeText(txt, "yards")}
                     placeholder={selectedAreaUnit == "Others" ? "ex. 100" : ""}
@@ -152,7 +152,7 @@ const Options = ({
                 />
 
                 {/* Furnished for plots */}
-                {Category_Selected == "Residential" &&
+                {Category_Selected == "Residential" && propertyCategorySelected !== "Plot" &&
                     < ButtonList
                         data={furnishes}
                         titleSale={"Furnished/Unfurnished"}
@@ -160,10 +160,10 @@ const Options = ({
                     />}
 
                 {/* Space Line */}
-                {Category_Selected == "Residential" && <View style={styles.space_line}></View>}
+                {Category_Selected == "Residential" && propertyCategorySelected !== "Plot" && <View style={styles.space_line}></View>}
 
                 {/* bedrooms for plots */}
-                {Category_Selected == "Residential" &&
+                {Category_Selected == "Residential" && propertyCategorySelected !== "Plot" &&
                     < ButtonList
                         data={bedrooms}
                         titleSale={"Bedrooms"}
@@ -171,10 +171,10 @@ const Options = ({
                     />}
 
                 {/* Space Line */}
-                {Category_Selected == "Residential" && <View style={styles.space_line}></View>}
+                {Category_Selected == "Residential" && propertyCategorySelected !== "Plot" && <View style={styles.space_line}></View>}
 
                 {/* Furnished for plots */}
-                {Category_Selected == "Residential" &&
+                {Category_Selected == "Residential" && propertyCategorySelected !== "Plot" &&
                     < ButtonList
                         data={bathrooms}
                         titleSale={"Bathrooms"}
@@ -182,21 +182,21 @@ const Options = ({
                     />}
 
                 {/* Space Line */}
-                {Category_Selected == "Plot" && <View style={styles.space_line}></View>}
+                {propertyCategorySelected == "Plot" && <View style={styles.space_line}></View>}
 
                 {/* Phase for plots */}
-                {Category_Selected == "Plot" &&
+                {propertyCategorySelected == "Plot" &&
                     < ButtonList
                         data={PlotPhase}
-                        titleSale={"Area Type *"}
+                        titleSale={"Plot Status *"}
                         onSelectValue={(val) => onSelectValue(val, "phase")}
                     />
                 }
-                {Category_Selected == "Plot" &&
+                {/* {Category_Selected == "Plot" &&
                     <CustomTextInp
                         titleEN={"Plot Status *"}
                         onChangeText={(txt) => onChangeText(txt, "phase1")}
-                    />}
+                    />} */}
 
                 {/* Space Line */}
                 <View style={styles.space_line}></View>
@@ -214,11 +214,11 @@ const Options = ({
 
                 {/* Address */}
                 {/* {Category_Selected !== "Residential" && */}
-                    <CustomTextInp
-                        titleEN={"Address *"}
-                        onChangeText={(txt) => onChangeText(txt, "address")}
-                    />
-                    {/* } */}
+                <CustomTextInp
+                    titleEN={"Address *"}
+                    onChangeText={(txt) => onChangeText(txt, "address")}
+                />
+                {/* } */}
 
                 {/* Space Line */}
                 {/* <View style={styles.space_line}></View> */}

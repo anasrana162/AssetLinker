@@ -5,9 +5,7 @@ export const Property_Types = [
     {
         type: "Residential"
     },
-    {
-        type: "Plot"
-    },
+
 ]
 export const Property_Types1 = [
     {
@@ -58,10 +56,54 @@ export const PropertyCommercialCategories = [
         id: 6,
         name: "WareHouse",
     },
+    // {
+    //     id: 7,
+    //     name: "PentHouse",
+    // },
     {
         id: 7,
-        name: "PentHouse",
+        name: "Plot",
     },
+    {
+        id: 8,
+        name: "Others"
+    },
+    {
+        id: 9,
+        name: "Ground"
+    },
+
+];
+export const PropertyCommercialCategories1 = [
+    {
+        id: 1,
+        name: "Building"
+    },
+    {
+        id: 2,
+        name: "Shop"
+    },
+    {
+        id: 3,
+        name: "Office"
+    },
+    {
+        id: 4,
+        name: "Basement"
+    },
+    {
+        id: 5,
+        name: "Mezzanine"
+    },
+    {
+        id: 6,
+        name: "WareHouse",
+    },
+    // {
+    //     id: 7,
+    //     name: "PentHouse",
+    // },
+
     {
         id: 8,
         name: "Others"
@@ -92,6 +134,15 @@ export const ResidentialCategories = [
     { id: 3, name: 'Town House' },
     { id: 4, name: 'Apartment' },
     { id: 5, name: 'Pent House' },
+    { id: 6, name: 'Plot' },
+    { id: 7, name: 'Others' },
+];
+export const ResidentialCategories1 = [
+    { id: 1, name: 'Bangalow' },
+    { id: 2, name: 'Farm House' },
+    { id: 3, name: 'Town House' },
+    { id: 4, name: 'Apartment' },
+    { id: 5, name: 'Pent House' },
     { id: 6, name: 'Others' },
 ];
 export const Yards = [
@@ -112,6 +163,7 @@ export const Phase = [
 export const Phase1=[
     { id: 1, name: 'Grey Structure' },
     { id: 2, name: 'Boundary Wall' },
+    { id: 3, name: 'Open' },
     
 ];
 export const Area_unit = [

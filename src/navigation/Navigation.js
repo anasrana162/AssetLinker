@@ -29,6 +29,7 @@ import UserProfileDetail from "../screens/Account/UserProfileDetail";
 import ChatScreen from "../screens/Chat/ChatScreen";
 import Chatlist from "../screens/Chat/Chatlist";
 import AssociationNews from "../screens/Dash/AssociationNews";
+import PostUpdate from "../screens/Post/PostUpdate";
 
 const Stack = createNativeStackNavigator();
 
@@ -53,6 +54,7 @@ export default Navigation = () => {
         <Stack.Screen name="Dash" component={Dash} />
         <Stack.Screen name="Post" component={Post} />
         <Stack.Screen name="PostDetail" component={PostDetail} />
+        <Stack.Screen name="PostUpdate" component={PostUpdate} />
         <Stack.Screen name="MyProfile" component={MyProfile} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="Favourite" component={Favourite} />

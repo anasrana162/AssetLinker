@@ -3,9 +3,9 @@ import React from 'react'
 
 const width = Dimensions.get("screen").width
 
-const SelectType = ({ Property_Types, Category_Selected, sale_Rent }) => {
+const SelectType = ({ Property_Types, Category_Selected, sale_Rent, valueSelected }) => {
 
-    const [selected_cat, setSelected_cat] = React.useState("")
+    const [selected_cat, setSelected_cat] = React.useState(valueSelected == undefined ? "" : valueSelected)
 
     const SelectedCategory = (val) => {
         // console.log("selected Value", val)

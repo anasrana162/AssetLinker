@@ -63,8 +63,8 @@ class Dash extends Component {
       openDeletePostModal: false,
       postID: "",
       docID: "",
-      Posts: homeposts,
-      FilteredPosts: homeposts,
+      Posts: null,
+      FilteredPosts: null,
       openSearchBar: false,
       openPreFilterModal: false,
       searched: "",
@@ -170,7 +170,7 @@ class Dash extends Component {
               Posts: homeposts,
               FilteredPosts: homeposts,
               loader: false,
-              // key: this.state.key + 1
+              key: this.state.key + 1
             });
           })
         }
@@ -253,10 +253,12 @@ class Dash extends Component {
   }
 
   onSearchOpen = (key) => {
+    var { userData: { homeposts } } = this.props;
     switch (key) {
       case "search bar":
         setImmediate(() => {
           this.setState({
+            Posts:homeposts,
             openSearchBar: !this.state.openSearchBar,
           });
         });
@@ -274,8 +276,10 @@ class Dash extends Component {
 
   onSearch = (txt) => {
     var { Posts } = this.state;
-
-    const filterData = Posts.filter((data) => {
+//     var { userData: { homeposts } } = this.props;
+// console.log("Posts in serach",Posts);
+// this.setState({Posts:})
+    const filterData = Posts?.filter((data) => {
 
       var locationParser = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
       // console.log("locationParser",locationParser)
@@ -392,7 +396,7 @@ class Dash extends Component {
             />
           ) : (
             <AllPosts
-              // key={this.state.key}
+              key={this.state.key}
               data={
                 this.state.openSearchBar
                   ? this.state.FilteredPosts

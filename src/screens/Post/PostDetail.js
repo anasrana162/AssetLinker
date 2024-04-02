@@ -52,6 +52,8 @@ class PostDetail extends Component {
   onPress = (key) => {
     var { image, name, member_since, user_id, designation } =
       this.props?.route?.params?.data;
+      var { data } = this.props?.route?.params;
+
     switch (key) {
       case "goback":
         this.props.navigation.navigate("Dash");
@@ -66,6 +68,10 @@ class PostDetail extends Component {
           image: image,
           name: name,
           // designation: designation
+        });
+      case "update":
+        this.props.navigation.navigate("PostUpdate", {
+          data: data,
         });
         break;
     }
@@ -174,15 +180,25 @@ class PostDetail extends Component {
             <Ionicons name="chevron-back" size={30} color="white" />
           </TouchableOpacity>
 
-          {/* Share Button */}
+          <View style={{flexDirection:"row"}}>
+
+          {/* Update Button */}
           <TouchableOpacity
-            style={[styles.headerBtn, { marginRight: 15 }]}
+            style={[styles.headerBtn, { marginRight: 0 }]}
             onPress={() => this.onPress("share")}>
             <Ionicons name="share-social" size={30} color="white" />
           </TouchableOpacity>
+
+          {/* Share Button */}
+          <TouchableOpacity
+            style={[styles.headerBtn, { marginRight: 15 }]}
+            onPress={() => this.onPress("update")}>
+            <Ionicons name="pencil" size={30} color="white" />
+          </TouchableOpacity>
+          </View>
         </View>
 
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ width: width }}>
 
           {/* {console.log("post_images",data?.post_images)} */}
 
