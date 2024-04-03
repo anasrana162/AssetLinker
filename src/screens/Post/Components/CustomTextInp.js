@@ -4,7 +4,7 @@ import React from 'react'
 const width = Dimensions.get("screen").width
 
 const CustomTextInp = ({ style,placeholder, onChangeText, value, keyboardType, titleEN, titleAR, numberOfLines, multiline,onEndEditing }) => {
-    // console.log("numoflines", numberOfLines)
+    // console.log("numoflines", value)
     return (
         <View style={[styles.mainContainer,style]}>
             <Text style={styles.title}>{titleEN}</Text>

@@ -70,7 +70,7 @@ const PostUpdate = (props) => {
     // States
     const [sale_Rent, setSale_Rent] = useState(data?.rent_sale);
     const [rooms, setRooms] = useState("Null");
-    const [yards, setYards] = useState("");
+    const [yards, setYards] = useState((data?.yards.split(" "))[1]);
     const [yards_Unit, setYards_Unit] = useState("");
     const [PlotYards, setPlotYards] = useState([
         { id: 1, name: 'ACRE' },
@@ -80,16 +80,16 @@ const PostUpdate = (props) => {
         { id: 5, name: 'Sq.FEET' },
         { id: 6, name: 'Others' },
     ])
-    const [yardsNumber, setYardsNumber] = useState("");
-    const [furnished, setFurnished] = useState("Null");
-    const [bedrooms1, setBedrooms] = useState("Null");
-    const [bathrooms1, setBathrooms] = useState("Null");
+    const [yardsNumber, setYardsNumber] = useState((data?.yards.split(" "))[0]);
+    const [furnished, setFurnished] = useState(data?.furnished);
+    const [bedrooms1, setBedrooms] = useState(data?.bedrooms);
+    const [bathrooms1, setBathrooms] = useState(data?.bathrooms);
     const [phase, setPhase] = useState("");
     const [phase1, setPhase1] = useState("");
     const [loc_bahria, setLoc_bahria] = useState("");
     const [loc_dha, setLoc_dha] = useState("");
     const [area_unit, setArea_Unit] = useState("Null");
-    const [category, setCategory] = React.useState("Commercial");
+    const [category, setCategory] = React.useState(data?.property_type);
     const [multipleAssetsPost, setMultipleAssetsPost] = useState("");
     const [selectTypeData, setSelectTypeData] = useState(sale_rent);
     const [locationDropDownOpen, setLocationDropDownOpen] = React.useState(false);
@@ -98,22 +98,22 @@ const PostUpdate = (props) => {
         place: "Null",
         valueToShow: "Null",
     });
-    const [locationMain, setLocationMain] = React.useState("");
+    const [locationMain, setLocationMain] = React.useState(data?.Location);
     const [
         selected_constructionStatus_corner,
         setSelected_constructionStatus_corner,
-    ] = useState("Null");
+    ] = useState(data?.corner);
     const [
         selected_constructionStatus_open,
         setSelected_constructionStatus_open,
-    ] = useState("Null");
+    ] = useState(data?.open);
     const [price, setPrice] = useState(data?.price);
-    const [address, setAddress] = useState("");
+    const [address, setAddress] = useState(data?.address);
     const [main_features, setMain_features] = useState("");
-    const [details, setdetails] = useState("");
-    const [propertyCategory, setPropertyCategory] = useState(data?.property_type);
+    const [details, setdetails] = useState(data?.details);
+    const [propertyCategory, setPropertyCategory] = useState(data?.category);
     const [propertyCategoryOthers, setPropertyCategoryOthers] = useState("");
-    const [images, setImages] = useState("");
+    const [images, setImages] = useState(data?.post_images);
     const [imagesPaths, setImagesPaths] = useState(data?.post_images);
     const [loader, setLoader] = useState(false);
     const [check, setCheck] = useState(true);
@@ -555,7 +555,7 @@ const PostUpdate = (props) => {
         <View style={styles.mainContainer}>
             {/* {console.log(props)} */}
             {/* Header */}
-            <Header navProps={props.navigation} />
+            <Header Title={"Update Post"} navProps={props.navigation} />
 
             <ScrollView style={{ width: "100%" }}>
                 {/* Sale/Rent */}
@@ -578,7 +578,7 @@ const PostUpdate = (props) => {
                 {/* Select Type {Property} */}
                 <SelectType
                     Property_Types={Property_Types}
-                    valueSelected={propertyCategory}
+                    valueSelected={category}
                     sale_Rent={sale_Rent}
                     Category_Selected={(val) => onCategoryChange(val)}
                 />
@@ -621,6 +621,18 @@ const PostUpdate = (props) => {
                     Location_Bahria={Location_Bahria} //data
                     Location_DHA_City={Location_DHA_City} //data
                     onChangeText={(val, key) => onChangeText(val, key)}
+                    initPrice={price}
+                    initPropertyCategory={propertyCategory}
+                    initYards={yards}
+                    initYardsNumber={yardsNumber}
+                    initCorner={selected_constructionStatus_corner}
+                    initOpen={selected_constructionStatus_open}
+                    initLocation={JSON.parse(locationMain) == undefined ? "" : JSON.parse(locationMain)}
+                    initAddress={address}
+                    initDetails={details}
+                    initFurnished={furnished}
+                    initBathrooms={bathrooms1}
+                    initBedrooms={bedrooms1}
                 />
 
                 {/* Submit Button */}

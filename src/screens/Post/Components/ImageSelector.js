@@ -15,7 +15,7 @@ const ImageSelector = ({
     remmoveAsset,
 }) => {
 
-
+    // console.log(multipleAssetsPost);
 
     return (
         <>
@@ -50,16 +50,38 @@ const ImageSelector = ({
                                     style={{ position: 'relative', marginHorizontal: 5 }}
                                     key={index + 1}>
                                     {/* {       console.log("Item in com",item)} */}
-                                    <Image
-                                        style={{
-                                            height: Dimensions.get('window').height * 0.11,
-                                            width: Dimensions.get('window').height * 0.11,
-                                            borderRadius: 10,
-                                            resizeMode: 'cover',
-                                        }}
-                                       
-                                        source={{ uri: item }}
-                                    />
+                                    {
+                                        item !== "" ?
+                                            <>
+                                                {
+                                                    item.includes(".png", 0) == true ?
+                                                        <Image
+                                                            style={{
+                                                                height: Dimensions.get('window').height * 0.11,
+                                                                width: Dimensions.get('window').height * 0.11,
+                                                                borderRadius: 10,
+                                                                resizeMode: 'cover',
+                                                            }}
+
+                                                            source={{ uri: ImageURL + item }}
+                                                        /> :
+                                                        <Image
+                                                            style={{
+                                                                height: Dimensions.get('window').height * 0.11,
+                                                                width: Dimensions.get('window').height * 0.11,
+                                                                borderRadius: 10,
+                                                                resizeMode: 'cover',
+                                                            }}
+
+                                                            source={{ uri: item }}
+                                                        />
+                                                }
+                                            </>
+                                            :
+                                            <>
+                                            </>
+                                    }
+
                                     <TouchableOpacity
                                         onPress={() => {
                                             remmoveAsset(item);

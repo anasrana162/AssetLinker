@@ -52,7 +52,7 @@ class PostDetail extends Component {
   onPress = (key) => {
     var { image, name, member_since, user_id, designation } =
       this.props?.route?.params?.data;
-      var { data } = this.props?.route?.params;
+    var { data } = this.props?.route?.params;
 
     switch (key) {
       case "goback":
@@ -180,21 +180,21 @@ class PostDetail extends Component {
             <Ionicons name="chevron-back" size={30} color="white" />
           </TouchableOpacity>
 
-          <View style={{flexDirection:"row"}}>
+          <View style={{ flexDirection: "row" }}>
 
-          {/* Update Button */}
-          <TouchableOpacity
-            style={[styles.headerBtn, { marginRight: 0 }]}
-            onPress={() => this.onPress("share")}>
-            <Ionicons name="share-social" size={30} color="white" />
-          </TouchableOpacity>
+            {/* Share Button */}
+            <TouchableOpacity
+              style={[styles.headerBtn, { marginRight: data?.user_id == this.props.userData?.user?.id ? 0 : 15 }]}
+              onPress={() => this.onPress("share")}>
+              <Ionicons name="share-social" size={30} color="white" />
+            </TouchableOpacity>
 
-          {/* Share Button */}
-          <TouchableOpacity
-            style={[styles.headerBtn, { marginRight: 15 }]}
-            onPress={() => this.onPress("update")}>
-            <Ionicons name="pencil" size={30} color="white" />
-          </TouchableOpacity>
+            {/* Update Button */}
+            {data?.user_id == this.props.userData?.user?.id && <TouchableOpacity
+              style={[styles.headerBtn, { marginRight: 15 }]}
+              onPress={() => this.onPress("update")}>
+              <Ionicons name="pencil" size={25} color="white" />
+            </TouchableOpacity>}
           </View>
         </View>
 

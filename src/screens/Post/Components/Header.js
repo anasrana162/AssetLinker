@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-nati
 import React from 'react'
 const width = Dimensions.get("screen").width
 import Ionicons from "react-native-vector-icons/Ionicons";
-const Header = ({ navProps }) => {
+const Header = ({ navProps,Title }) => {
     return (
         <>
 
@@ -13,7 +13,7 @@ const Header = ({ navProps }) => {
                     onPress={() => navProps.pop()}>
                     <Ionicons name="chevron-back" size={30} color="white" />
                 </TouchableOpacity>
-                <Text style={styles.header_text}>POST</Text>
+                <Text style={styles.header_text}>{Title}</Text>
             </View>
 
             <View

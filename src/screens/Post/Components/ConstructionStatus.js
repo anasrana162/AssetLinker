@@ -9,12 +9,14 @@ const height = Dimensions.get("screen").height - HEIGHT
 const ConstructionStatus = ({
     constructionStatus_corner,
     constructionStatus_open,
+    valueCorner,
+    valueOpen,
     selected_constructionStatus_corner,
     selected_constructionStatus_open,
 }) => {
 
-    const [cornerDropDown, setCornerDropDown] = useState('Select Corner')
-    const [openDropDown, setOpenDropDown] = useState('Select Open')
+    const [cornerDropDown, setCornerDropDown] = useState(valueCorner || "Select Open")
+    const [openDropDown, setOpenDropDown] = useState(valueOpen || "Select Open")
     const [dropDownOpenedOf, setDropDownOpenedOf] = useState('')
     const [cornerDropDownOpen, setCornerDropDownOpen] = useState(false)
     const [openDropDownOpen, setOpenDropDownOpen] = useState(false)
@@ -77,7 +79,7 @@ const ConstructionStatus = ({
         <View style={styles.construction_status_cont}>
             <Text
                 style={styles.construction_status_text}>
-                Construction Status 
+                Construction Status
             </Text>
             {/* Corner */}
             <View style={styles.construction_status_small_cont}>
@@ -85,7 +87,7 @@ const ConstructionStatus = ({
                 <TouchableOpacity
                     onPress={() => showDropDowns("corner")}
                     style={styles.small_dropdown}>
-                    <Text style={styles.small_dropdown_value_text}>{cornerDropDown}</Text>
+                    <Text style={styles.small_dropdown_value_text}>{cornerDropDown == "Null" ? "Select Corner" : cornerDropDown}</Text>
                     <AntDesign name="down" size={20} color="grey" />
                 </TouchableOpacity>
 
@@ -99,7 +101,7 @@ const ConstructionStatus = ({
                 <TouchableOpacity
                     onPress={() => showDropDowns("open")}
                     style={styles.small_dropdown}>
-                    <Text style={styles.small_dropdown_value_text}>{openDropDown}</Text>
+                    <Text style={styles.small_dropdown_value_text}>{openDropDown == "Null" ? "Select Open" : openDropDown}</Text>
                     <AntDesign name="down" size={20} color="grey" />
                 </TouchableOpacity>
 

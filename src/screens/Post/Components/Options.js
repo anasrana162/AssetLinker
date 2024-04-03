@@ -37,6 +37,18 @@ const Options = ({
     typedDetails,
     propertyCategorySelected,
     typedYards,
+    initPrice,
+    initPropertyCategory,
+    initYardsNumber,
+    initYards,
+    initCorner,
+    initOpen,
+    initLocation,
+    initAddress,
+    initDetails,
+    initFurnished,
+    initBathrooms,
+    initBedrooms,
 }) => {
     // const [PlotYards, setPlotYards] = useState([
     //     { id: 1, name: 'ACRE' },
@@ -46,7 +58,7 @@ const Options = ({
     //     { id: 5, name: 'Sq.FEET' },
     //     { id: 6, name: 'Others' },
     // ])
-    // console.log("selectTypeData", selectTypeData)
+    console.log("propertyCategory", initYards)
 
 
 
@@ -66,6 +78,7 @@ const Options = ({
 
                 {/* Price */}
                 <CustomTextInp
+                    value={initPrice}
                     keyboardType={"numeric"}
                     titleEN={"Price *"}
                     onChangeText={(txt) => onChangeText(txt, "price")}
@@ -79,6 +92,7 @@ const Options = ({
                     < ButtonList
                         data={commercialCategories}
                         titleSale={"Category *"}
+                        valueSelected={initPropertyCategory}
                         onSelectValue={(val) => onSelectValue(val, "commercial_prop_cat")}
                     />}
                 {propertyCategorySelected == "Others" && Category_Selected == "Commercial" &&
@@ -93,6 +107,7 @@ const Options = ({
                     < ButtonList
                         data={residentialCategories}
                         titleSale={"Category *"}
+                        valueSelected={initPropertyCategory}
                         onSelectValue={(val) => onSelectValue(val, "residential_prop_cat")}
                     />}
 
@@ -117,6 +132,7 @@ const Options = ({
 
                 < ButtonList
                     data={PlotYards}
+                    valueSelected={initYards}
                     titleSale={"Area Unit *"}
                     onSelectValue={(val) => {
                         onSelectValue(val, "yards")
@@ -127,6 +143,7 @@ const Options = ({
                 {/* {(Category_Selected == "Plot" && yardSelected == true) && */}
                 <CustomTextInp
                     titleEN={"Enter Number *"}
+                    value={initYardsNumber}
                     keyboardType={"numeric"}
                     onChangeText={(txt) => onChangeText(txt, "yards")}
                     placeholder={selectedAreaUnit == "Others" ? "ex. 100" : ""}
@@ -147,6 +164,8 @@ const Options = ({
                 <ConstructionStatus
                     constructionStatus_corner={constructionStatus_corner}
                     constructionStatus_open={constructionStatus_open}
+                    valueCorner={initCorner}
+                    valueOpen={initOpen}
                     selected_constructionStatus_corner={(val) => onSelectValue(val, "Status_corner")}
                     selected_constructionStatus_open={(val) => onSelectValue(val, "Status_open")}
                 />
@@ -155,6 +174,7 @@ const Options = ({
                 {Category_Selected == "Residential" && propertyCategorySelected !== "Plot" &&
                     < ButtonList
                         data={furnishes}
+                        valueSelected={initFurnished}
                         titleSale={"Furnished/Unfurnished"}
                         onSelectValue={(val) => onSelectValue(val, "furnishes")}
                     />}
@@ -166,6 +186,7 @@ const Options = ({
                 {Category_Selected == "Residential" && propertyCategorySelected !== "Plot" &&
                     < ButtonList
                         data={bedrooms}
+                        valueSelected={initBedrooms}
                         titleSale={"Bedrooms"}
                         onSelectValue={(val) => onSelectValue(val, "bedrooms")}
                     />}
@@ -177,6 +198,7 @@ const Options = ({
                 {Category_Selected == "Residential" && propertyCategorySelected !== "Plot" &&
                     < ButtonList
                         data={bathrooms}
+                        valueSelected={initBathrooms}
                         titleSale={"Bathrooms"}
                         onSelectValue={(val) => onSelectValue(val, "bathrooms")}
                     />}
@@ -206,7 +228,7 @@ const Options = ({
                 <LocationDropDown
                     titleMain={"Location *"}
                     showModal={openLocationDropdown}
-                    title={location?.location == "Null" ? "Location" : location?.valueToShow}
+                    title={initLocation !== "" ? initLocation?.valueToShow : location?.location == "Null" ? "Location" : location?.valueToShow}
                 />
 
                 {/* Space Line */}
@@ -216,6 +238,7 @@ const Options = ({
                 {/* {Category_Selected !== "Residential" && */}
                 <CustomTextInp
                     titleEN={"Address *"}
+                    value={initAddress}
                     onChangeText={(txt) => onChangeText(txt, "address")}
                 />
                 {/* } */}
@@ -266,6 +289,7 @@ const Options = ({
                     numberOfLines={12}
                     titleEN={"details *"}
                     multiline={true}
+                    value={initDetails}
                     onChangeText={(txt) => onChangeText(txt, "details")}
                 />
 

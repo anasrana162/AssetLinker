@@ -22,7 +22,7 @@ const ButtonList = ({ data, titleSale,onSelectValue,style,styleTitle,valueSelect
                                     onSelectValue(data?.name)
                                 }}
                                 style={[styles.list_btn, {
-                                    backgroundColor: data?.name == selected ? '#144272' : '#2C74B3'
+                                    backgroundColor: data?.name?.toLowerCase() == selected?.toLowerCase() ? '#144272' : '#2C74B3'
                                 }]}
                             >
                                 <Text style={styles.list_btn_text}>{data?.name}</Text>

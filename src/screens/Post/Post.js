@@ -1232,7 +1232,7 @@ var stateCheck = checkDataForSubmitBtn()
     <View style={styles.mainContainer}>
       {/* {console.log(props)} */}
       {/* Header */}
-      <Header navProps={props.navigation} />
+      <Header Title={"POST"} navProps={props.navigation} />
 
       <ScrollView style={{ width: "100%" }}>
         {/* Sale/Rent */}
