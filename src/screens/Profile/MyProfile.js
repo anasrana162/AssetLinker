@@ -12,6 +12,7 @@ import {
   StyleSheet,
   NativeModules,
   Modal,
+  TextInput,
 } from "react-native";
 import React, { Component } from "react";
 
@@ -21,6 +22,7 @@ import { Colors } from "../../config";
 import AssetLinkers from "../../api/AssetLinkers";
 import AllPosts from "../Dash/Components/AllPosts";
 import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const {
   StatusBarManager: { HEIGHT },
 } = NativeModules;
@@ -41,6 +43,10 @@ class MyProfile extends Component {
       Posts: null,
       openDeletePostModal: false,
       postID: "",
+      phone: "",
+      openDotModal: false,
+      deleteAccountModal: false,
+      openConfirmBtn: true,
     };
   }
 
@@ -122,6 +128,57 @@ class MyProfile extends Component {
     }
   };
 
+  deleteAccount = () => {
+    var {
+      userData: {
+        user,
+      },
+    } = this.props;
+    console.log(user?.id);
+    AssetLinkers.post("delete/user/account/" + user?.id)
+      .then((res) => {
+        if (res?.data) {
+          // this.getPosts();
+          this.setState({
+            deleteAccountModal: false,
+
+          });
+          Toast.show({
+            type: "success",
+            text1: "Account Deleted Successfully!",
+            visibilityTime: 3000,
+          });
+          this.logout()
+          console.log("Delete Account API Response", res?.data);
+        }
+      })
+      .catch((err) => {
+        // alert("Account Deletion Unsuccessful please try again");
+        this.setState({
+          deleteAccountModal: false,
+
+        });
+        Toast.show({
+          type: "success",
+          text1: "Account Deleted Successfully!",
+          visibilityTime: 3000,
+        });
+        this.logout()
+        console.log("Delete Account API Response", res?.data);
+        // console.log("Delete Account API Error", err?.response);
+      });
+  }
+  logout = () => {
+    var { actions, userData } = this.props;
+    AsyncStorage.removeItem("@assetlinker_usertoken");
+    AsyncStorage.removeItem("@assetlinker_userCreds");
+    actions?.userToken("");
+    actions?.user("");
+    setTimeout(() => {
+      this.props?.navigation.navigate("GetStarted");
+    }, 1000);
+  };
+
   onPress = (key) => {
     switch (key) {
       case "goback":
@@ -130,8 +187,36 @@ class MyProfile extends Component {
       case "edit_profile":
         this.props.navigation.navigate("EditProfile");
         break;
+      case "delete_account":
+        this.setState({ deleteAccountModal: true, openDotModal: false })
+        break;
+      case "confirm_delete":
+        this.deleteAccount()
+        break;
     }
   };
+
+  onChangeText = (number) => {
+    setImmediate(() => {
+      this.setState({ phone: number })
+    })
+    setTimeout(() => {
+      this.checkPhoneNumber()
+    }, 200)
+
+  }
+
+  checkPhoneNumber = () => {
+    var {
+      userData: {
+        user,
+      },
+    } = this.props;
+
+    if (this.state.phone == user?.phone) {
+      this.setState({ openConfirmBtn: false })
+    }
+  }
 
   openDeletePostModal = (postID) => {
     console.log("POST TO DELETE:", postID);
@@ -175,7 +260,7 @@ class MyProfile extends Component {
 
   render() {
     var { id, name, image, phone } = this.props?.userData?.user;
-// console.log(his.props?.userData?.user);
+    // console.log(his.props?.userData?.user);
     return (
       <View style={styles.mainContainer}>
         <ScrollView>
@@ -191,7 +276,23 @@ class MyProfile extends Component {
 
             {/* Title */}
             <Text style={styles.headerTitle}>My Profile</Text>
+
+            <TouchableOpacity
+              style={{ position: "absolute", right: -5, padding: 10 }}
+              onPress={() => { this.setState({ openDotModal: !this.state.openDotModal }) }}
+            >
+              <Feather name="more-vertical" size={25} color="white" />
+            </TouchableOpacity>
           </View>
+
+          {/* Dot Modal */}
+          {this.state.openDotModal && < View style={styles.dotModal}>
+            <TouchableOpacity
+              onPress={() => this.onPress("delete_account")}
+              style={styles.dotMenuBtn}>
+              <Text style={[styles.headerTitle, { fontSize: 16 }]}>Delete Account</Text>
+            </TouchableOpacity>
+          </View>}
 
           {/* Profile Info Cont */}
 
@@ -261,11 +362,11 @@ class MyProfile extends Component {
               this.addToFavourite(user_id, postID, is_favourite)
             }
           />
-        </ScrollView>
+        </ScrollView >
 
         {/* Modal Delete Post */}
 
-        <Modal
+        < Modal
           animationType="slide"
           transparent={true}
           visible={this.state.openDeletePostModal}
@@ -281,6 +382,7 @@ class MyProfile extends Component {
 
             <View style={styles.flex_direc}>
               <TouchableOpacity
+
                 onPress={() => this.deletePost()}
                 style={styles.yes_no_btn}
               >
@@ -295,8 +397,52 @@ class MyProfile extends Component {
               </TouchableOpacity>
             </View>
           </View>
-        </Modal>
-      </View>
+        </Modal >
+
+        {/* Modal Delete Account */}
+
+        < Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.deleteAccountModal}
+        >
+          <TouchableOpacity
+            style={styles.deletePostModal}
+            onPress={() => this.setState({ deleteAccountModal: false, openConfirmBtn: true })}
+          ></TouchableOpacity>
+          <View style={styles.deletePost_mainCont}>
+            <Text style={styles.deletePost_title}>
+              Are you Sure you want to delete your Account? , this can't be undone!
+            </Text>
+
+
+            <Text style={[styles.deletePost_title, { fontSize: 14, marginVertical: 10, color: "red" }]}>Enter your phone number</Text>
+            <TextInput
+              placeholder="Number"
+              style={{ width: "80%", height: 30, color: "black", borderWidth: 1, paddingLeft: 10 }}
+              onChangeText={(txt) => this.onChangeText(txt)}
+            />
+            <View style={styles.flex_direc}>
+
+              <TouchableOpacity
+                onPress={() => this.setState({ deleteAccountModal: false, openConfirmBtn: true })}
+                style={styles.yes_no_btn}
+              >
+                <Text style={styles.yes_no_text}>Cancel</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                disabled={this.state.openConfirmBtn}
+                onPress={() => this.deleteAccount()}
+                style={[styles.yes_no_btn, { backgroundColor: this.state.openConfirmBtn == false ? Colors.blue : "#bbb" }]}
+              >
+                <Text style={styles.yes_no_text}>Confirm</Text>
+              </TouchableOpacity>
+
+            </View>
+          </View>
+        </Modal >
+      </View >
     );
   }
 }
@@ -366,6 +512,24 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "white",
   },
+  dotModal: {
+    width: 180,
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: 60,
+    right: 0,
+    zIndex: 200,
+    borderBottomLeftRadius: 20,
+    backgroundColor: Colors.blue
+  },
+  dotMenuBtn: {
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
+
+  },
   inner_cont: {
     width: "100%",
     flexDirection: "row",
@@ -417,7 +581,8 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   flex_direc: {
-    width: "40%",
+    width: "80%",
+    marginVertical: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

@@ -1,4 +1,4 @@
-package com.assetlinker;
+package com.assetlinker1;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

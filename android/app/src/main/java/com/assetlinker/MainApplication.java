@@ -1,4 +1,4 @@
-package com.assetlinker;
+package com.assetlinker1;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

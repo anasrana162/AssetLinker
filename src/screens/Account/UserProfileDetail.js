@@ -31,7 +31,7 @@ const UserProfileDetail = (props) => {
     const getProfile = async () => {
       try {
         const res = await AssetLinkers.get(`/allUser/${id}`);
-        console.log("res?.data?.response",res?.data?.response);
+        console.log("res?.data?.response", res?.data?.response);
         setProfile(res?.data?.response[0]);
       } catch (error) {
         console.log("GET User Profile Error: ", error);
@@ -40,7 +40,7 @@ const UserProfileDetail = (props) => {
     getProfile();
   }, []);
 
-  console.log(profile, "***********************");
+  console.log(detail, "***********************");
   return (
     <View style={styles.mainContainer}>
       {profile ? (
@@ -81,21 +81,21 @@ const UserProfileDetail = (props) => {
                 profile?.user_type === "estate_agent"
                   ? "Consultant"
                   : profile?.user_type === "buyer_seller"
-                  ? "Buyer/Seller"
-                  : profile?.user_type
+                    ? "Buyer/Seller"
+                    : profile?.user_type
               }
             />
 
             <TextBox title="MS ID" label={profile?.ms_id} />
             <TextBox title="Phone" label={profile?.phone} />
             <TextBox title="Email" label={profile?.email} />
-            {detail?.address !== undefined && (
+            {(detail?.address !== undefined || detail?.address !== "" || detail?.address !== null) ? <></> : (
               <TextBox title="Address" label={detail?.address} />
             )}
-            {detail?.location !== undefined && (
-              <TextBox title="Location" label={detail?.location} />
+            {(detail?.location == undefined || detail?.location == "" || detail?.location == null) ? <></> : (
+              <TextBox title="Location" label={JSON.parse(detail?.location)?.valueToShow} />
             )}
-            {detail?.description !== undefined && (
+            {(detail?.description !== undefined || detail?.description !== "" || detail?.description !== null) ? <></> : (
               <TextBox title="About Us" label={detail?.description} />
             )}
             {/* <TextBox

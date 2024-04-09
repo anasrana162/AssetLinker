@@ -29,6 +29,7 @@ class ChatScreen extends Component {
   }
 
   componentDidMount = () => {
+    console.log("this.props.route?.params?.data", this.props.route?.params?.data);
     this.fetchChat()
   }
 
@@ -38,7 +39,7 @@ class ChatScreen extends Component {
     var { route } = this.props
     // const senderID = "" + route?.params?.id;
     // const receiverID = api?.user_id ? "" + api?.user_id : firebase.receiver
-    const senderID = firebase?.senderID == undefined ? route?.params?.id.toString() : firebase?.senderID;
+    const senderID = firebase?.senderID == undefined ? route?.params?.id?.toString() : firebase?.senderID;
     const receiverID = firebase?.receiverID == undefined ? api?.user_id : firebase?.receiverID;
     //  const receiverID = api?.user_id == undefined ? firebase.receiverID : api?.user_id.toString() ;
     const postID = api?.id ? "" + api?.id : firebase.postID;
@@ -75,11 +76,11 @@ class ChatScreen extends Component {
     var { route } = this.props
     // const senderID = "" + route?.params?.id;
     // const receiverID = api?.user_id ? "" + api?.user_id : firebase.receiverID;
-    const senderID = firebase?.senderID == undefined ? route?.params?.id.toString() : firebase?.senderID;
+    const senderID = firebase?.senderID == undefined ? route?.params?.id?.toString() : firebase?.senderID;
     const receiverID = firebase?.receiverID == undefined ? api?.user_id : firebase?.receiverID;
     //  const receiverID = api?.user_id == undefined ? firebase.receiverID : api?.user_id.toString() ;
     const postID = api?.id ? "" + api?.id : firebase.postID;
-
+    // console.log("api",api);
     // Get already signup user
     // db.collection("users")
     //   .where("receiverID", "==", receiverID)
@@ -113,7 +114,6 @@ class ChatScreen extends Component {
       // );
 
       // this.fetchChat()
-
       // Access For Sender
       db.collection("chat")
         .doc(senderID + receiverID)
@@ -133,7 +133,7 @@ class ChatScreen extends Component {
           email: api?.email,
           img: api?.post_images[0],
           location: JSON.parse(api?.Location)?.valueToShow,
-          features: api?.main_features,
+          features: api?.main_features == null ? "" : api?.main_features,
           receiverID: receiverID,
           senderID: senderID,
         })
@@ -159,13 +159,13 @@ class ChatScreen extends Component {
 
     var { api, firebase, messageList, messageList2, user_id } = this.state
     var { route } = this.props
-    const senderID = firebase?.senderID == undefined ? route?.params?.id.toString() : firebase?.senderID;
+    const senderID = firebase?.senderID == undefined ? route?.params?.id?.toString() : firebase?.senderID;
     const receiverID = firebase?.receiverID == undefined ? api?.user_id : firebase?.receiverID;
     // const senderID = "" + route?.params?.id;
     // const receiverID = api?.user_id ? "" + api?.user_id : firebase.receiverID;
     //  const receiverID = api?.user_id == undefined ? firebase.receiverID : api?.user_id.toString() ;
     const postID = api?.id ? "" + api?.id : firebase.postID;
-
+    console.log("checking id", user_id?.toString());
     return (
       <View style={styles.main}>
         {/* <Button title="Delete" color={"red"} onPress={onDelete} /> */}
@@ -182,7 +182,7 @@ class ChatScreen extends Component {
             marginLeft: -20,
           }}
           user={{
-            _id: user_id.toString(),
+            _id: user_id?.toString(),
           }}
         />
       </View>

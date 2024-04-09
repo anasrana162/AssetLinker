@@ -78,9 +78,13 @@ class PostDetail extends Component {
   };
 
   getLocaluser = async () => {
-    const res = await AsyncStorage.getItem("@assetlinker_userData");
-    const data = JSON.parse(res);
-    this.setState({ localUserID: data?.detail[0].user_id, });
+    var {
+      userData: { user },
+    } = this.props;
+    const res = user
+    // const data = JSON.parse(res);
+    console.log(res,"data in getLocal User");
+    this.setState({ localUserID: res?.detail[0].user_id, });
   };
 
   componentDidMount = () => {
@@ -153,7 +157,7 @@ class PostDetail extends Component {
 
   render() {
     var { data, location, subLocation } = this.props?.route?.params;
-
+// console.log(data,"jkabdhjbjshdc");
     var user_type = "";
     switch (data?.user_type) {
       case "buyer_seller":
@@ -184,17 +188,17 @@ class PostDetail extends Component {
 
             {/* Share Button */}
             <TouchableOpacity
-              style={[styles.headerBtn, { marginRight: data?.user_id == this.props.userData?.user?.id ? 0 : 15 }]}
+              style={[styles.headerBtn, { marginRight:  15 }]}
               onPress={() => this.onPress("share")}>
               <Ionicons name="share-social" size={30} color="white" />
             </TouchableOpacity>
 
             {/* Update Button */}
-            {data?.user_id == this.props.userData?.user?.id && <TouchableOpacity
+            {/* {data?.user_id == this.props.userData?.user?.id && <TouchableOpacity
               style={[styles.headerBtn, { marginRight: 15 }]}
               onPress={() => this.onPress("update")}>
               <Ionicons name="pencil" size={25} color="white" />
-            </TouchableOpacity>}
+            </TouchableOpacity>} */}
           </View>
         </View>
 

@@ -44,9 +44,12 @@ const Chatlist = (props,) => {
 
   const db = firestore();
   const getUsers = async () => {
-    const res = await AsyncStorage.getItem("@assetlinker_userData");
-    const data = JSON.parse(res);
-    const userID = "" + data?.id;
+    var {
+      userData: { user },
+    } = props;
+    // const res = await AsyncStorage.getItem("@assetlinker_userData");
+    const data = user;
+    const userID = "" + data?.detail[0].user_id;
     if (userID) {
       const senderQuery = db
         .collection("users")
@@ -71,11 +74,11 @@ const Chatlist = (props,) => {
   const navHandler = (item) => {
     var { userData } = props
     console.log(item?.data(), " :CHAT DATA");
-    console.log("currentUser DATA", currentUser?.id)
+    console.log("currentUser DATA", currentUser?.detail[0]?.user_id)
     props.navigation.navigate("ChatScreen", {
       fireStore: item?.data(),
       // id: currentUser?.detail[0].user_id,
-      id: currentUser?.id
+      id: currentUser?.detail[0]?.user_id
     });
   };
   return (

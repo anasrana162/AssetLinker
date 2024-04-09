@@ -81,9 +81,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.assetlinker"
+    namespace "com.assetlinker1"
     defaultConfig {
-        applicationId "com.assetlinker"
+        applicationId "com.assetlinker1"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
