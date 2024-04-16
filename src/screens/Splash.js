@@ -58,7 +58,10 @@ const Splash = (props, { navigation }) => {
         // console.log("Token in App js", res)
         console.log("Creds",creds);
         if (creds == null || creds == '') {
-            props.navigation.navigate("GetStarted")
+            setTimeout(()=>{
+
+                props.navigation.navigate("GetStarted")
+            },3000)
         } else {
             await AssetLinkers.post("/loginApi", {
                 "phone": JSON.parse(creds).phone,
