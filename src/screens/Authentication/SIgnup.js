@@ -64,6 +64,44 @@ export default class Signup extends Component {
 
     componentDidMount = () => {
         this.getRoles()
+        setImmediate(()=>{
+            this.setState({
+                checked: 'first',
+                flagForEstateAgent: true,
+                flagForBuilders: false,
+                flagForBuyer: false,
+                country: null,
+                city: null,
+                cities: [],
+                others: null,
+                name: null,
+                firmName: null,
+                selectArea: null,
+                LocationMain: "",
+                realEstateName: '',
+                mobile: null,
+                email: null,
+                password: null,
+                confirmPassword: null,
+                landline: null,
+                image: null,
+                mime: null,
+                role: 'estate_agent',
+                userName: null,
+                address: null,
+                userRoles: null, // new
+                locationDropDownOpen: false, // new
+                dropdownDataChange: false,
+                dropdownSV: "",
+                defaultSelectedRoleType: {
+                    id: 1,
+                    name: "Real Estate Consultant",
+                    role: "estate_agent",
+                }, // new
+                loader: false, // new
+                continueSignUp: true, // new
+            })
+        })
     }
 
     cancelRequest = () => {
@@ -220,7 +258,7 @@ export default class Signup extends Component {
             })
             return alert("Please enter correct password!")
         }
-        if (confirmPassword !== password) {
+        if (confirmPassword.trim() !== password.trim()) {
             console.log("c_p setting false")
             setImmediate(() => {
                 this.setState({
