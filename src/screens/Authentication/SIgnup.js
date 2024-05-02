@@ -479,17 +479,17 @@ export default class Signup extends Component {
             return alert("Password does not match!")
         }
         console.log("Check for Signup", this.state.continueSignUp)
-        // return {
-        //     check: this.state.continueSignUp,
-        //     obj: {
-        //         "name": name,
-        //         "phone": mobile,
-        //         "email": email.toLowerCase(),
-        //         "password": password.trim(),
-        //         "password_confirmation": confirmPassword.trim(),
-        //         "image": image
-        //     }
-        // }
+        return {
+            check: this.state.continueSignUp,
+            obj: {
+                "name": name,
+                "phone": mobile,
+                "email": email.toLowerCase(),
+                "password": password.trim(),
+                "password_confirmation": confirmPassword.trim(),
+                "image": image
+            }
+        }
     }
 
     getRoles = () => {
