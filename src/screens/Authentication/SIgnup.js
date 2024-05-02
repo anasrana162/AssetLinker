@@ -57,66 +57,33 @@ export default class Signup extends Component {
                 role: "estate_agent",
             }, // new
             loader: false, // new
+            // counterForLoader: 0,
+            // loaderDisable: false,
             continueSignUp: true, // new
+            success: false,
 
         };
     }
 
     componentDidMount = () => {
+
         this.getRoles()
-        setImmediate(()=>{
-            this.setState({
-                checked: 'first',
-                flagForEstateAgent: true,
-                flagForBuilders: false,
-                flagForBuyer: false,
-                country: null,
-                city: null,
-                cities: [],
-                others: null,
-                name: null,
-                firmName: null,
-                selectArea: null,
-                LocationMain: "",
-                realEstateName: '',
-                mobile: null,
-                email: null,
-                password: null,
-                confirmPassword: null,
-                landline: null,
-                image: null,
-                mime: null,
-                role: 'estate_agent',
-                userName: null,
-                address: null,
-                userRoles: null, // new
-                locationDropDownOpen: false, // new
-                dropdownDataChange: false,
-                dropdownSV: "",
-                defaultSelectedRoleType: {
-                    id: 1,
-                    name: "Real Estate Consultant",
-                    role: "estate_agent",
-                }, // new
-                loader: false, // new
-                continueSignUp: true, // new
-            })
-        })
+
     }
 
-    cancelRequest = () => {
-        const controller = new AbortController();
-        setTimeout(() => {
+    // cancelRequest = () => {
+    //     const controller = new AbortController();
+    //     setTimeout(() => {
 
-            controller.abort()
-            setImmediate(() => {
-                this.setState({
-                    loader: false,
-                })
-            })
-            // alert("Network Error PLease Try again")
-        }, 6000)
-    }
+    //         controller.abort()
+    //         setImmediate(() => {
+    //             this.setState({
+    //                 loader: false,
+    //             })
+    //         })
+    //         // alert("Network Error PLease Try again")
+    //     }, 6000)
+    // }
 
     onRegisterPress = async () => {
 
@@ -126,6 +93,15 @@ export default class Signup extends Component {
                 continueSignUp: true
             })
         })
+
+        setTimeout(() => {
+            if (this.state.success == false) {
+                setImmediate(() => {
+                    this.setState({ loader: false })
+                })
+                alert("Network Timeout check you Internet Connection")
+            }
+        }, 6000)
         if (this.state.role == null) {
             return alert("Please select a role")
         }
@@ -133,7 +109,7 @@ export default class Signup extends Component {
         console.log("Check Value", check?.name, check?.email, check.password)
 
         if (check?.check == true) {
-            this.cancelRequest()
+            // this.cancelRequest()
             console.log("OBJ before signup: ", check?.obj);
             await AssetLinkers.post('/register/user?user_type=' + this.state.role, check?.obj)
                 .then((res) => {
@@ -142,6 +118,7 @@ export default class Signup extends Component {
                         setImmediate(() => {
                             this.setState({
                                 loader: false,
+                                success: true
                             })
                         })
                         if (this.state.role == "builder") {
@@ -300,8 +277,8 @@ export default class Signup extends Component {
                 "real_estate_name": realEstateName,
                 "phone": mobile,
                 "email": email.toLowerCase(),
-                "password": password,
-                "password_confirmation": confirmPassword,
+                "password": password.trim(),
+                "password_confirmation": confirmPassword.trim(),
                 "location": LocationMain,
                 "address": address,
                 "image": image
@@ -383,7 +360,7 @@ export default class Signup extends Component {
             })
             return alert("Please enter correct password!")
         }
-        if (confirmPassword !== password) {
+        if (confirmPassword.trim() !== password.trim()) {
             console.log("c_p setting false")
             setImmediate(() => {
                 this.setState({
@@ -415,7 +392,7 @@ export default class Signup extends Component {
         }
 
 
-        console.log("Check for Signup", this.state.continueSignUp)
+        console.log("Check for Signup", LocationMain)
 
 
         return {
@@ -425,9 +402,9 @@ export default class Signup extends Component {
                 "frim_name": firmName,
                 "phone": mobile,
                 "landline_number": landline,
-                "email": email,
-                "password": password,
-                "password_confirmation": confirmPassword,
+                "email": email.toLowerCase(),
+                "password": password.trim(),
+                "password_confirmation": confirmPassword.trim(),
                 "location": LocationMain,
                 "address": address,
                 "image": image
@@ -491,7 +468,7 @@ export default class Signup extends Component {
             })
             return alert("Please enter correct password!")
         }
-        if (confirmPassword !== password) {
+        if (confirmPassword.trim() !== password.trim()) {
             console.log("c_p setting false")
             setImmediate(() => {
                 this.setState({
@@ -502,17 +479,17 @@ export default class Signup extends Component {
             return alert("Password does not match!")
         }
         console.log("Check for Signup", this.state.continueSignUp)
-        return {
-            check: this.state.continueSignUp,
-            obj: {
-                "name": name,
-                "phone": mobile,
-                "email": email,
-                "password": password,
-                "password_confirmation": confirmPassword,
-                "image": image
-            }
-        }
+        // return {
+        //     check: this.state.continueSignUp,
+        //     obj: {
+        //         "name": name,
+        //         "phone": mobile,
+        //         "email": email.toLowerCase(),
+        //         "password": password.trim(),
+        //         "password_confirmation": confirmPassword.trim(),
+        //         "image": image
+        //     }
+        // }
     }
 
     getRoles = () => {
@@ -653,7 +630,7 @@ export default class Signup extends Component {
     }
 
     setLocation = (val, key) => {
-        //  console.log("LOcatin: ",val,"     Key:  ",key)
+         console.log("LOcatin: ",val,"     Key:  ",key)
 
         switch (key) {
             case "location":
@@ -662,8 +639,17 @@ export default class Signup extends Component {
                     place: "Null",
                     valueToShow: val,
                 };
-                this.setState({ selectArea: obj })
-                console.log("location recieved", val);
+                this.setState({ selectArea: obj, })
+                // console.log("location recieved", val);
+                break;
+            case "locat_Clifton_MDA":
+                let objjjj = {
+                    location: val,
+                    place: "Null",
+                    valueToShow: val,
+                };
+                this.setState({ selectArea: objjjj, LocationMain:  JSON.stringify(objjjj) })
+                // console.log("locat_Clifton_MDA recieved", val);
                 break;
             case "loc_bahria":
                 let objj = {
@@ -832,8 +818,9 @@ export default class Signup extends Component {
                                 }
                                 this.setLocation(val, 'location')
                                 if (val == "Clifton" || val == "MDA") {
+                                    this.setLocation(val, 'locat_Clifton_MDA')
                                     this.setState({ locationDropDownOpen: false })
-                                  }
+                                }
                                 // valueAssigner(val, "location");
                                 // if (val == "Clifton" || val == "MDA") {
                                 //     this.setState({ dropdownDataChange: false, selectArea: null })

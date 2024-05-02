@@ -128,12 +128,16 @@ const RoleOptions = ({
                     />
 
                     {/* Designation */}
-                    <CustomTextInp
+                    {/* <CustomTextInp
                         value={designationValue}
                         titleEN={"Designation "}
                         onChangeText={(txt) => onChangeText(txt, "designation")}
-                    />
+                    /> */}
 
+                    <View style={{ width: width - 80 }}>
+
+                        <Text style={styles.warningText}>Please Contact AssetsLinkers if you want to add or update Designation</Text>
+                    </View>
 
                 </>
             }
@@ -154,8 +158,8 @@ const RoleOptions = ({
                         onChangeText={(txt) => onChangeText(txt, "email")}
                     />
 
-                      {/* Real Estate Name */}
-                      <CustomTextInp
+                    {/* Real Estate Name */}
+                    <CustomTextInp
                         value={realEstateNameValue}
                         titleEN={"Real Estate Name "}
                         onChangeText={(txt) => onChangeText(txt, "real_estate_name")}
@@ -178,11 +182,15 @@ const RoleOptions = ({
                     />
 
                     {/* Designation */}
-                    <CustomTextInp
+                    {/* <CustomTextInp
                         value={designationValue}
                         titleEN={"Designation "}
                         onChangeText={(txt) => onChangeText(txt, "designation")}
-                    />
+                    /> */}
+                    <View style={{ width: width - 80 }}>
+
+                        <Text style={styles.warningText}>Please Contact AssetsLinkers if you want to add or update Designation</Text>
+                    </View>
 
 
                 </>
@@ -201,4 +209,10 @@ const styles = StyleSheet.create({
         marginTop: 30,
         paddingLeft: 15,
     },
+    warningText: {
+        fontSize: 14,
+        fontWeight: "600",
+        color: "red",
+        marginLeft: 10,
+    }
 })

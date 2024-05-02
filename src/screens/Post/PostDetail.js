@@ -69,6 +69,7 @@ class PostDetail extends Component {
           name: name,
           // designation: designation
         });
+        break;
       case "update":
         this.props.navigation.navigate("PostUpdate", {
           data: data,
@@ -435,9 +436,9 @@ class PostDetail extends Component {
 
         {data?.user_id != this.state.localUserID && (
           <BottomBar
-            data={data}
+            data={this.state.postUserData}
             id={this.state.localUserID}
-            user_cellno={data?.phone}
+            user_cellno={this.state.postUserData?.phone}
           />
         )
         }

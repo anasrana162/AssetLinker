@@ -107,6 +107,7 @@ class AssociationNews extends Component {
                 posting: true,
             })
         })
+        console.log("Images Post ---", this.state.imagesToPost);
         AssetLinkers.post("add_news_post", {
             user_id: user?.id,
             post_description: this.state.postText,
@@ -288,7 +289,8 @@ class AssociationNews extends Component {
                     // console.log("Image COmpressor Results", result)
                     const uri = await RNFS.readFile(result, "base64")
                         .then((res) => {
-                            return "data:image/png/jpeg/jpg;base64," + res;
+                            // return "data:image/png/jpeg/jpg;base64," + res;
+                            return res
                         })
                         .catch((err) => {
                             console.log("Error IN BASE^$ Convertion", err);
@@ -310,7 +312,8 @@ class AssociationNews extends Component {
                 });
                 const uri = await RNFS.readFile(result, "base64")
                     .then((res) => {
-                        return "data:image/png/jpeg/jpg;base64," + res;
+                        // return "data:image/png/jpeg/jpg;base64," + res;
+                        return res
                     })
                     .catch((err) => {
                         console.log("Error IN BASE^$ Convertion", err);
@@ -426,7 +429,7 @@ class AssociationNews extends Component {
             )
         }
         const renderItem = ((item) => {
-            // console.log("Item", item?.item?.post_images.length)
+            // console.log("Item", item?.item)
             var data = item?.item
             return (
                 <View style={styles.itemContainer}>
@@ -448,17 +451,24 @@ class AssociationNews extends Component {
                         />
                         <View style={styles.userDataTextCont}>
                             <Text style={styles.userName}>{data?.name}</Text>
-                            <View style={{
-                                width: 60,
-                                height: 25,
-                                backgroundColor: Colors.blue,
-                                justifyContent: "center",
-                                alignItems: "center",
-                                borderRadius: 5,
-                                marginVertical: 3
-                            }}>
-                                <Text style={{ fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }}>{data?.designation}</Text>
-                            </View>
+
+                            {data?.designation == undefined ||
+                                data?.designation == "Null" ||
+                                data?.designation == null ||
+                                data?.designation == "" ?
+                                <></>
+                                :
+                                <View style={{
+                                    width: 60,
+                                    height: 25,
+                                    backgroundColor: Colors.blue,
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    borderRadius: 5,
+                                    marginVertical: 3
+                                }}>
+                                    <Text style={{ fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }}>{data?.designation}</Text>
+                                </View>}
                         </View>
 
                         {/* Delete Button */}
@@ -602,17 +612,23 @@ class AssociationNews extends Component {
                         />
                         <View style={styles.userDataTextCont}>
                             <Text style={styles.userName}>{user?.name}</Text>
-                            <View style={{
-                                width: 60,
-                                height: 25,
-                                backgroundColor: Colors.blue,
-                                justifyContent: "center",
-                                alignItems: "center",
-                                borderRadius: 5,
-                                marginVertical: 3
-                            }}>
-                                <Text style={{ fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }}>{user?.detail[0]?.designation}</Text>
-                            </View>
+                            {user?.detail[0]?.designation == undefined ||
+                                user?.detail[0]?.designation == "Null" ||
+                                user?.detail[0]?.designation == null ||
+                                user?.detail[0]?.designation == "" ?
+                                <></>
+                                :
+                                <View style={{
+                                    width: 60,
+                                    height: 25,
+                                    backgroundColor: Colors.blue,
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    borderRadius: 5,
+                                    marginVertical: 3
+                                }}>
+                                    <Text style={{ fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }}>{user?.detail[0]?.designation}</Text>
+                                </View>}
                         </View>
                     </View>
                     <ScrollView style={{ width: "95%" }}>
@@ -708,15 +724,15 @@ class AssociationNews extends Component {
                         </TouchableOpacity>
 
                     </ScrollView>
-                </View>
+                </View >
             )
         }
 
         return (
-            <View style={styles.mainContainer}>
+            <View style={styles.mainContainer} >
 
                 {/* Header */}
-                <ListHeaderComponent />
+                < ListHeaderComponent />
 
                 {
                     (this.state.recorded == "" &&
@@ -812,8 +828,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 30,
-        position:"absolute",
-        left:5,
+        position: "absolute",
+        left: 5,
     },
     itemContainer: {
         width: width,
