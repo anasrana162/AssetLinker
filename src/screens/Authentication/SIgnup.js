@@ -99,7 +99,7 @@ export default class Signup extends Component {
                 setImmediate(() => {
                     this.setState({ loader: false })
                 })
-                alert("Network Timeout check you Internet Connection")
+                // alert("Network Timeout check you Internet Connection")
             }
         }, 6000)
         if (this.state.role == null) {
@@ -484,9 +484,9 @@ export default class Signup extends Component {
             obj: {
                 "name": name,
                 "phone": mobile,
-                "email": email.toLowerCase(),
-                "password": password.trim(),
-                "password_confirmation": confirmPassword.trim(),
+                "email": email?.toLowerCase(),
+                "password": password?.trim(),
+                "password_confirmation": confirmPassword?.trim(),
                 "image": image
             }
         }

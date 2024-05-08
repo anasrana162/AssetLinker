@@ -50,6 +50,7 @@ const Chatlist = (props,) => {
     // const res = await AsyncStorage.getItem("@assetlinker_userData");
     const data = user;
     const userID = "" + data?.detail[0].user_id;
+    console.log("user",userID,data);
     if (userID) {
       const senderQuery = db
         .collection("users")
@@ -61,6 +62,8 @@ const Chatlist = (props,) => {
       const senderResults = await senderQuery.get();
       const receiverResults = await receiverQuery.get();
       const combinedResults = [...senderResults.docs, ...receiverResults.docs];
+      console.log("...senderResults.docs",...senderResults.docs);
+      console.log("...receiverResults.docs",...receiverResults.docs);
       setLoading(false);
       setUsers(combinedResults);
       setCurrentUser(data);
@@ -73,8 +76,8 @@ const Chatlist = (props,) => {
   }, []);
   const navHandler = (item) => {
     var { userData } = props
-    console.log(item?.data(), " :CHAT DATA");
-    console.log("currentUser DATA", currentUser?.detail[0]?.user_id)
+    // console.log(item?.data(), " :CHAT DATA");
+    // console.log("currentUser DATA", currentUser?.detail[0]?.user_id)
     props.navigation.navigate("ChatScreen", {
       fireStore: item?.data(),
       // id: currentUser?.detail[0].user_id,
@@ -113,7 +116,7 @@ const Chatlist = (props,) => {
         <ScrollView>
           {users?.length > 0 &&
             users?.map((item, index) => {
-              console.log(item, "______________IMAGE");
+              // console.log(item, "______________IMAGE");
               const { name, location, features, img, receiverID, senderID } =
                 item?.data();
               return (
@@ -239,7 +242,7 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Chatlist);
 
 export const chatDeleteHandler = async (docID) => {
-  console.log("------chatDeleteHandler------", docID);
+  // console.log("------chatDeleteHandler------", docID);
   if (docID) {
     try {
       await firestore().collection("users").doc(docID).delete();

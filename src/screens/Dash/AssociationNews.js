@@ -169,7 +169,9 @@ class AssociationNews extends Component {
                     console.log('stopped recording, audio file saved at: ', result);
                     const uri = await RNFS.readFile(result?.path, "base64")
                         .then((res) => {
-                            return "data:audio/mp3;base64," + res;
+                            console.log("sound audio",res);
+                            // return "data:audio/mp3;base64," + res;
+                            return res
                         })
                         .catch((err) => {
                             console.log("Error IN BASE^$ Convertion", err);
@@ -244,13 +246,14 @@ class AssociationNews extends Component {
             mediaType: 'photo',
 
         }).then(async image => {
-            const result = await ImageCompressor.compress(data.path, {
+            const result = await ImageCompressor.compress(image.path, {
                 quality: 0.8,
 
             });
             const uri = await RNFS.readFile(result, "base64")
                 .then((res) => {
-                    return "data:image/png/jpeg/jpg;base64," + res;
+                    // return "data:image/png/jpeg/jpg;base64," + res;
+                    return res
                 })
                 .catch((err) => {
                     console.log("Error IN BASE^$ Convertion", err);
@@ -429,7 +432,7 @@ class AssociationNews extends Component {
             )
         }
         const renderItem = ((item) => {
-            // console.log("Item", item?.item)
+            console.log("Item", item?.item)
             var data = item?.item
             return (
                 <View style={styles.itemContainer}>

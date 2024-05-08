@@ -172,7 +172,7 @@ class PostDetail extends Component {
         break;
     }
 
-    // console.log("=================>>>>", data);
+    console.log("=================>>>>", data);
 
     return (
       <View style={styles.mainContainer}>
@@ -436,7 +436,7 @@ class PostDetail extends Component {
 
         {data?.user_id != this.state.localUserID && (
           <BottomBar
-            data={this.state.postUserData}
+            data={data}
             id={this.state.localUserID}
             user_cellno={this.state.postUserData?.phone}
           />

@@ -1,7 +1,7 @@
-import { StyleSheet, View, Dimensions, Button, NativeModules, Platform } from "react-native";
+import { StyleSheet, View, Dimensions, Button, NativeModules, Platform, TouchableOpacity } from "react-native";
 import React, { useCallback, Component } from "react";
 import firestore from "@react-native-firebase/firestore";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import uuid from "react-native-uuid";
 import Colors from "../../config/Colors";
 import { GiftedChat } from "react-native-gifted-chat";
@@ -102,8 +102,8 @@ class ChatScreen extends Component {
       const msg = messages[0];
       const myMsg = {
         ...msg,
-        sendBy: senderID,
-        sendTo: receiverID,
+        sendBy: "" + senderID,
+        sendTo: "" + receiverID,
         createdAt: Date.parse(msg?.createdAt),
       };
       this.setState({
@@ -131,11 +131,11 @@ class ChatScreen extends Component {
           postID: postID,
           name: api?.name,
           email: api?.email,
-          img: api?.post_images[0],
+          img: api?.post_images[0] == undefined ? "" : api?.post_images[0],
           location: JSON.parse(api?.Location)?.valueToShow,
           features: api?.main_features == null ? "" : api?.main_features,
-          receiverID: receiverID,
-          senderID: senderID,
+          receiverID: "" + receiverID,
+          senderID: "" + senderID,
         })
         .then((res) => {
           console.log(res, "==========firebase SIGNUP SUCCESS");
@@ -166,10 +166,27 @@ class ChatScreen extends Component {
     //  const receiverID = api?.user_id == undefined ? firebase.receiverID : api?.user_id.toString() ;
     const postID = api?.id ? "" + api?.id : firebase.postID;
     console.log("checking id", user_id?.toString());
+
+
+
     return (
       <View style={styles.main}>
         {/* <Button title="Delete" color={"red"} onPress={onDelete} /> */}
         {/* {console.log("messageList", messageList2)} */}
+
+        <TouchableOpacity
+          onPress={() => this.props?.navigation?.goBack()}
+          style={{
+            width: 50,
+            height: 40,
+            position: "absolute",
+            left: 20,
+            top: 20,
+            zIndex: 100
+          }}>
+          <Ionicons name="arrow-back" size={30} color="black" />
+        </TouchableOpacity>
+
         <GiftedChat
           // key={keyChat}
           messages={messageList}
@@ -182,7 +199,7 @@ class ChatScreen extends Component {
             marginLeft: -20,
           }}
           user={{
-            _id: user_id?.toString(),
+            _id: ""+user_id,
           }}
         />
       </View>

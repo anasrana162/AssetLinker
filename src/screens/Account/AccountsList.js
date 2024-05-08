@@ -53,13 +53,13 @@ const AccountsList = (props) => {
   useEffect(() => {
     return () => clearTimeout(delay);
   }, [searchInput]);
-
+  // data.sort((a, b) => a.name.localeCompare(b.name))
   return (
     <View style={styles.mainContainer}>
       {/* {console.log(data)} */}
       <SearchBar onChangeText={(i) => setSearchInput(i)} navProps={props?.navigation} />
       <FlatList
-        data={filteredData.length == 0 ? data : filteredData}
+        data={filteredData.length == 0 ? data?.sort((a, b) => a?.name?.localeCompare(b?.name)) : filteredData?.sort((a, b) => a?.name?.localeCompare(b?.name))}
         renderItem={({ item, index }) => {
           // console.log(item, "~~~~~~ITEM~~~~~~~");
           return <CustomerContainer data={item} key={index} />;
@@ -127,18 +127,14 @@ const CustomerContainer = ({ data }) => {
             data?.name}
         </Text>
         {data?.detail[0]?.designation == undefined || data?.detail[0]?.designation == "" ? <></> :
-          <View style={{
-            width: 50,
-            height: 20,
-            borderRadius: 10,
-            justifyContent: "center",
-            alignItems: 'center',
-            backgroundColor: Colors.blue,
-          }}>
-            <Text style={styles.designation}>
-              {data?.detail[0]?.designation}
-            </Text>
-          </View>}
+          <>
+            <View style={styles.tagContainer}>
+              <Text numberOfLines={1} style={styles.designation}>
+                {data?.detail[0]?.designation}
+              </Text>
+            </View>
+          </>
+        }
         <View style={styles.tagContainer}>
           <Text style={styles.tagLabel}>
             {user_type}
@@ -214,11 +210,12 @@ const styles = StyleSheet.create({
   },
   img: { width: 60, height: 60, borderRadius: 10 },
   name: { color: "black", fontWeight: "600", fontSize: 16 },
-  designation: { color: "white", fontWeight: "600", fontSize: 14, letterSpacing: 1 },
+  designation: { color: "white", fontWeight: "700", fontSize: 12, textAlign: "center", paddingVertical: 3, letterSpacing: 1 },
   tagContainer: {
     backgroundColor: Colors.blue,
     borderRadius: 20,
     width: 110,
+    paddingHorizontal: 10,
   },
   tagLabel: {
     color: "#fff",
@@ -232,7 +229,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
   },
-  box2: { width: "48%", rowGap: 3 },
+  box2: { width: "48%", rowGap: 3, },
   box3: { width: "30%", rowGap: 15, paddingLeft: 15 },
   viewBTN: {
     flexDirection: "row",
