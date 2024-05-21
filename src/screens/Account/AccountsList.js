@@ -34,6 +34,7 @@ const AccountsList = (props) => {
 
     const filteredUser = data.filter((user) => {
       const matchesName = user?.name?.toLowerCase().includes(normalizedInput);
+      const matchesMSID = user?.ms_id?.toLowerCase().includes(normalizedInput);
 
       const matchesDetail = user?.detail.some((detail) => {
         return (
@@ -42,7 +43,7 @@ const AccountsList = (props) => {
         );
       });
 
-      return matchesName || matchesDetail;
+      return matchesName || matchesDetail || matchesMSID;
     });
 
     if (filteredUser.length > 0) {

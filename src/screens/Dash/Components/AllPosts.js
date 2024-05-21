@@ -30,13 +30,14 @@ const AllPosts = ({
   data,
   userID,
   openDeletePostModal,
+  openReportModal,
   navProps,
   onFavPress,
   refreshKey,
 }) => {
   // STATES
 
-// console.log(data == null ? "": data[0]);
+  // console.log(data == null ? "": data[0]);
 
   const [showOption, setShowOption] = React.useState(false);
   const [itemId, setItemId] = React.useState("");
@@ -86,18 +87,18 @@ const AllPosts = ({
 
                 style={styles.itemContainer}
               >
-                {userID == item?.item?.user_id && (
-                  <TouchableOpacity
-                    onPressIn={() => onOptionPress(item?.item?.id)}
-                    style={styles.optionBtn}>
-                    <Entypo
-                      name="dots-three-horizontal"
-                      size={25}
-                      color="white"
-                    />
-                  </TouchableOpacity>
-                )}
 
+                <TouchableOpacity
+                  onPressIn={() => onOptionPress(item?.item?.id)}
+                  style={styles.optionBtn}>
+                  <Entypo
+                    name="dots-three-horizontal"
+                    size={25}
+                    color="white"
+                  />
+                </TouchableOpacity>
+
+                {/* black background */}
                 {itemId == item?.item?.id && showOption == true && (
                   <TouchableOpacity
                     onPress={() => setShowOption(false)}
@@ -105,34 +106,45 @@ const AllPosts = ({
                     style={styles.fade}></TouchableOpacity>
                 )}
 
-                {itemId == item?.item?.id && showOption == true && (
-                  <View style={styles.optionMenu_cont}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        // console.log("ALL POST >>>>", docID);
-                        setShowOption(false);
-                        openDeletePostModal(postID, docID);
-                      }}
-                      activeOpacity={0.5}
-                      style={styles.menu_item_btn}>
-                      <Text style={styles.delete_text}>Delete</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
+
+                {itemId == item?.item?.id && showOption == true && <View style={styles.optionMenu_cont}>
+                 {userID == item?.item?.user_id && <TouchableOpacity
+                    onPress={() => {
+                      // console.log("ALL POST >>>>", docID);
+                      setShowOption(false);
+                      openDeletePostModal(postID, docID);
+                    }}
+                    activeOpacity={0.5}
+                    style={styles.menu_item_btn}>
+                    <Text style={styles.delete_text}>Delete</Text>
+                  </TouchableOpacity>}
+                  {userID !== item?.item?.user_id && <TouchableOpacity
+                    onPress={() => {
+                      console.log("ALL POST >>>>", docID);
+                      setShowOption(false);
+                      openReportModal(item?.item)
+                    }}
+                    activeOpacity={0.5}
+                    style={styles.menu_item_btn}>
+                    <Text style={styles.delete_text}>Report</Text>
+                  </TouchableOpacity>}
+                </View>}
+
 
                 {/* Image */}
 
                 {item?.item.post_images[0] === "" ? (
                   <TouchableOpacity
-                  style={styles.itemImage}
+                    style={styles.itemImage}
                     activeOpacity={0.7}
                     disabled={showOption}
                     onPress={() => {
-                      console.log(item);
+                      // console.log(item,index);
                       navProps.navigate("PostDetail", {
                         data: item?.item,
                         location: Location?.location,
                         subLocation: Location?.place,
+                        index: item?.index,
                       })
                     }}
                   >
@@ -145,17 +157,18 @@ const AllPosts = ({
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
-                  style={styles.itemImage}
-                  activeOpacity={0.7}
-                  disabled={showOption}
-                  onPress={() => {
-                    console.log(item);
-                    navProps.navigate("PostDetail", {
-                      data: item?.item,
-                      location: Location?.location,
-                      subLocation: Location?.place,
-                    })
-                  }}
+                    style={styles.itemImage}
+                    activeOpacity={0.7}
+                    disabled={showOption}
+                    onPress={() => {
+                      console.log(item);
+                      navProps.navigate("PostDetail", {
+                        data: item?.item,
+                        location: Location?.location,
+                        subLocation: Location?.place,
+                        index: item?.index,
+                      })
+                    }}
                   >
 
                     <Image
@@ -324,6 +337,7 @@ const styles = StyleSheet.create({
     zIndex: 150,
     justifyContent: "center",
     alignItems: "center",
+    paddingVertical: 10,
   },
   fade: {
     width: "100%",
@@ -341,9 +355,10 @@ const styles = StyleSheet.create({
   menu_item_btn: {
     width: "95%",
     height: 30,
-    marginVertical: 5,
+    marginTop: 5,
     justifyContent: "center",
     alignItems: "center",
+    // borderWidth:1,
   },
   delete_text: {
     fontWeight: "600",

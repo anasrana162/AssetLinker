@@ -193,6 +193,10 @@ class MyProfile extends Component {
       case "confirm_delete":
         this.deleteAccount()
         break;
+      case "blocked_users":
+        this.setState({openDotModal: false})
+        this.props.navigation.navigate("BlockedUsers");
+        break;
     }
   };
 
@@ -291,6 +295,11 @@ class MyProfile extends Component {
               onPress={() => this.onPress("delete_account")}
               style={styles.dotMenuBtn}>
               <Text style={[styles.headerTitle, { fontSize: 16 }]}>Delete Account</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.onPress("blocked_users")}
+              style={styles.dotMenuBtn}>
+              <Text style={[styles.headerTitle, { fontSize: 16 }]}>Blocked Users</Text>
             </TouchableOpacity>
           </View>}
 

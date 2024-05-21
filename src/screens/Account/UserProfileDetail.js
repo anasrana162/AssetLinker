@@ -30,7 +30,9 @@ const UserProfileDetail = (props) => {
   useEffect(() => {
     const getProfile = async () => {
       try {
-        const res = await AssetLinkers.get(`/allUser/${id}`);
+        const res = await AssetLinkers.post('/single_user', {
+          user_id: id
+        });
         console.log("res?.data?.response", res?.data?.response);
         setProfile(res?.data?.response[0]);
       } catch (error) {

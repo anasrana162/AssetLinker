@@ -11,7 +11,7 @@ import React, { Component } from "react";
 import Colors from "../../config/Colors";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import AssetLinkers , { ImagePath }  from "../../api/AssetLinkers";
+import AssetLinkers, { ImagePath } from "../../api/AssetLinkers";
 import LoadingModal from "../../components/LoadingModal";
 import moment from "moment";
 
@@ -42,7 +42,9 @@ class Account extends Component {
   async allUser() {
     var { buyerSeller, consultant, builder } = this.state
     try {
-      const res = await AssetLinkers.get("/allUser");
+      const res = await AssetLinkers.post("/allUser/details", {
+        "current_user_id": this.props?.userData?.user?.detail[0]?.user_id
+      });
       const data = res?.data?.response;
       this.setState({ all: data });
       data.map((item, index) => {
@@ -86,12 +88,39 @@ class Account extends Component {
 
   componentDidMount() {
     this.allUser();
+    this.checkCallBacks()
   }
+
+  checkCallBacks = () => {
+    this.props.navigation.addListener("focus", async () => {
+      // console.log("checkcallbacks", this.props?.route?.params);
+      if (this.props?.route?.params == undefined) {
+        console.log("No callabacks");
+      } else {
+        var { refresh } = this.props?.route?.params;
+        // console.log("refresh", refresh)
+        if (refresh == "refresh") {
+          console.log("Callbacks initiated");
+          this.props.navigation.setParams({ refresh: null });
+          this.setState({
+            buyerSeller: [],
+            builder: [],
+            consultant: [],
+            all: [],
+          })
+          this.allUser();
+        }
+
+        //this.ScrollToRefresh();
+      }
+      //  console.log("Refreshing");
+    });
+  };
 
   render() {
 
     // var { user_id, name, image, created_at, designation } = this.props?.route?.params;
-    console.log("userData",this.props)
+    console.log("userData", this.props?.userData?.user?.detail[0]?.user_id)
 
     var { userData: { user: { name, image, created_at, detail } } } = this.props
     const memberSince = moment(created_at).format("YYYY/MM/DD");
@@ -174,7 +203,7 @@ class Account extends Component {
             </View>
           </View>
 
-          
+
 
           {accountCategory.map((catName, index) => (
             <LongButton label={catName} key={index} />
@@ -184,7 +213,7 @@ class Account extends Component {
     );
   }
 }
-  /* {---------------redux State ------------} */
+/* {---------------redux State ------------} */
 
 const mapStateToProps = (state) => ({
   userData: state.userData,

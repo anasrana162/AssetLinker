@@ -84,7 +84,7 @@ class PostDetail extends Component {
     } = this.props;
     const res = user
     // const data = JSON.parse(res);
-    console.log(res,"data in getLocal User");
+    // console.log(res,"data in getLocal User");
     this.setState({ localUserID: res?.detail[0].user_id, });
   };
 
@@ -98,8 +98,10 @@ class PostDetail extends Component {
   getPostUserDetail = () => {
     var { data, location, subLocation } = this.props?.route?.params;
 
-    AssetLinkers.get("allUser/" + data?.user_id).then((res) => {
-      console.log("specifix user detail API Post detail screen Res:", res?.data)
+    AssetLinkers.post('/single_user', {
+      user_id: data?.user_id
+    }).then((res) => {
+      // console.log("specifix user detail API Post detail screen Res:", res?.data)
       setImmediate(() => {
         this.setState({
           postUserData: res?.data?.response[0]
@@ -131,18 +133,24 @@ class PostDetail extends Component {
 
   AddView = () => {
     var {
-      data: { id, user_id },
+      data: { id, user_id }, index
     } = this.props?.route?.params;
-    var {
-      userData: { user },
-    } = this.props;
 
+    var {
+      userData: { user, homeposts }, actions
+    } = this.props;
+    console.log("this.props?.route?.params;", this.props?.route?.params);
     if (user_id !== user?.id) {
       AssetLinkers.post("postViews", {
         post_id: id,
       })
         .then((res) => {
-          console.log("View Added");
+          // console.log("View Added", homeposts[index]);
+
+          homeposts[index].views = homeposts[index]?.views + 1
+
+          actions.homePosts(homeposts)
+
         })
         .catch((err) => {
           console.log("Add Views Api Error", err?.response);
@@ -158,7 +166,7 @@ class PostDetail extends Component {
 
   render() {
     var { data, location, subLocation } = this.props?.route?.params;
-// console.log(data,"jkabdhjbjshdc");
+    // console.log(data,"jkabdhjbjshdc");
     var user_type = "";
     switch (data?.user_type) {
       case "buyer_seller":
@@ -172,7 +180,7 @@ class PostDetail extends Component {
         break;
     }
 
-    console.log("=================>>>>", data);
+    // console.log("=================>>>>", data);
 
     return (
       <View style={styles.mainContainer}>
@@ -189,7 +197,7 @@ class PostDetail extends Component {
 
             {/* Share Button */}
             <TouchableOpacity
-              style={[styles.headerBtn, { marginRight:  15 }]}
+              style={[styles.headerBtn, { marginRight: 15 }]}
               onPress={() => this.onPress("share")}>
               <Ionicons name="share-social" size={30} color="white" />
             </TouchableOpacity>

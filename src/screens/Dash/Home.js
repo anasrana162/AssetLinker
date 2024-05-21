@@ -12,6 +12,7 @@ import {
   StyleSheet,
   NativeModules,
   Modal,
+  Platform,
 } from "react-native";
 import React, { Component } from "react";
 import Header from "./Components/Header";
@@ -43,6 +44,8 @@ import FilterModal from "./Components/FilterModal";
 import { chatDeleteHandler } from "../Chat/Chatlist";
 import { deleteMessagesHandler } from "../Chat/ChatScreen";
 import Back_handler from "../../components/BackHandler";
+import Entypo from 'react-native-vector-icons/Entypo'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 class Dash extends Component {
   constructor(props) {
@@ -61,6 +64,8 @@ class Dash extends Component {
         },
       ],
       openDeletePostModal: false,
+      openReportPostModal: false,
+      reportPostData: null,
       postID: "",
       docID: "",
       Posts: null,
@@ -70,17 +75,18 @@ class Dash extends Component {
       searched: "",
       loader: false,
       key: 0,
+      searchText: "",
     };
   }
 
   checkCallBacks = () => {
     this.props.navigation.addListener("focus", async () => {
-      console.log("checkcallbacks", this.props?.route?.params);
+      // console.log("checkcallbacks", this.props?.route?.params);
       if (this.props?.route?.params == undefined) {
         console.log("No callabacks");
       } else {
         var { refresh } = this.props?.route?.params;
-        console.log("refresh", refresh)
+        // console.log("refresh", refresh)
         if (refresh == "refresh") {
           console.log("Callbacks initiated");
           this.props.navigation.setParams({ refresh: null });
@@ -106,7 +112,7 @@ class Dash extends Component {
   };
 
   openDeletePostModal = (postID, docID) => {
-    console.log("POST TO DELETE:", docID);
+    // console.log("POST TO DELETE:", docID);
     setImmediate(() => {
       this.setState({
         openDeletePostModal: true,
@@ -115,6 +121,41 @@ class Dash extends Component {
       });
     });
   };
+  openReportModal = (item) => {
+    console.log("POST TO Report:", item);
+    setImmediate(() => {
+      this.setState({
+        openReportPostModal: true,
+        reportPostData: item,
+
+      });
+    });
+  };
+
+  reportAd = (complaintName) => {
+
+    var { reportPostData } = this.state
+    var { userData: { user } } = this.props
+
+    AssetLinkers.post("/block/post", {
+      "user_id": user?.id,
+      "post_id": reportPostData?.id,
+      "user_post_id": reportPostData?.user_id,
+      "comment": complaintName
+    }).then((res) => {
+      // console.log("res block Post", res?.data);
+      setImmediate(() => {
+        this.setState({
+          openReportPostModal: false,
+          reportPostData: null
+        })
+      })
+      alert("Post Reported Successfully")
+    }).catch((err) => {
+      console.log("Err block post", err);
+    })
+
+  }
 
   deletePost = () => {
     var {
@@ -140,7 +181,7 @@ class Dash extends Component {
           });
           chatDeleteHandler(this.state.docID);
           deleteMessagesHandler(this.state.docID, this.state.postID);
-          console.log("Delete Post API Response", res?.data);
+          // console.log("Delete Post API Response", res?.data);
         }
       })
       .catch((err) => {
@@ -158,8 +199,10 @@ class Dash extends Component {
   getPosts = () => {
     var { userData: { user: { id }, homeposts, }, actions } = this.props;
     this.setState({ loader: true })
-    AssetLinkers.get(
-      "get_propertyV2?id=" + id
+    AssetLinkers.post(
+      "get_propertyV3", {
+      id: id
+    }
     )
       .then((res) => {
         // console.log("Get Post api Data:  ", res?.data?.property) 
@@ -195,7 +238,7 @@ class Dash extends Component {
         )
           .then((res) => {
             if (res?.data) {
-              console.log("Add to favourite api Response:  ", res?.data);
+              // console.log("Add to favourite api Response:  ", res?.data);
               Toast.show({
                 type: "success",
                 text1: "Added to Favourites!",
@@ -205,7 +248,7 @@ class Dash extends Component {
             }
           })
           .catch((err) => {
-            console.log("Add to favourite api  Error:  ", err?.response);
+            console.log("Add to favourite api  Error:  ", err);
           });
         break;
 
@@ -219,7 +262,7 @@ class Dash extends Component {
         )
           .then((res) => {
             if (res?.data) {
-              console.log("Remove from favourite api Response:  ", res?.data);
+              // console.log("Remove from favourite api Response:  ", res?.data);
               Toast.show({
                 type: "success",
                 text1: "Removed From Favourites!",
@@ -258,7 +301,7 @@ class Dash extends Component {
       case "search bar":
         setImmediate(() => {
           this.setState({
-            Posts:homeposts,
+            Posts: homeposts,
             openSearchBar: !this.state.openSearchBar,
           });
         });
@@ -276,9 +319,8 @@ class Dash extends Component {
 
   onSearch = (txt) => {
     var { Posts } = this.state;
-//     var { userData: { homeposts } } = this.props;
-// console.log("Posts in serach",Posts);
-// this.setState({Posts:})
+    //     var { userData: { homeposts } } = this.props;
+    console.log("Posts in serach", Posts);
     const filterData = Posts?.filter((data) => {
 
       var locationParser = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
@@ -287,6 +329,9 @@ class Dash extends Component {
         .toLowerCase()
         .includes(txt.toLowerCase());
       const matches_category = data?.category == undefined ? "" : data?.category
+        .toLowerCase()
+        .includes(txt.toLowerCase());
+      const matches_address = data?.address == undefined ? "" : data?.address
         .toLowerCase()
         .includes(txt.toLowerCase());
       const matches_rent_sale = data?.rent_sale == undefined ? "" : data?.rent_sale
@@ -298,15 +343,16 @@ class Dash extends Component {
       const matches_price = data?.price == undefined ? "" : data?.price
         .toLowerCase()
         .includes(txt?.toLowerCase());
-      // const matches_location = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
+      const matches_location = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
+        .location.toLowerCase()
+        .includes(txt?.toLowerCase());
+      console.log("data", data);
+      // const matches_location_place = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)?.place
       //   .location.toLowerCase()
       //   .includes(txt?.toLowerCase());
-      // // const matches_location_place = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)?.place
-      // //   .location.toLowerCase()
-      // //   .includes(txt?.toLowerCase());
-      // const matches_place = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
-      //   .place.toLowerCase()
-      //   .includes(txt?.toLowerCase());
+      const matches_place = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
+        .place.toLowerCase()
+        .includes(txt?.toLowerCase());
       const matches_place_location = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
         .location.toLowerCase()
         .includes(txt?.toLowerCase()) + JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
@@ -320,8 +366,9 @@ class Dash extends Component {
         matches_rent_sale ||
         // matches_open ||
         matches_price ||
-        // matches_location ||
-        // matches_place ||
+        matches_location ||
+        matches_place ||
+        matches_address ||
         matches_place_location
         // ||
         // matches_location_place
@@ -342,7 +389,26 @@ class Dash extends Component {
   render() {
     var { userData: { homeposts } } = this.props;
     // console.log("Props:  ",homeposts)
-
+    const reportTypes = [
+      {
+        name: "Misleading or scam"
+      },
+      {
+        name: "Offensive"
+      },
+      {
+        name: "Violence"
+      },
+      {
+        name: "Advertiser's pretending to be someone else"
+      },
+      {
+        name: "Spam"
+      },
+      {
+        name: "False news"
+      },
+    ]
     return (
       <View style={styles.mainContainer}>
         {/* Header */}
@@ -355,8 +421,9 @@ class Dash extends Component {
         {this.state.openSearchBar && (
           <SearchBar
             onCancelSearch={() => this.onSearchOpen("search bar")}
-            onChangeText={(txt) => this.onSearch(txt)}
+            onChangeText={(txt) => this.setState({ searchText: txt })}
             onFilterPress={() => this.onSearchOpen("filter")}
+            applySearch={() => this.onSearch(this.state.searchText)}
           />
         )}
 
@@ -407,6 +474,7 @@ class Dash extends Component {
               openDeletePostModal={(postID, docID) =>
                 this.openDeletePostModal(postID, docID)
               }
+              openReportModal={(item) => this.openReportModal(item)}
               onFavPress={(postID, is_favourite, index) =>
                 this.addToFavourite(postID, is_favourite, index)
               }
@@ -445,6 +513,44 @@ class Dash extends Component {
           </View>
         </Modal>
 
+        {/* Report Post Modal */}
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.openReportPostModal} //
+        >
+          <View style={styles.reportModalCont}>
+            <View style={[styles.flex_direc, { width: "100%", borderBottomWidth: 1 }]}>
+              <Text style={styles.reportModalTitle}>Report this Ad</Text>
+              <TouchableOpacity
+                onPress={() => this.setState({ openReportPostModal: false, reportPostData: null })}
+                style={{ padding: 5 }}>
+
+                <Entypo name="cross" size={28} color={Colors.black} />
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              data={reportTypes}
+              contentContainerStyle={{
+                marginTop: 20
+              }}
+              renderItem={({ item, index }) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => this.reportAd(item?.name)}
+                    style={styles.reportItemCont}>
+                    <Text style={styles.reportItemText}>{item?.name}</Text>
+                    <Entypo name="chevron-right" size={28} color={"black"} />
+                  </TouchableOpacity>
+                )
+              }}
+            />
+          </View>
+
+
+        </Modal>
+
         {/* Tab Navigator */}
         <TabNavigator navProps={this.props.navigation} screenName={"Dash"} />
       </View>
@@ -477,6 +583,42 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "white",
+  },
+  reportModalCont: {
+    width: width,
+    height: height / 2,
+    position: "absolute",
+    backgroundColor: "white",
+    bottom: 0,
+    zIndex: 200,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    padding: 20,
+  },
+  reportModalTitle: {
+    fontWeight: "600",
+    color: Colors.black,
+    fontSize: 16,
+    // width: "80%",
+    alignSelf: "center",
+    textAlign: "left",
+  },
+  reportItemCont: {
+    width: width - 40,
+    alignSelf: "center",
+    height: 40,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    marginTop: 5
+  },
+  reportItemText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: Colors.black
   },
   deletePostModal: {
     width: width,

@@ -80,7 +80,7 @@ const FilterModal = ({ visible, onFilterPress, onSearch }) => {
                         styleTitle={{ marginLeft: 20 }}
                     />
 
-                    <CustomTextInp
+                    {/* <CustomTextInp
                         titleEN={"Search By Plot Type"}
                         placeholder={"Plot Type"}
                         onChangeText={(val) => {
@@ -90,7 +90,7 @@ const FilterModal = ({ visible, onFilterPress, onSearch }) => {
                         }
                         onEndEditing={onFilterPress}
                         style={{ marginLeft: 10, }}
-                    />
+                    /> */}
                     <CustomTextInp
                         titleEN={"Search By Price"}
                         placeholder={"Maximum Price"}
