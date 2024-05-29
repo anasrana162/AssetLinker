@@ -15,12 +15,18 @@ import { useNavigation } from "@react-navigation/native";
 
 const width = Dimensions.get("screen").width;
 
-const BottomBar = ({ data, id, user_cellno }) => {
+const BottomBar = ({ data, id, user_cellno,disableChat }) => {
   const navigation = useNavigation(0);
   const onPress = (key) => {
     switch (key) {
       case "chat":
-        navigation.navigate("ChatScreen", { data, id });
+        if (disableChat == false){
+
+          navigation.navigate("ChatScreen", { data, id });
+        }else{
+          navigation.navigate("Login");
+          
+        }
         break;
 
       case "whatsapp":

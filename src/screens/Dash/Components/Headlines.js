@@ -20,14 +20,13 @@ const Headlines = () => {
                     )
                 }>
                 <TextTicker
-                    style={{ fontSize: 15, color: 'black',alignSelf:"flex-start",width:width-50 }}
+                    style={{ fontSize: 15, color: 'black', alignSelf: "flex-start", width: width - 50 }}
                     duration={13000}
                     loop
-                    repeatSpacer={50}
+                    repeatSpacer={70}
                     marqueeDelay={4000}
                     scrollSpeed={5000}>
-                    We are recognized for exceeding client expectations and
-                    delivering great results through dedication, ease of process, and extraordinary services to our worldwide clients.
+                                       Welcome to Assets Linkers                 Phone:+923333603115               Address: Plot No 29-C, Mez Floor #3, 21st Commerical Street PH II Ext, DHA, Karachi.
                 </TextTicker>
             </TouchableOpacity>
         </View>

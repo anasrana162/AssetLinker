@@ -55,6 +55,12 @@ class Dash extends Component {
       position: 0,
       menuDropDown: false,
       sliderImages: [
+        {
+          url: require("../../../assets/property_images/banner1.jpg"),
+        },
+        {
+          url: require("../../../assets/property_images/banner2.jpg"),
+        },
         { url: require("../../../assets/property_images/B1.jpg") },
         {
           url: require("../../../assets/property_images/B3.jpg"),
@@ -105,14 +111,18 @@ class Dash extends Component {
     AsyncStorage.removeItem("@assetlinker_usertoken");
     AsyncStorage.removeItem("@assetlinker_userCreds");
     actions?.userToken("");
-    actions?.user("");
     setTimeout(() => {
-      this.props?.navigation.navigate("GetStarted");
+      actions?.user("");
+      this.getPosts()
+      // this.props?.navigation.navigate("GetStarted");
     }, 1000);
   };
 
   openDeletePostModal = (postID, docID) => {
     // console.log("POST TO DELETE:", docID);
+    if (Object.keys(this.props.userData?.user).length == 0) {
+      return this.props.navigation.navigate("Login")
+    }
     setImmediate(() => {
       this.setState({
         openDeletePostModal: true,
@@ -122,6 +132,9 @@ class Dash extends Component {
     });
   };
   openReportModal = (item) => {
+    if (Object.keys(this.props.userData?.user).length == 0) {
+      return this.props.navigation.navigate("Login")
+    }
     console.log("POST TO Report:", item);
     setImmediate(() => {
       this.setState({
@@ -199,83 +212,114 @@ class Dash extends Component {
   getPosts = () => {
     var { userData: { user: { id }, homeposts, }, actions } = this.props;
     this.setState({ loader: true })
-    AssetLinkers.post(
-      "get_propertyV3", {
-      id: id
+    console.log("user", id);
+    if (id == undefined) {
+      AssetLinkers.get(
+        "get_propertyV2"
+      )
+        .then((res) => {
+          // console.log("Get Post api Data:  ", res?.data?.property) 
+          if (res?.data) {
+            actions.homePosts((res?.data?.property).reverse())
+            setImmediate(() => {
+              this.setState({
+                Posts: homeposts,
+                FilteredPosts: homeposts,
+                loader: false,
+                key: this.state.key + 1
+              });
+            })
+          }
+        })
+        .catch((err) => {
+          this.setState({ loader: false })
+          console.log("Get Post api Error:  ", err?.response);
+        });
+    } else {
+      AssetLinkers.post(
+        "get_propertyV3", {
+        id: id
+      }
+      )
+        .then((res) => {
+          // console.log("Get Post api Data:  ", res?.data?.property) 
+          if (res?.data) {
+            actions.homePosts((res?.data?.property).reverse())
+            setImmediate(() => {
+              this.setState({
+                Posts: homeposts,
+                FilteredPosts: homeposts,
+                loader: false,
+                key: this.state.key + 1
+              });
+            })
+          }
+        })
+        .catch((err) => {
+          this.setState({ loader: false })
+          console.log("Get Post api Error:  ", err?.response);
+        });
     }
-    )
-      .then((res) => {
-        // console.log("Get Post api Data:  ", res?.data?.property) 
-        if (res?.data) {
-          actions.homePosts((res?.data?.property).reverse())
-          setImmediate(() => {
-            this.setState({
-              Posts: homeposts,
-              FilteredPosts: homeposts,
-              loader: false,
-              key: this.state.key + 1
-            });
-          })
-        }
-      })
-      .catch((err) => {
-        this.setState({ loader: false })
-        console.log("Get Post api Error:  ", err?.response);
-      });
+
   };
 
   addToFavourite = (postID, is_favourite, indexPost) => {
     var { userData: { user } } = this.props;
-    // console.log("user", user?.id);
-    switch (is_favourite) {
-      case 0:
-        AssetLinkers.post(
-          "save/favourite_post",
-          {
-            user_id: user?.id,
-            post_id: postID,
-          }
-        )
-          .then((res) => {
-            if (res?.data) {
-              // console.log("Add to favourite api Response:  ", res?.data);
-              Toast.show({
-                type: "success",
-                text1: "Added to Favourites!",
-                visibilityTime: 2000,
-              });
-              this.getPosts();
+    console.log("user", user);
+    if (Object.keys(user).length == 0) {
+      this.props.navigation.navigate("Login")
+    } else {
+      switch (is_favourite) {
+        case 0:
+          AssetLinkers.post(
+            "save/favourite_post",
+            {
+              user_id: user?.id,
+              post_id: postID,
             }
-          })
-          .catch((err) => {
-            console.log("Add to favourite api  Error:  ", err);
-          });
-        break;
+          )
+            .then((res) => {
+              if (res?.data) {
+                // console.log("Add to favourite api Response:  ", res?.data);
+                Toast.show({
+                  type: "success",
+                  text1: "Added to Favourites!",
+                  visibilityTime: 2000,
+                });
+                this.getPosts();
+              }
+            })
+            .catch((err) => {
+              console.log("Add to favourite api  Error:  ", err);
+            });
+          break;
 
-      case 1:
-        AssetLinkers.post(
-          "remove/favourite_post",
-          {
-            user_id: user?.id,
-            post_id: postID,
-          }
-        )
-          .then((res) => {
-            if (res?.data) {
-              // console.log("Remove from favourite api Response:  ", res?.data);
-              Toast.show({
-                type: "success",
-                text1: "Removed From Favourites!",
-                visibilityTime: 2000,
-              });
-              this.getPosts();
+        case 1:
+          AssetLinkers.post(
+            "remove/favourite_post",
+            {
+              user_id: user?.id,
+              post_id: postID,
             }
-          })
-          .catch((err) => {
-            console.log("Remove from favourite api  Error:  ", err?.response);
-          });
-        break;
+          )
+            .then((res) => {
+              if (res?.data) {
+                // console.log("Remove from favourite api Response:  ", res?.data);
+                Toast.show({
+                  type: "success",
+                  text1: "Removed From Favourites!",
+                  visibilityTime: 2000,
+                });
+                this.getPosts();
+              }
+            })
+            .catch((err) => {
+              console.log("Remove from favourite api  Error:  ", err?.response);
+            });
+          break;
+      }
     }
+
   };
 
   runSlideShow = () => {
@@ -439,6 +483,7 @@ class Dash extends Component {
         <MenuBar
           navProps={this.props.navigation}
           logout={() => this.logout()}
+          disable={Object.keys(this.props.userData?.user).length == 0 ? true : false}
         />
 
         {/* Headlines */}
@@ -552,7 +597,7 @@ class Dash extends Component {
         </Modal>
 
         {/* Tab Navigator */}
-        <TabNavigator navProps={this.props.navigation} screenName={"Dash"} />
+        <TabNavigator navProps={this.props.navigation} screenName={"Dash"} isLoggedIn={Object.keys(this.props.userData?.user).length == 0 ? true : false} />
       </View>
     );
   }

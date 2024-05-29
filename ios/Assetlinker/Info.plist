@@ -38,9 +38,8 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string> - AssetsLinkers is saving your Basic Profile Information UTF-
-	Important : Please be assure that AssetsLinkers does not collect
-    or share your personal or sensitive data
+	<string> - This will allow you to take pictures from
+	 your camera app then upload it.
 	</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string> - AssetsLinkers is saving your Basic Profile Information UTF-
@@ -48,14 +47,12 @@
     or share your personal or sensitive data
 	</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string> - AssetsLinkers is saving your Basic Profile Information UTF-
-	Important : Please be assure that AssetsLinkers does not collect
-    or share your personal or sensitive data
+	<string> - This will allow you to record your voice
+	through your phone's microphone.
 	</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string> - AssetsLinkers is saving your Basic Profile Information UTF-
-	Important : Please be assure that AssetsLinkers does not collect
-    or share your personal or sensitive data
+	<string> - This will allow you to take pictures from
+	your media gallery then upload it.
 	</string>
 	<key>UIAppFonts</key>
 	<array>

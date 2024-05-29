@@ -97,18 +97,18 @@ class PostDetail extends Component {
 
   getPostUserDetail = () => {
     var { data, location, subLocation } = this.props?.route?.params;
-
+    console.log("data?.user_id", data?.user_id);
     AssetLinkers.post('/single_user', {
       user_id: data?.user_id
     }).then((res) => {
-      // console.log("specifix user detail API Post detail screen Res:", res?.data)
+      console.log("specifix user detail API Post detail screen Res:", res?.data)
       setImmediate(() => {
         this.setState({
           postUserData: res?.data?.response[0]
         })
       })
     }).catch(err => {
-      console.log("specifix user detail API Post detail screen err", err)
+      console.log("specifix user detail API Post detail screen err", err.response?.data)
     })
   }
 
@@ -140,23 +140,28 @@ class PostDetail extends Component {
       userData: { user, homeposts }, actions
     } = this.props;
     console.log("this.props?.route?.params;", this.props?.route?.params);
-    if (user_id !== user?.id) {
-      AssetLinkers.post("postViews", {
-        post_id: id,
-      })
-        .then((res) => {
-          // console.log("View Added", homeposts[index]);
+    if (Object.keys(user).length == 0) {
 
-          homeposts[index].views = homeposts[index]?.views + 1
-
-          actions.homePosts(homeposts)
-
-        })
-        .catch((err) => {
-          console.log("Add Views Api Error", err?.response);
-        });
     } else {
-      console.log("The user is the post creator no view added");
+
+      if (user_id !== user?.id) {
+        AssetLinkers.post("postViews", {
+          post_id: id,
+        })
+          .then((res) => {
+            // console.log("View Added", homeposts[index]);
+
+            homeposts[index].views = homeposts[index]?.views + 1
+
+            actions.homePosts(homeposts)
+
+          })
+          .catch((err) => {
+            console.log("Add Views Api Error", err?.response);
+          });
+      } else {
+        console.log("The user is the post creator no view added");
+      }
     }
   };
 
@@ -447,6 +452,7 @@ class PostDetail extends Component {
             data={data}
             id={this.state.localUserID}
             user_cellno={this.state.postUserData?.phone}
+            disableChat={Object.keys(this.props.userData?.user).length == 0 ? true : false}
           />
         )
         }

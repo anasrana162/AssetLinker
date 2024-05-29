@@ -77,6 +77,9 @@ class AccountDetail extends Component {
   };
 
   addToFavourite = (user_id, postID, is_favourite) => {
+    if (Object.keys(this.props.userData?.user).length == 0) {
+      return this.props.navigation.navigate("Login")
+    }
     switch (is_favourite) {
       case 0:
         AssetLinkers.post(
@@ -162,7 +165,10 @@ class AccountDetail extends Component {
   };
 
   openDeletePostModal = (postID) => {
-    console.log("POST TO DELETE:", postID);
+    if (Object.keys(this.props.userData?.user).length == 0) {
+      return this.props.navigation.navigate("Login")
+    }
+    // console.log("POST TO DELETE:", postID);
     setImmediate(() => {
       this.setState({
         openDeletePostModal: true,
@@ -206,6 +212,9 @@ class AccountDetail extends Component {
     this.getUserPosts();
   };
   openReportModal = (item) => {
+    if (Object.keys(this.props.userData?.user).length == 0) {
+      return this.props.navigation.navigate("Login")
+    }
     console.log("POST TO Report:", item);
     setImmediate(() => {
       this.setState({
@@ -282,16 +291,20 @@ class AccountDetail extends Component {
 
             {/* Title */}
             <Text style={styles.headerTitle}>User Profile</Text>
-
-            {user_id !== user?.detail[0]?.user_id && <TouchableOpacity
-              style={{ position: "absolute", right: -5, padding: 10 }}
-              onPress={() => { this.setState({ openDotModal: !this.state.openDotModal }) }}
-            >
-              <Feather name="more-vertical" size={25} color="white" />
-            </TouchableOpacity>}
+            {Object.keys(user)?.length == 0 ?
+              <></> :
+              <>
+                {user_id !== user?.detail[0]?.user_id && <TouchableOpacity
+                  style={{ position: "absolute", right: -5, padding: 10 }}
+                  onPress={() => { this.setState({ openDotModal: !this.state.openDotModal }) }}
+                >
+                  <Feather name="more-vertical" size={25} color="white" />
+                </TouchableOpacity>}
+              </>
+            }
           </View>
-
           {/* Dot Modal */}
+
           {this.state.openDotModal && < View style={styles.dotModal}>
             <TouchableOpacity
               onPress={() => this.onPress("block_user")}
@@ -299,6 +312,7 @@ class AccountDetail extends Component {
               <Text style={[styles.headerTitle, { fontSize: 16 }]}>Block this user</Text>
             </TouchableOpacity>
           </View>}
+
 
           {/* Profile Info Cont */}
 
@@ -403,9 +417,9 @@ class AccountDetail extends Component {
           </View>
         </Modal >
 
-         {/* Report Post Modal */}
+        {/* Report Post Modal */}
 
-         <Modal
+        <Modal
           animationType="slide"
           transparent={true}
           visible={this.state.openReportPostModal} //

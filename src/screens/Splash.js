@@ -59,8 +59,8 @@ const Splash = (props, { navigation }) => {
         console.log("Creds",creds);
         if (creds == null || creds == '') {
             setTimeout(()=>{
-
-                props.navigation.navigate("GetStarted")
+                props.navigation.navigate("Dash")
+                // props.navigation.navigate("GetStarted")
             },3000)
         } else {
             await AssetLinkers.post("/loginApi", {

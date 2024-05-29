@@ -18,38 +18,43 @@ import { Colors } from "../config";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 
-export default TabNavigator = ({ navProps, screenName }) => {
-  
+export default TabNavigator = ({ navProps, screenName, isLoggedIn }) => {
+
   const data = [
     {
       id: 1,
       label: "Home",
       navName: "Dash",
       iconName: "home",
+      disable: false,
     },
     {
       id: 2,
       label: "Chat",
       navName: "Chatlist",
       iconName: "message-outline",
+      disable: isLoggedIn,
     },
     {
       id: 3,
       label: "Post",
       navName: "Post",
       iconName: "plus-circle-outline",
+      disable: isLoggedIn,
     },
     {
       id: 4,
       label: "Favourite",
       navName: "Favourite",
       iconName: "heart-outline",
+      disable: isLoggedIn,
     },
     {
       id: 5,
       label: "Account",
       navName: "Account",
       iconName: "account-settings-outline",
+      disable: isLoggedIn,
     },
   ];
 
@@ -60,7 +65,13 @@ export default TabNavigator = ({ navProps, screenName }) => {
           <TouchableOpacity
             key={String(item?.id)}
             style={styles.item}
-            onPress={() => navProps.navigate(item?.navName)}>
+            onPress={() => {
+              console.log("LOGGED IN",isLoggedIn);
+              if (isLoggedIn == true) {
+                return navProps.navigate("Login")
+              }
+              navProps.navigate(item?.navName)
+            }}>
             <MaterialCommunityIcons
               name={item?.iconName}
               size={22}

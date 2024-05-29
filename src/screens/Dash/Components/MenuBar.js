@@ -6,16 +6,16 @@ import { Colors } from '../../../config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const MenuBar = ({ navProps, logout }) => {
+const MenuBar = ({ navProps, logout, disable }) => {
 
     // States
     const [value, setValue] = useState(null);
     const [openDropdown, setOpenDropDown] = useState(false)
     const data = [
-        { label: 'Profile', value: '2', icon: 'supervised-user-circle' },
-        { label: 'Contact Us', value: '2', icon: 'supervised-user-circle' },
+        { label: 'Profile', value: '2', icon: 'supervised-user-circle', disable: disable },
+        { label: 'Contact Us', value: '2', icon: 'supervised-user-circle', disable: false },
         // {label: 'Notification', value: '1', icon: 'notifications-none'},
-        { label: 'Logout', value: '2', icon: 'logout' },
+        { label: 'Logout', value: '2', icon: 'logout', disable: disable },
     ];
 
     const onPress = (key) => {
@@ -32,6 +32,9 @@ const MenuBar = ({ navProps, logout }) => {
                 break;
 
             case "Menu":
+                if(disable == true){
+                    return navProps.navigate("Login")
+                }
                 setOpenDropDown(!openDropdown)
                 break;
 
@@ -47,9 +50,9 @@ const MenuBar = ({ navProps, logout }) => {
 
             case "news":
                 navProps.navigate("AssociationNews")
-                // Linking.openURL(
-                //     `https://assetslinkers.com/association-news/`,
-                // )
+            // Linking.openURL(
+            //     `https://assetslinkers.com/association-news/`,
+            // )
 
         }
     }
@@ -97,6 +100,7 @@ const MenuBar = ({ navProps, logout }) => {
                             return (
                                 <TouchableOpacity
                                     onPress={() => onPress(item?.label)}
+                                    disabled={item?.disable}
                                     style={styles.item}>
                                     <Text style={styles.item_text}>{item?.label}</Text>
                                 </TouchableOpacity>

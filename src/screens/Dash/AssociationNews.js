@@ -462,15 +462,17 @@ class AssociationNews extends Component {
                                 <></>
                                 :
                                 <View style={{
-                                    width: 60,
-                                    height: 25,
+                                    // width: 60,
+                                    // height: 25,
+                                    paddingHorizontal:5,
+                                    paddingVertical:3,
                                     backgroundColor: Colors.blue,
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    borderRadius: 5,
+                                    borderRadius: 10,
                                     marginVertical: 3
                                 }}>
-                                    <Text style={{ fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }}>{data?.designation}</Text>
+                                    <Text style={{ fontWeight: "600", fontSize: 14, color: "white", letterSpacing: 1 }}>{data?.designation}</Text>
                                 </View>}
                         </View>
 
