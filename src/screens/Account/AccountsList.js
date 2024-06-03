@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
   },
   img: { width: 60, height: 60, borderRadius: 10 },
   name: { color: "black", fontWeight: "600", fontSize: 16 },
-  designation: { color: "white", fontWeight: "700", fontSize: 12, textAlign: "center", paddingVertical: 3, letterSpacing: 1 },
+  designation: { color: "white", fontWeight: "600", fontSize: 12, textAlign: "center", paddingVertical: 3, letterSpacing: 1 },
   tagContainer: {
     backgroundColor: Colors.blue,
     borderRadius: 20,

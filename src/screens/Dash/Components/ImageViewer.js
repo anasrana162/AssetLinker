@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, Dimensions, ScrollView, Image } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, ScrollView, Image, Pressable } from 'react-native'
 import React from 'react'
 import Slideshow from 'react-native-image-slider-show'
+import { Colors } from '../../../config'
 const width = Dimensions.get("screen").width
 const height = Dimensions.get('screen').height
-const ImageViewer = ({ Images, position }) => {
+const ImageViewer = ({ Images, position, openImageModal }) => {
     // console.log("Images COmp", position)
 
     var imageSet = []
@@ -22,10 +23,10 @@ const ImageViewer = ({ Images, position }) => {
             {
                 Images[0] == "" ?
                     <View style={{
-                        width:width,
-                        height:height/3.2,
-                        justifyContent:"center",
-                        alignItems:"center"
+                        width: width,
+                        height: height / 3.2,
+                        justifyContent: "center",
+                        alignItems: "center"
                     }}>
 
                         <Image
@@ -38,11 +39,31 @@ const ImageViewer = ({ Images, position }) => {
                         />
                     </View>
                     :
-                    <Slideshow
-                        dataSource={imageSet}
-                        height={height / 3.2}
-                        position={position}
-                    />
+
+                    <Pressable
+                        onPress={() => openImageModal(imageSet[position], position)}
+                        style={styles.imagCont}>
+                        {/* Images */}
+                        <Image
+                            resizeMode='cover'
+                            source={imageSet[position]}
+                            style={{ width: "100%", height: "100%" }}
+                        />
+                        {/* Pagination */}
+                        <View style={styles.paginationCont}>
+                            {
+                                imageSet.map((item, index) => {
+                                    return (
+                                        <View style={[styles.dots, {
+                                            backgroundColor: index == position ? Colors.white : Colors.DarkGrey
+                                        }]}>
+                                        </View>
+                                    )
+                                })
+                            }
+                        </View>
+                    </Pressable>
+
             }
 
         </View>
@@ -59,11 +80,36 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center"
     },
+    imagCont: {
+        width: width,
+        height: height / 3.2,
+        justifyContent: "center",
+        alignItems: 'center',
+    },
     imageViewerCont: {
         width: width,
         // height: 270,
         justifyContent: "flex-start",
         alignItems: "center",
         flexDirection: "row",
-    }
+    },
+    paginationCont: {
+        paddingHorizontal: 5,
+        paddingVertical: 3,
+        borderRadius: 10,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        zIndex: 200,
+        bottom: 10,
+        backgroundColor: "rgba(52,52,52,0.2)"
+    },
+    dots: {
+        width: 12,
+        height: 12,
+        borderRadius: 15,
+        backgroundColor: Colors.grey,
+        marginHorizontal: 2,
+    },
 })

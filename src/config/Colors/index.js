@@ -11,7 +11,7 @@ export default Colors = {
   white: "#FFFFFF",
   green: "#00ED59",
   grey: "#EFEFEF",
-  DarkGrey: "#666666",
+  DarkGrey: "#999999",
   icon: "#AA1B21",
   textHeading: "#000000",
   textColor: "#000000",

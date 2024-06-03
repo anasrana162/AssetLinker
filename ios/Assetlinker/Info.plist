@@ -39,7 +39,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string> - This will allow you to take pictures from
-	 your camera app then upload it.
+	 your camera app then upload it. AssetsLinkers will save these photo for your post or Profile information
+	 purposes.
 	</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string> - AssetsLinkers is saving your Basic Profile Information UTF-
@@ -48,12 +49,23 @@
 	</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string> - This will allow you to record your voice
-	through your phone's microphone.
+	through your phone's microphone. AssetsLinkers will use your microphone to record voice recording
+	 for your Association News posts.
 	</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string> - This will allow you to take pictures from
-	your media gallery then upload it.
+	your media gallery then upload it. AssetsLinkers will save these photo for your post or Profile information
+	 purposes.
 	</string>
+	  <key>LSApplicationQueriesSchemes</key>
+  <array>
+    <string>whatsapp</string>
+    <string>mailto</string>
+    <string>instagram</string>
+    <string>instagram-stories</string>
+    <string>fb</string>
+    <string>facebook-stories</string>
+  </array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

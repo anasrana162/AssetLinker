@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import React, { Component } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import Share from 'react-native-share';
 
 const {
   StatusBarManager: { HEIGHT },
@@ -37,6 +38,8 @@ import UserProfileButton from "../Dash/Components/UserProfileButton";
 import BottomBar from "../Dash/Components/BottomBar";
 import AssetLinkers from "../../api/AssetLinkers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import RNFS from "react-native-fs";
+import ImageModal from "./Components/ImageModal";
 
 class PostDetail extends Component {
   constructor(props) {
@@ -46,11 +49,16 @@ class PostDetail extends Component {
       position: 0,
       localUserID: "",
       postUserData: "",
+      imageModal: {
+        isOpen: false,
+        image: "",
+        index: 0,
+      }
     };
   }
 
-  onPress = (key) => {
-    var { image, name, member_since, user_id, designation } =
+  onPress = async (key) => {
+    var { image, name, member_since, user_id, post_images, category, details, property_type, price, address, rent_sale } =
       this.props?.route?.params?.data;
     var { data } = this.props?.route?.params;
 
@@ -59,7 +67,17 @@ class PostDetail extends Component {
         this.props.navigation.navigate("Dash");
         break;
       case "share":
-        Linking.openURL(`https://assetslinkers.com`);
+
+
+        const options = {
+          title: category,
+          subject: property_type,
+          message: ` ${category} ${'\n'} ${'\n'}Category: ${property_type} ${'\n'} ${'\n'}${details} ${'\n'} ${address} ${'\n'} ${'\n'}Price: ${price} ${'\n'} ${'\n'}Rent/Sale: ${rent_sale} ${'\n'} ${'\n'} Download the App: ${'\n'} https://play.google.com/store/apps/details?id=com.assetlinker1 `,
+          // url: "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/" + post_images[0]
+        };
+
+        Share.open(options)
+
         break;
       case "openUserDetail":
         this.props.navigation.navigate("AccountDetail", {
@@ -165,6 +183,30 @@ class PostDetail extends Component {
     }
   };
 
+  openImageModal = (image, index) => {
+    // console.log("Image Slected for Modal: ", image,
+    //   `${'\n'}`,
+    //   "Image Index fro Modal: ", index
+    // );
+    this.setState({
+      imageModal: {
+        isOpen: true,
+        image: image,
+        index: index,
+      }
+    })
+  }
+
+  closeImageModal = () => {
+    this.setState({
+      imageModal: {
+        isOpen: false,
+        image: "",
+        index: 0,
+      }
+    })
+  }
+
   componentWillUnmount = () => {
     clearInterval(this.state.interval);
   };
@@ -223,7 +265,8 @@ class PostDetail extends Component {
           {/* Images Viewer */}
           <ImageViewer
             Images={data?.post_images}
-            position={this.state.position}
+            position={data?.post_images?.length == 1 ? 0 : this.state.position}
+            openImageModal={(image, index) => this.openImageModal(image, index)}
           />
 
           {/* Information */}
@@ -447,6 +490,7 @@ class PostDetail extends Component {
 
         </ScrollView >
 
+        {/* Chat, Whatsapp, call */}
         {data?.user_id != this.state.localUserID && (
           <BottomBar
             data={data}
@@ -456,6 +500,19 @@ class PostDetail extends Component {
           />
         )
         }
+
+        {/* Image Modal */}
+        {
+          this.state.imageModal?.isOpen == true &&
+          <ImageModal
+            imageSelected={this.state.imageModal?.image}
+            indexSelected={this.state.imageModal?.index}
+            images={data?.post_images}
+            closeModal={() => this.closeImageModal()}
+            imageLink={"https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/"}
+          />
+        }
+
       </View>
     );
   }

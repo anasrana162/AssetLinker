@@ -781,7 +781,9 @@ export default class Signup extends Component {
                             text={"Already have an Account?"}
                             navProps={this.props.navigation}
                             navToScreenName={"Login"}
+                            style={{ marginBottom: 200,}}
                         />
+            
 
                     </ScrollView>
 
@@ -892,7 +894,7 @@ const styles = StyleSheet.create({
         height: 40,
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 200,
+        marginBottom: 20,
         backgroundColor: Colors.main,
         alignSelf: "center",
         borderRadius: 10,

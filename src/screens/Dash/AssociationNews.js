@@ -42,6 +42,7 @@ import { connect } from "react-redux";
 import * as userActions from "../../redux/actions/user";
 import { bindActionCreators } from "redux";
 import { newsPostImageURL } from "../../config/Common";
+import ImageModal from "../Post/Components/ImageModal";
 
 class AssociationNews extends Component {
 
@@ -67,7 +68,13 @@ class AssociationNews extends Component {
             posting: false,
             postDeleteID: "",
             openDeleteModal: false,
-            confirmModal: false
+            confirmModal: false,
+            imageModal: {
+                isOpen: false,
+                image: "",
+                index: 0,
+                allImages: [],
+            }
         };
     }
     _onFinishedPlayingSubscription = null
@@ -169,7 +176,7 @@ class AssociationNews extends Component {
                     console.log('stopped recording, audio file saved at: ', result);
                     const uri = await RNFS.readFile(result?.path, "base64")
                         .then((res) => {
-                            console.log("sound audio",res);
+                            console.log("sound audio", res);
                             // return "data:audio/mp3;base64," + res;
                             return res
                         })
@@ -346,6 +353,33 @@ class AssociationNews extends Component {
         console.log("imaimagesToShow after splice", imagesToShow)
 
     }
+
+    openImageModal = (image, index, allImages) => {
+        // console.log("Image Slected for Modal: ", image,
+        //   `${'\n'}`,
+        //   "Image Index fro Modal: ", index
+        // );
+        this.setState({
+            imageModal: {
+                isOpen: true,
+                image: image,
+                index: index,
+                allImages: allImages
+            }
+        })
+    }
+
+    closeImageModal = () => {
+        this.setState({
+            imageModal: {
+                isOpen: false,
+                image: "",
+                index: 0,
+                allImages: [],
+            }
+        })
+    }
+
     Footer = () => {
         return (
             <View style={styles.addPostCont}>
@@ -464,8 +498,8 @@ class AssociationNews extends Component {
                                 <View style={{
                                     // width: 60,
                                     // height: 25,
-                                    paddingHorizontal:5,
-                                    paddingVertical:3,
+                                    paddingHorizontal: 5,
+                                    paddingVertical: 3,
                                     backgroundColor: Colors.blue,
                                     justifyContent: "center",
                                     alignItems: "center",
@@ -526,11 +560,16 @@ class AssociationNews extends Component {
                                             data?.post_images.map((image, index) => {
                                                 // console.log("image", image)
                                                 return (
-                                                    <Image
-                                                        source={{ uri: newsPostImageURL + image }}
-                                                        style={{ width: width - 20, height: 200 }}
-                                                        resizeMode='cover'
-                                                    />
+                                                    <TouchableOpacity
+                                                        onPress={() => this.openImageModal(image, index, data?.post_images)}
+                                                    >
+
+                                                        <Image
+                                                            source={{ uri: newsPostImageURL + image }}
+                                                            style={{ width: width - 20, height: 200 }}
+                                                            resizeMode='cover'
+                                                        />
+                                                    </TouchableOpacity>
                                                 )
                                             })
                                         }
@@ -763,6 +802,18 @@ class AssociationNews extends Component {
                 {
                     user?.allow_to_post == 1 &&
                     <this.Footer />
+                }
+
+                {/* Image Modal */}
+                {
+                    this.state.imageModal?.isOpen == true &&
+                    <ImageModal
+                        imageSelected={this.state.imageModal?.image}
+                        indexSelected={this.state.imageModal?.index}
+                        images={this.state.imageModal?.allImages}
+                        closeModal={() => this.closeImageModal()}
+                        imageLink={newsPostImageURL}
+                    />
                 }
 
                 {/* Modal Delete Post */}
