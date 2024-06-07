@@ -10,11 +10,11 @@ const ImageViewer = ({ Images, position, openImageModal }) => {
     var imageSet = []
 
 
-    for (let i = 0; i < Images.length; i++) {
-        imageSet.push({
-            url: "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/" + Images[i]
-        })
-    }
+    // for (let i = 0; i < Images.length; i++) {
+    //     imageSet.push({
+    //         url:  + Images[i]
+    //     })
+    // }
 
 
     return (
@@ -41,18 +41,18 @@ const ImageViewer = ({ Images, position, openImageModal }) => {
                     :
 
                     <Pressable
-                        onPress={() => openImageModal(imageSet[position], position)}
+                        onPress={() => openImageModal(Image[position], position)}
                         style={styles.imagCont}>
                         {/* Images */}
                         <Image
                             resizeMode='cover'
-                            source={imageSet[position]}
+                            source={{ uri: "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/" + Images[position] }}
                             style={{ width: "100%", height: "100%" }}
                         />
                         {/* Pagination */}
                         <View style={styles.paginationCont}>
                             {
-                                imageSet.map((item, index) => {
+                                Images.map((item, index) => {
                                     return (
                                         <View style={[styles.dots, {
                                             backgroundColor: index == position ? Colors.white : Colors.DarkGrey
