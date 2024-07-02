@@ -171,11 +171,12 @@ const PostUpdate = (props) => {
     };
 
     const remmoveAsset = async (currentProduct) => {
+        console.log("Current product", currentProduct);
         const cloneMultipleAssetsPaths = [...imagesPaths];
         const removeTheSelectedAssetPaths = cloneMultipleAssetsPaths.filter(
             (item) => item !== currentProduct
         );
-        setImagesPaths(removeTheSelectedAssetPaths);
+        // setImagesPaths(removeTheSelectedAssetPaths);
 
         const uri = await RNFS.readFile(currentProduct, "base64")
             .then((res) => {
@@ -185,11 +186,19 @@ const PostUpdate = (props) => {
                 console.log("Error IN BASE^$ Convertion", err);
             });
         const cloneMultipleAssets = [...images];
-        const removeTheSelectedAsset = cloneMultipleAssets.filter(
-            (item) => item !== uri
-        );
-        console.log("After Remove", removeTheSelectedAsset);
-        setImages(removeTheSelectedAsset);
+        console.log("cloneMultipleAssets", currentProduct.includes(".."));
+        // const removeTheSelectedAsset = cloneMultipleAssets.filter(
+        //     (item) =>{
+        //         item !== currentProduct.includes("..") ? currentProduct : uri}
+
+        // );
+
+        var index = cloneMultipleAssets.indexOf(currentProduct.includes("..") ? currentProduct : uri)
+
+        cloneMultipleAssets.splice(index, 1)
+
+        console.log("After Remove", cloneMultipleAssets);
+        // setImages(cloneMultipleAssets);
     };
 
     const updateImageInGallery = async (path, mime, type) => {
@@ -227,7 +236,7 @@ const PostUpdate = (props) => {
                         .catch((err) => {
                             console.log("Error IN BASE^$ Convertion", err);
                         });
-                    // console.log("Selected Images",uri)
+
                     multipleImages.push(uri.apiPath);
                     multipleImagePaths.push(result);
                 });
@@ -540,13 +549,555 @@ const PostUpdate = (props) => {
         }
     };
 
+    const checkCategory = () => {
+        var {
+            userData: {
+                user: { id },
+            },
+        } = props;
+        var obj = {};
+        switch (category) {
+            case "Commercial":
+                const check = checkCategoryData();
+                obj = {
+                    property_id: data?.property_id,
+                    rent_sale: sale_Rent,
+                    property_type: category,
+                    images: `${images}`,
+                    price: price,
+                    yards: yards == "Others" ? yardsNumber + " " + yards_Unit : yardsNumber + " " + yards.toLowerCase(),
+                    category: propertyCategory,
+                    corner: selected_constructionStatus_corner,
+                    open: selected_constructionStatus_open,
+                    furnished: "Null",
+                    bedrooms: "Null",
+                    bathrooms: "Null",
+                    rooms: rooms,
+                    phase: "Null",
+                    Location: locationMain,
+                    address: address,
+                    area_unit: area_unit,
+                    main_features: main_features,
+                    details: details,
+                };
+                console.log("check:", check);
+                return { check: check, data: obj };
+
+            case "Residential":
+                const check1 = checkCategoryData();
+                console.log("location Main", bathrooms1);
+                obj = {
+                    property_id: data?.property_id,
+                    rent_sale: sale_Rent,
+                    property_type: category,
+                    images: `${images}`,
+                    price: price,
+                    yards: yards == "Others" ? yardsNumber + " " + yards_Unit : yardsNumber + " " + yards.toLowerCase(),
+                    category: propertyCategory,
+                    corner: selected_constructionStatus_corner,
+                    open: selected_constructionStatus_open,
+                    furnished: furnished,
+                    bedrooms: bedrooms1,
+                    bathrooms: bathrooms1,
+                    rooms: rooms,
+                    phase: "Null",
+                    Location: locationMain,
+                    address: address,
+                    area_unit: area_unit,
+                    main_features: main_features,
+                    details: details,
+                };
+                console.log("check1:", check1);
+                return { check: check1, data: obj };
+
+            // case "Plot":
+            //   const check2 = checkCategoryData();
+            //   obj = {
+            //     user_id: id,
+            //     rent_sale: sale_Rent,
+            //     property_type: category,
+            //     images: images,
+            //     price: price,
+            //     yards: yards == "Others" ? yardsNumber + " " + yards_Unit : yardsNumber + " " + yards.toLowerCase(),
+            //     category: "Null",
+            //     corner: selected_constructionStatus_corner,
+            //     open: selected_constructionStatus_open,
+            //     furnished: "Null",
+            //     bedrooms: "Null",
+            //     bathrooms: "Null",
+            //     rooms: rooms,
+            //     phase: phase + " " + phase1,
+            //     Location: locationMain,
+            //     address: address,
+            //     area_unit: "Null",
+            //     main_features: main_features,
+            //     details: details,
+            //   };
+            //   console.log("check2:", check2);
+            //   return { check: check2, data: obj };
+        }
+    };
+
+    const checkCategoryData = () => {
+        var {
+            userData: {
+                user: { id },
+            },
+        } = props;
+        console.log("Category1", category);
+        switch (category) {
+            case "Commercial":
+                if (id == null || id == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Network Error: Try to login again!");
+                }
+                if (sale_Rent == null || sale_Rent == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please select either Sale or Rent!");
+                }
+                // if (images == null || images == [] || images == "") {
+                //   setImmediate(() => {
+                //     setCheck(false);
+                //     setLoader(false);
+                //   });
+                //   return alert("Please select an image");
+                // }
+                if (category == null || category == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please select Type!");
+                }
+                if (price == null || price == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please enter price!");
+                }
+                if (propertyCategory == null || propertyCategory == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please select category!");
+                }
+                if (yards == null || yards == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please select Area Unit!");
+                }
+                if (yardsNumber == null || yardsNumber == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please Enter Area Value!");
+                }
+                if (yards == "Others" && (yardsNumber == "" || yards_Unit == "")) {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please Enter Value of Others!");
+                }
+                // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select Construction Status Corner value!")
+                // }
+                // if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select Construction Status open value!")
+                // }
+                if (location == null || location == "" || location == "Location") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please select Location!");
+                }
+                if (locationMain == null || locationMain == "" || locationMain == "Location") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please select Location!");
+                }
+                if (address == null || address == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please enter Address!");
+                }
+                // if (main_features == null || main_features == "") {
+                //   setImmediate(() => {
+                //     setCheck(false);
+                //     setLoader(false);
+                //   });
+                //   return alert("Please add Main features!");
+                // }
+                if (details == null || details == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please eneter Details!");
+                }
+
+                return check;
+
+            case "Residential":
+                if (id == null || id == "") {
+                    console.log("id is prob,: ", id);
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Network Error: Try to login again!");
+                }
+                if (sale_Rent == null || sale_Rent == "") {
+                    console.log("sale_Rent is prob,: ", sale_Rent);
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please select either Sale or Rent!");
+                }
+                // if (images == null || images == [] || images == "") {
+                //   setImmediate(() => {
+                //     setCheck(false);
+                //     setLoader(false);
+                //   });
+                //   return alert("Please select an image");
+                // }
+                if (category == null || category == "") {
+                    console.log("category is prob,: ", category);
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please select Type!");
+                }
+                if (price == null || price == "") {
+                    console.log("price is prob,: ", price);
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please enter price!");
+                }
+                if (propertyCategory == null || propertyCategory == "") {
+                    console.log("categoryProp is prob,: ", propertyCategory);
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please select category!");
+                }
+                if (yards == null || yards == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please select Area Unit!");
+                }
+                if (yardsNumber == null || yardsNumber == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please Enter Area Value!");
+                }
+                if (address == null || address == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please enter Address!");
+                }
+
+                // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select Construction Status Corner value!")
+                // }
+                // if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select Construction Status open value!")
+                // }
+                // if (furnished == null || furnished == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select Furnished!")
+                // }
+                // if (bedrooms == null || bedrooms == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select no. of bedrooms!")
+                // }
+                // if (bathrooms == null || bathrooms == '') {
+                //     setImmediate(() => {
+                //         setCheck(false)
+                //         setLoader(false)
+                //     })
+                //     return alert("Please select no. of bathrooms!")
+                // }
+                if (location == null || location == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please select Location!");
+                }
+                if (locationMain == null || locationMain == "" || locationMain == "Location") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please select Location!");
+                }
+                // if (main_features == null || main_features == "") {
+                //   setImmediate(() => {
+                //     setCheck(false);
+                //     setLoader(false);
+                //   });
+                //   return alert("Please add Main features!");
+                // }
+                if (details == null || details == "") {
+                    setImmediate(() => {
+                        setCheck(false);
+                        setLoader(false);
+                    });
+                    return alert("Please enter Details!");
+                }
+                // if (area_unit == null || area_unit == "") {
+                //   setImmediate(() => {
+                //     setCheck(false);
+                //     setLoader(false);
+                //   });
+                //   return alert("Please select Area Unit!");
+                // }
+
+                return check;
+
+            // case "Plot":
+            //   if (id == null || id == "") {
+            //     setImmediate(() => {
+            //       setCheck(false);
+            //       setLoader(false);
+            //     });
+            //     return alert("Network Error: Try to login again!");
+            //   }
+            //   if (sale_Rent == null || sale_Rent == "") {
+            //     setImmediate(() => {
+            //       setCheck(false);
+            //       setLoader(false);
+            //     });
+            //     return alert("Please select either Sale or Rent!");
+            //   }
+            //   // if (images == null || images == [] || images == "") {
+            //   //   setImmediate(() => {
+            //   //     setCheck(false);
+            //   //     setLoader(false);
+            //   //   });
+            //   //   return alert("Please select an image");
+            //   // }
+            //   if (category == null || category == "") {
+            //     setImmediate(() => {
+            //       setCheck(false);
+            //       setLoader(false);
+            //     });
+            //     return alert("Please select Type!");
+            //   }
+            //   if (price == null || price == "") {
+            //     setImmediate(() => {
+            //       setCheck(false);
+            //       setLoader(false);
+            //     });
+            //     return alert("Please enter Price!");
+            //   }
+            //   if (yards == null || yards == "") {
+            //     setImmediate(() => {
+            //       setCheck(false);
+            //       setLoader(false);
+            //     });
+            //     return alert("Please select Area Unit!");
+            //   }
+            //   if (yardsNumber == null || yardsNumber == "") {
+            //     setImmediate(() => {
+            //       setCheck(false);
+            //       setLoader(false);
+            //     });
+            //     return alert("Please Enter Area Value!");
+            //   }
+
+            //   // if (selected_constructionStatus_corner == null || selected_constructionStatus_corner == '') {
+            //   //     setImmediate(() => {
+            //   //         setCheck(false)
+            //   //         setLoader(false)
+            //   //     })
+            //   //     return alert("Please select Construction Status Corner value!")
+            //   // }
+            //   // if (selected_constructionStatus_open == null || selected_constructionStatus_open == '') {
+            //   //     setImmediate(() => {
+            //   //         setCheck(false)
+            //   //         setLoader(false)
+            //   //     })
+            //   //     return alert("Please select Construction Status open value!")
+            //   // }
+
+            //   if (phase == null || phase == "") {
+            //     setImmediate(() => {
+            //       setCheck(false);
+            //     });
+            //     return alert("Please select phase!");
+            //   }
+            //   if (location == null || location == "") {
+            //     setImmediate(() => {
+            //       setCheck(false);
+            //       setLoader(false);
+            //     });
+            //     return alert("Please select Location!");
+            //   }
+            //   if (locationMain == null || locationMain == "" || locationMain == "Location") {
+            //     setImmediate(() => {
+            //       setCheck(false);
+            //       setLoader(false);
+            //     });
+            //     return alert("Please select Location!");
+            //   }
+            //   if (address == null || address == "") {
+            //     setImmediate(() => {
+            //       setCheck(false);
+            //       setLoader(false);
+            //     });
+            //     return alert("Please enter Address!");
+            //   }
+            //   // if (main_features == null || main_features == "") {
+            //   //   setImmediate(() => {
+            //   //     setCheck(false);
+            //   //     setLoader(false);
+            //   //   });
+            //   //   return alert("Please add Main features!");
+            //   // }
+            //   if (details == null || details == "") {
+            //     setImmediate(() => {
+            //       setCheck(false);
+            //       setLoader(false);
+            //     });
+            //     return alert("Please enter Details!");
+            //   }
+            //   console.log("Check", check);
+            //   return check;
+            // if (check == false) {
+            //     return false
+            // } else {
+            //     return true
+            // }
+        }
+    };
+
     const onSubmitPress = () => {
         setImmediate(() => {
             setLoader(true);
             setCheck(true);
         });
 
+        const dataForApi = checkCategory();
 
+        // console.log("");
+        // console.log("");
+        // console.log("--------------------ffffff2-------------------------");
+        // console.log("");
+        // console.log("");
+        // console.log(
+        //   "dataForApi of Category " + category + " " + "dataForApi",
+        //   dataForApi
+        // );
+        // console.log("");
+        // console.log("");
+        // console.log("--------------------ffffff-------------------------");
+        // console.log("");
+        // console.log("");
+
+        console.log("Data on Submit", dataForApi?.data, "   ",dataForApi?.check);
+        // setImmediate(() => {
+        //     setLoader(false);
+        //     setCheck(true);
+        // });
+
+        if (dataForApi?.check == true) {
+            setImmediate(() => {
+                // setLoader(false);
+                // setReadyToSubmit(true)
+                setCheck(true);
+            });
+            console.log("working API");
+            console.log("bathrooms Final", dataForApi?.data);
+            AssetLinkers.post("/update/property", dataForApi?.data)
+                .then((response) => {
+                    console.log("Post Api response:", response?.data);
+                    if (response?.data) {
+                        setImmediate(() => {
+                            setLoader(false);
+                            setCheck(true);
+                        });
+
+                        Toast.show({
+                            type: "success",
+                            text1: "Post Successfully Created!",
+                            visibilityTime: 2000,
+                        });
+                        props.navigation.navigate("Dash", { refresh: "refresh" });
+                    }
+                })
+                .catch((err) => {
+                    console.log("Post Api Error", err?.response);
+                    if (err?.response?.data?.msg == "Limit Exceeded for creating post please contact AssetsLinkers") {
+                        alert("Limit Exceeded for creating post please contact AssetsLinkers")
+                    }
+                    Toast.show({
+                        type: "error",
+                        text1: "Post Failed please try again!",
+                        visibilityTime: 2000,
+                    });
+                    setImmediate(() => {
+                        setLoader(false);
+                        setCheck(true);
+                    });
+                });
+        } else {
+            alert("Check feilds");
+            setImmediate(() => {
+                setLoader(false);
+                setCheck(true);
+            });
+        }
     };
 
 

@@ -108,7 +108,7 @@ const AllPosts = ({
 
 
                 {itemId == item?.item?.id && showOption == true && <View style={styles.optionMenu_cont}>
-                 {userID == item?.item?.user_id && <TouchableOpacity
+                  {userID == item?.item?.user_id && <TouchableOpacity
                     onPress={() => {
                       // console.log("ALL POST >>>>", docID);
                       setShowOption(false);
@@ -118,6 +118,20 @@ const AllPosts = ({
                     style={styles.menu_item_btn}>
                     <Text style={styles.delete_text}>Delete</Text>
                   </TouchableOpacity>}
+                  {/* {userID == item?.item?.user_id &&  */}
+                  <TouchableOpacity
+                    onPress={() => {
+                      // console.log("ALL POST >>>>", docID);
+                      navProps.navigate("PostUpdate", {
+                        data: item?.item,
+                      });
+                      setShowOption(false);
+                    }}
+                    activeOpacity={0.5}
+                    style={styles.menu_item_btn}>
+                    <Text style={[styles.delete_text,{color:Colors.black}]}>Update</Text>
+                  </TouchableOpacity>
+                   {/* } */}
                   {userID !== item?.item?.user_id && <TouchableOpacity
                     onPress={() => {
                       console.log("ALL POST >>>>", docID);
@@ -210,8 +224,12 @@ const AllPosts = ({
                       }}>
                       <Ionicons name="location-sharp" color={Colors.blue} />
                       <Text style={styles.locationText}>
-                        {Location?.location}
+                        {Location?.location},{" "}
                       </Text>
+                      <Text style={styles.locationText}>
+                        {Location?.place == null ? "":Location?.place}
+                      </Text>
+
                     </View>
                   )}
                   {/* <Text

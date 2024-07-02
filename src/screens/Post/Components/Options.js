@@ -141,13 +141,16 @@ const Options = ({
                 />
                 {/* } */}
                 {/* {(Category_Selected == "Plot" && yardSelected == true) && */}
-                <CustomTextInp
-                    titleEN={"Enter Number *"}
-                    value={initYardsNumber}
-                    keyboardType={"numeric"}
-                    onChangeText={(txt) => onChangeText(txt, "yards")}
-                    placeholder={selectedAreaUnit == "Others" ? "ex. 100" : ""}
-                />
+                {initYards == "" ?
+                    <></>
+                    :
+                    <CustomTextInp
+                        titleEN={`${initYards} in Numbers`}
+                        value={initYardsNumber}
+                        keyboardType={"numeric"}
+                        onChangeText={(txt) => onChangeText(txt, "yards")}
+                        placeholder={selectedAreaUnit == "Others" ? "ex. 100" : ""}
+                    />}
                 {selectedAreaUnit == "Others" && <CustomTextInp
                     titleEN={selectedAreaUnit == "Others" ? "Enter Unit *" : "Others"}
                     onChangeText={(txt) => onChangeText(txt, "num_unit_yards")}

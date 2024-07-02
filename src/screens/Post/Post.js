@@ -225,7 +225,7 @@ const Post = (props) => {
             .catch((err) => {
               console.log("Error IN BASE^$ Convertion", err);
             });
-          // console.log("Selected Images",uri)
+          console.log("Selected Images",uri)
           multipleImages.push(uri.apiPath);
           multipleImagePaths.push(result);
         });
@@ -1286,6 +1286,7 @@ var stateCheck = checkDataForSubmitBtn()
           constructionStatus_corner={Plots1} //data  corner/non-corner
           constructionStatus_open={Plots} //data  west/east open
           PlotYards={PlotYards} //data
+          initYards={yards}
           selectedAreaUnit={yards}
           PlotPhase={Phase1} // old data Phase //data
           Area_Unit={propertyCategory == "Apartment" ? Area_unit1 : Area_unit} //data

@@ -96,7 +96,7 @@ const Builder = ({ onChangeFormattedText, onChangeText, selectedLocation, onLocB
                 />
 
                 {/* Location button */}
-                {console.log(selectedLocation)}
+                {/* {console.log(selectedLocation)} */}
                 <TouchableOpacity
                     onPress={onLocBtnPress}
                     style={styles.location_btn}>
