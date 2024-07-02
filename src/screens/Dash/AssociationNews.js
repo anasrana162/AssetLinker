@@ -98,7 +98,7 @@ class AssociationNews extends Component {
             if (res?.data) {
                 // console.log("Res", res?.data?.property)
                 this.setState({
-                    postData: res?.data?.property,
+                    postData: res?.data?.property.reverse(),
                     loader: false
                 })
             }
@@ -521,7 +521,7 @@ class AssociationNews extends Component {
                                     color="white"
                                 />
                             </TouchableOpacity>
-                        )}
+                        )} 
                     </View>
 
                     {this.state.openDeleteModal && data?.post_id == this.state.postDeleteID &&
