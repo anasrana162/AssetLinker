@@ -176,7 +176,7 @@ const PostUpdate = (props) => {
         const removeTheSelectedAssetPaths = cloneMultipleAssetsPaths.filter(
             (item) => item !== currentProduct
         );
-        // setImagesPaths(removeTheSelectedAssetPaths);
+        setImagesPaths(removeTheSelectedAssetPaths);
 
         const uri = await RNFS.readFile(currentProduct, "base64")
             .then((res) => {
@@ -197,8 +197,8 @@ const PostUpdate = (props) => {
 
         cloneMultipleAssets.splice(index, 1)
 
-        console.log("After Remove", cloneMultipleAssets);
-        // setImages(cloneMultipleAssets);
+        // console.log("After Remove", cloneMultipleAssets);
+        setImages(cloneMultipleAssets);
     };
 
     const updateImageInGallery = async (path, mime, type) => {
@@ -563,7 +563,7 @@ const PostUpdate = (props) => {
                     property_id: data?.property_id,
                     rent_sale: sale_Rent,
                     property_type: category,
-                    images: `${images}`,
+                    images: images.toString(),
                     price: price,
                     yards: yards == "Others" ? yardsNumber + " " + yards_Unit : yardsNumber + " " + yards.toLowerCase(),
                     category: propertyCategory,
@@ -590,7 +590,7 @@ const PostUpdate = (props) => {
                     property_id: data?.property_id,
                     rent_sale: sale_Rent,
                     property_type: category,
-                    images: `${images}`,
+                    images: images.toString(),
                     price: price,
                     yards: yards == "Others" ? yardsNumber + " " + yards_Unit : yardsNumber + " " + yards.toLowerCase(),
                     category: propertyCategory,
@@ -1045,7 +1045,7 @@ const PostUpdate = (props) => {
         // console.log("");
         // console.log("");
 
-        console.log("Data on Submit", dataForApi?.data, "   ",dataForApi?.check);
+        // console.log("Data on Submit", dataForApi?.data, "   ", dataForApi?.check);
         // setImmediate(() => {
         //     setLoader(false);
         //     setCheck(true);
@@ -1101,7 +1101,7 @@ const PostUpdate = (props) => {
     };
 
 
-    console.log("Post Update Screen", props.route.params.data)
+    // console.log("Post Update Screen", props.route.params.data)
     return (
         <View style={styles.mainContainer}>
             {/* {console.log(props)} */}
