@@ -507,23 +507,24 @@ class Dash extends Component {
               style={{ marginTop: 90 }}
             />
           ) : (
-            <AllPosts
-              key={this.state.key}
-              data={
-                this.state.openSearchBar
-                  ? this.state.FilteredPosts
-                  : homeposts
-              }
-              navProps={this.props.navigation}
-              userID={this.props.userData?.user?.id}
-              openDeletePostModal={(postID, docID) =>
-                this.openDeletePostModal(postID, docID)
-              }
-              openReportModal={(item) => this.openReportModal(item)}
-              onFavPress={(postID, is_favourite, index) =>
-                this.addToFavourite(postID, is_favourite, index)
-              }
-            />
+            <></>
+            // <AllPosts
+            //   key={this.state.key}
+            //   data={
+            //     this.state.openSearchBar
+            //       ? this.state.FilteredPosts
+            //       : homeposts
+            //   }
+            //   navProps={this.props.navigation}
+            //   userID={this.props.userData?.user?.id}
+            //   openDeletePostModal={(postID, docID) =>
+            //     this.openDeletePostModal(postID, docID)
+            //   }
+            //   openReportModal={(item) => this.openReportModal(item)}
+            //   onFavPress={(postID, is_favourite, index) =>
+            //     this.addToFavourite(postID, is_favourite, index)
+            //   }
+            // />
           )}
         </ScrollView>
 

@@ -31,6 +31,7 @@ import Chatlist from "../screens/Chat/Chatlist";
 import AssociationNews from "../screens/Dash/AssociationNews";
 import PostUpdate from "../screens/Post/PostUpdate";
 import BlockedUsers from "../screens/Profile/BlockedUsers";
+import ContactUs from "../screens/Dash/ContactUs";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,7 +44,8 @@ export default Navigation = () => {
           contentStyle: { backgroundColor: "transparent" },
           headerShown: false,
           // animation: "none",
-        }}>
+        }}
+      >
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="GetStarted" component={GetStarted} />
         <Stack.Screen name="Login" component={Login} />
@@ -53,6 +55,7 @@ export default Navigation = () => {
         <Stack.Screen name="ChangePassword" component={ChangePassword} />
         <Stack.Screen name="AssociationNews" component={AssociationNews} />
         <Stack.Screen name="Dash" component={Dash} />
+        <Stack.Screen name="ContactUS" component={ContactUs} />
         <Stack.Screen name="Post" component={Post} />
         <Stack.Screen name="PostDetail" component={PostDetail} />
         <Stack.Screen name="PostUpdate" component={PostUpdate} />
