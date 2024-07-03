@@ -50,6 +50,7 @@ export default ImagePick = ({
       });
     } else if (method === 'video') {
       ImageCropPicker.openPicker({
+        // multiple: isMultiple,
         mediaType: 'video',
       }).then(async video => {
         actionSheetRef.current.hide();

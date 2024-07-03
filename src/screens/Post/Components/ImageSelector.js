@@ -11,11 +11,12 @@ const ImageURL = "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage
 const ImageSelector = ({
     setMultipleAssetsPost,
     multipleAssetsPost,
+    multipleVideos,
     updateImageInGallery,
     remmoveAsset,
 }) => {
 
-    // console.log(multipleAssetsPost);
+    console.log(multipleVideos);
 
     return (
         <>
@@ -28,7 +29,7 @@ const ImageSelector = ({
                 <MultipleimagePicker
                     style={styles.multi_image_picker}
                     onImageChange={(path, mime, type) => { updateImageInGallery(path, mime, type) }}
-                    uploadVideo={false}
+                    uploadVideo={true}
                     isMultiple={true}>
                     <AntDesign name="pluscircleo" size={20} color="#fff" />
                     <Text style={styles.add_image_text}>
@@ -45,63 +46,85 @@ const ImageSelector = ({
                             marginVertical: 10,
                         }}>
                         {multipleAssetsPost &&
-                            multipleAssetsPost?.map((item, index) => (
-                                <View
-                                    style={{ position: 'relative', marginHorizontal: 5 }}
-                                    key={index + 1}>
-                                    {/* {       console.log("Item in com",item)} */}
-                                    {
-                                        item !== "" ?
-                                            <>
-                                                {
-                                                    item.includes(".png", 0) == true ?
-                                                        <Image
-                                                            style={{
-                                                                height: Dimensions.get('window').height * 0.11,
-                                                                width: Dimensions.get('window').height * 0.11,
-                                                                borderRadius: 10,
-                                                                resizeMode: 'cover',
-                                                            }}
+                            multipleAssetsPost?.map((item, index) => {
 
-                                                            source={{ uri: ImageURL + item }}
-                                                        /> :
-                                                        <Image
-                                                            style={{
-                                                                height: Dimensions.get('window').height * 0.11,
-                                                                width: Dimensions.get('window').height * 0.11,
-                                                                borderRadius: 10,
-                                                                resizeMode: 'cover',
-                                                            }}
+                                return (
+                                    <View
+                                        style={{ position: 'relative', marginHorizontal: 5 }}
+                                        key={index + 1}>
 
-                                                            source={{ uri: item }}
-                                                        />
-                                                }
-                                            </>
-                                            :
-                                            <>
-                                            </>
-                                    }
+                                        {
+                                            item !== "" ?
+                                                <>
+                                                    {
+                                                        item.includes(".png", 0) == true ?
+                                                            <Image
+                                                                style={{
+                                                                    height: Dimensions.get('window').height * 0.11,
+                                                                    width: Dimensions.get('window').height * 0.11,
+                                                                    borderRadius: 10,
+                                                                    resizeMode: 'cover',
+                                                                }}
 
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            remmoveAsset(item);
-                                        }}
-                                        style={{
-                                            position: 'absolute',
-                                            top: 8,
-                                            right: 5,
-                                        }}>
-                                        <Text
+                                                                source={{ uri: ImageURL + item }}
+                                                            /> :
+                                                            <Image
+                                                                style={{
+                                                                    height: Dimensions.get('window').height * 0.11,
+                                                                    width: Dimensions.get('window').height * 0.11,
+                                                                    borderRadius: 10,
+                                                                    resizeMode: 'cover',
+                                                                }}
+
+                                                                source={{ uri: item }}
+                                                            />
+                                                    }
+                                                  
+                                                </>
+                                                :
+                                                <>
+
+                                                </>
+                                        }
+
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                remmoveAsset(item);
+                                            }}
                                             style={{
-                                                fontSize: 30,
-                                                fontWeight: 'bold',
-                                                color: 'white',
+                                                position: 'absolute',
+                                                top: 8,
+                                                right: 5,
                                             }}>
-                                            x
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            ))}
+                                            <Text
+                                                style={{
+                                                    fontSize: 30,
+                                                    fontWeight: 'bold',
+                                                    color: 'white',
+                                                }}>
+                                                x
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )
+                            })}
+
+                        {multipleVideos &&
+                            multipleVideos.map((item, index) => {
+                                console.log("Item in com", item.includes(".mp4", 0))
+                                return (
+                                    <>
+                                        {
+                                            item.includes(".mp4", 0) == true ?
+                                                <Text>This is video</Text>
+                                                :
+                                                <Text>This is video</Text>
+
+                                        }
+                                    </>
+                                )
+                            })
+                        }
                         <View></View>
                     </View>
                 </ScrollView>

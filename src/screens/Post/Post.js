@@ -113,6 +113,8 @@ const Post = (props) => {
   const [propertyCategoryOthers, setPropertyCategoryOthers] = useState("");
   const [images, setImages] = useState("");
   const [imagesPaths, setImagesPaths] = useState("");
+  const [videos, setVideos] = useState("");
+  const [videoPaths, setVideoPaths] = useState("");
   const [loader, setLoader] = useState(false);
   const [check, setCheck] = useState(true);
   const [dropdownDataChange, setDropdownDataChange] = useState(false);
@@ -194,6 +196,87 @@ const Post = (props) => {
     // console.log("Working Image selector")
     let multipleImages = [];
     let multipleImagePaths = [];
+    let multipleVideos = [];
+    let multipleVideosPaths = [];
+
+    if (type == "video") {
+      console.log("Video recieved :", path);
+      if (Array.isArray(path)) {
+        const arr = path?.map(async (item) => {
+          console.log("Working Image selector1");
+          const result = await ImageCompressor.compress(item.path, {
+            // maxHeight: 400,
+            // maxWidth: 400,
+            quality: 0.8,
+          });
+
+          const uri = await RNFS.readFile(result, "base64")
+            .then((res) => {
+              // return "data:image/png/jpeg/jpg;base64," + res;
+              let obj = {
+                apiPath: res,
+                appPath: "data:video/mp4;base64," + res,
+              }
+
+              return obj
+            })
+            .catch((err) => {
+              console.log("Error IN BASE^$ Convertion", err);
+            });
+          console.log("Selected Images", uri)
+          multipleVideos.push(uri.apiPath);
+          multipleVideosPaths.push(result);
+        });
+        await Promise.all(arr);
+        const mergeImagesWithExistingGalleryAssets = [
+          ...videos,
+          ...multipleVideos,
+        ];
+        const mergeImagesWithExistingGalleryAssetsPaths = [
+          ...videoPaths,
+          ...multipleVideosPaths,
+        ];
+        // console.log("mergeImagesWithExistingGalleryAssetsPaths", mergeImagesWithExistingGalleryAssetsPaths)
+        setVideoPaths(mergeImagesWithExistingGalleryAssetsPaths);
+        // setMultipleAssetsPost(mergeImagesWithExistingGalleryAssets);
+        setVideos(mergeImagesWithExistingGalleryAssets);
+      } else {
+        const getExistingGalleryAssets = [];
+        const getExistingGalleryAssetsPaths = [...videoPaths];
+        // const imageObject = {
+        //     uri: path,
+        //     name: `image${Date.now()}.${mime.slice(mime.lastIndexOf('/') + 1)}`,
+        //     type: mime,
+        //     tempType: type,
+        // };
+        // const result = await ImageCompressor.compress(path, {
+        //   maxHeight: 400,
+        //   maxWidth: 400,
+        //   quality: 1,
+        // });
+        console.log("Result",path);
+        const uri = await RNFS.readFile(path, "base64")
+          .then((res) => {
+            // return "data:image/png/jpeg/jpg;base64," + res;
+            let obj = {
+              apiPath: res,
+              appPath: "data:video/mp4;base64," + res,
+            }
+
+            return obj
+          })
+          .catch((err) => {
+            console.log("Error IN BASE^$ Convertion", err);
+          });
+        getExistingGalleryAssets.push(uri.apiPath);
+        getExistingGalleryAssetsPaths.push(path);
+        setVideoPaths(getExistingGalleryAssetsPaths);
+        // setMultipleAssetsPost(getExistingGalleryAssets);
+        setVideos(getExistingGalleryAssets);
+      }
+      return
+    }
+
     if (multipleAssetsPost?.length < 5) {
       if (Array.isArray(path)) {
         const arr = path?.map(async (item) => {
@@ -219,13 +302,13 @@ const Post = (props) => {
                 apiPath: res,
                 appPath: "data:image/png/jpeg/jpg;base64," + res,
               }
-  
+
               return obj
             })
             .catch((err) => {
               console.log("Error IN BASE^$ Convertion", err);
             });
-          console.log("Selected Images",uri)
+          console.log("Selected Images", uri)
           multipleImages.push(uri.apiPath);
           multipleImagePaths.push(result);
         });
@@ -1223,10 +1306,10 @@ const Post = (props) => {
       //     return check = false
       //   }
       //   return check = true;
-  
+
     }
   };
-var stateCheck = checkDataForSubmitBtn()
+  var stateCheck = checkDataForSubmitBtn()
   // console.log("category Post SCreen", stateCheck)
   return (
     <View style={styles.mainContainer}>
@@ -1267,6 +1350,7 @@ var stateCheck = checkDataForSubmitBtn()
             updateImageInGallery(path, mime, type)
           }
           multipleAssetsPost={imagesPaths}
+          multipleVideos={videoPaths}
           remmoveAsset={(val) => remmoveAsset(val)}
         />
 
@@ -1274,7 +1358,7 @@ var stateCheck = checkDataForSubmitBtn()
         <Options
           Category_Selected={category}
           selectTypeData={selectTypeData} // Property Types
-          commercialCategories={sale_Rent == "Rent"? PropertyCommercialCategories1 : PropertyCommercialCategories} //data  Comercial Categories
+          commercialCategories={sale_Rent == "Rent" ? PropertyCommercialCategories1 : PropertyCommercialCategories} //data  Comercial Categories
           residentialCategories={ResidentialCategories} //data  Residential Categories
           onSelectValue={(val, key) => valueAssigner(val, key)}
           propertyCategorySelected={propertyCategoryOthers} // old value :propertyCategory  // Commercial/Residential selected Property

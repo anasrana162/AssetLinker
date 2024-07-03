@@ -974,7 +974,7 @@ PODS:
   - BoringSSL-GRPC/Interface (0.0.32)
   - BVLinearGradient (2.8.3):
     - React-Core
-  - CodePush (8.2.2):
+  - CodePush (8.2.1):
     - Base64 (~> 1.1)
     - JWT (~> 3.0.0-beta.12)
     - React-Core
@@ -1534,11 +1534,18 @@ PODS:
   - react-native-compressor (1.8.24):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - react-native-safe-area-context (4.10.3):
+  - react-native-safe-area-context (4.9.0):
     - React-Core
   - react-native-simple-toast (3.3.1):
     - React-Core
     - Toast (~> 4)
+  - react-native-video (6.3.0):
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
+    - react-native-video/Video (= 6.3.0)
+  - react-native-video/Video (6.3.0):
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
   - React-NativeModulesApple (0.72.5):
     - hermes-engine
     - React-callinvoker
@@ -1671,7 +1678,7 @@ PODS:
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (2.16.2):
+  - RNGestureHandler (2.15.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNImageCropPicker (0.40.3):
@@ -1685,21 +1692,20 @@ PODS:
     - TOCropViewController
   - RNPermissions (3.10.1):
     - React-Core
-  - RNReanimated (3.11.0):
+  - RNReanimated (3.8.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNScreens (3.31.1):
+  - RNScreens (3.29.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-    - React-RCTImage
   - RNShare (10.2.1):
     - React-Core
-  - RNSoundPlayer (0.13.3):
+  - RNSoundPlayer (0.13.2):
     - React-Core
   - RNSoundRecorder (1.5.0):
     - React
-  - RNVectorIcons (10.1.0):
+  - RNVectorIcons (10.0.3):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - SocketRocket (0.6.1)
@@ -1744,6 +1750,7 @@ DEPENDENCIES:
   - react-native-compressor (from `../node_modules/react-native-compressor`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-simple-toast (from `../node_modules/react-native-simple-toast`)
+  - react-native-video (from `../node_modules/react-native-video`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -1878,6 +1885,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-simple-toast:
     :path: "../node_modules/react-native-simple-toast"
+  react-native-video:
+    :path: "../node_modules/react-native-video"
   React-NativeModulesApple:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios"
   React-perflogger:
@@ -1958,7 +1967,7 @@ SPEC CHECKSUMS:
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
-  CodePush: eaa66fc8dd9ff611304ecc48397ce8831ba79ac9
+  CodePush: 84c9a5792cb3c8e311197d595610c803f0b01739
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 71803c074f6325f10b5ec891c443b6bbabef0ca7
   FBReactNativeSpec: 448e08a759d29a96e15725ae532445bf4343567c
@@ -2006,8 +2015,9 @@ SPEC CHECKSUMS:
   React-jsinspector: aef73cbd43b70675f572214d10fa438c89bf11ba
   React-logger: 2e4aee3e11b3ec4fa6cfd8004610bbb3b8d6cca4
   react-native-compressor: 415b1861823b4dd1d142aed0547439f310f85321
-  react-native-safe-area-context: b01d8f42d4e62a7be5a3e69fd332e0c7e67584c7
+  react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-simple-toast: 1f1cc551d419bc0ab05dcb0136554006c274789d
+  react-native-video: ed181c8cb4397787ffc72a6344ff823ed9ec759d
   React-NativeModulesApple: 54adc761c7a6fa5f183ca62ad0cb94f4f1cdce4a
   React-perflogger: cd8886513f68e1c135a1e79d20575c6489641597
   React-RCTActionSheet: 726d2615ca62a77ce3e2c13d87f65379cdc73498
@@ -2032,21 +2042,21 @@ SPEC CHECKSUMS:
   RNFBStorage: faac7822242a55b7857831fcd9f609223290a2f0
   RNFlashList: b521ebdd7f9352673817f1d98e8bdc0c8cf8545b
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: ee924bd0024545efc4bc88c1e856f24b785d2ca2
+  RNGestureHandler: 6a0bca5c5b2fb62211e9a75d5f4ed877817c4412
   RNImageCropPicker: e7ab6fb43d2fc3e84651e786ef4a080d63b0ed3d
   RNPermissions: 4e3714e18afe7141d000beae3755e5b5fb2f5e05
-  RNReanimated: fc537c9a29e55eb01c620f29b39554cfd68eef35
-  RNScreens: 396c07678c1c35614bc5feba74a56df387bf1965
+  RNReanimated: 87c5d25efb8f4b122e16e992b6f1bfbb2a9bbab3
+  RNScreens: 1c2444658fbb696a094272d946708167b1f63409
   RNShare: 0fad69ae2d71de9d1f7b9a43acf876886a6cb99c
-  RNSoundPlayer: 823c6917378e60b89efa54881bd4c16ecf39f645
+  RNSoundPlayer: 369105c565b8fe6ea0a43fc882dc81eba444e842
   RNSoundRecorder: a753a2f5f3744c0e13922537222c6e0b926e5227
-  RNVectorIcons: 084c5c365eca594f94fda0192d8a380b2b40f9b5
+  RNVectorIcons: 6731bd488db95f4197433b30d81d03dc228b367e
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   Yoga: 86fed2e4d425ee4c6eab3813ba1791101ee153c6
 
-PODFILE CHECKSUM: 2acfb8ca7b2749445bd5962df5ca93f5cbc0125c
+PODFILE CHECKSUM: b9e5fef925d66e07faecfe51cd40be84a10ca383
 
 COCOAPODS: 1.15.2
