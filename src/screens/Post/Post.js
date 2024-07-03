@@ -170,26 +170,49 @@ const Post = (props) => {
     // }
   };
 
-  const remmoveAsset = async (currentProduct) => {
-    const cloneMultipleAssetsPaths = [...imagesPaths];
-    const removeTheSelectedAssetPaths = cloneMultipleAssetsPaths.filter(
-      (item) => item !== currentProduct
-    );
-    setImagesPaths(removeTheSelectedAssetPaths);
+  const remmoveAsset = async (currentProduct, type) => {
+    if (type == "image") {
 
-    const uri = await RNFS.readFile(currentProduct, "base64")
-      .then((res) => {
-        return "data:image/png/jpeg/jpg;base64," + res;
-      })
-      .catch((err) => {
-        console.log("Error IN BASE^$ Convertion", err);
-      });
-    const cloneMultipleAssets = [...images];
-    const removeTheSelectedAsset = cloneMultipleAssets.filter(
-      (item) => item !== uri
-    );
-    console.log("After Remove", removeTheSelectedAsset);
-    setImages(removeTheSelectedAsset);
+      const cloneMultipleAssetsPaths = [...imagesPaths];
+      const removeTheSelectedAssetPaths = cloneMultipleAssetsPaths.filter(
+        (item) => item !== currentProduct
+      );
+      setImagesPaths(removeTheSelectedAssetPaths);
+
+      const uri = await RNFS.readFile(currentProduct, "base64")
+        .then((res) => {
+          return "data:image/png/jpeg/jpg;base64," + res;
+        })
+        .catch((err) => {
+          console.log("Error IN BASE^$ Convertion", err);
+        });
+      const cloneMultipleAssets = [...images];
+      const removeTheSelectedAsset = cloneMultipleAssets.filter(
+        (item) => item !== uri
+      );
+      // console.log("After Remove Image", removeTheSelectedAsset);
+      setImages(removeTheSelectedAsset);
+    } else {
+      const cloneMultipleAssetsPaths = [...videoPaths];
+      const removeTheSelectedAssetPaths = cloneMultipleAssetsPaths.filter(
+        (item) => item !== currentProduct
+      );
+      setVideoPaths(removeTheSelectedAssetPaths);
+
+      const uri = await RNFS.readFile(currentProduct, "base64")
+        .then((res) => {
+          return "data:video/mp4" + res;
+        })
+        .catch((err) => {
+          console.log("Error IN BASE^$ Convertion", err);
+        });
+      const cloneMultipleAssets = [...videos];
+      const removeTheSelectedAsset = cloneMultipleAssets.filter(
+        (item) => item !== uri
+      );
+      // console.log("After Remove Video", removeTheSelectedAsset);
+      setVideos(removeTheSelectedAsset);
+    }
   };
 
   const updateImageInGallery = async (path, mime, type) => {
@@ -254,7 +277,7 @@ const Post = (props) => {
         //   maxWidth: 400,
         //   quality: 1,
         // });
-        console.log("Result",path);
+        console.log("Result", path);
         const uri = await RNFS.readFile(path, "base64")
           .then((res) => {
             // return "data:image/png/jpeg/jpg;base64," + res;
@@ -1351,7 +1374,7 @@ const Post = (props) => {
           }
           multipleAssetsPost={imagesPaths}
           multipleVideos={videoPaths}
-          remmoveAsset={(val) => remmoveAsset(val)}
+          remmoveAsset={(val, type) => remmoveAsset(val, type)}
         />
 
         {/* option like sale/rent Price category yards etc */}
