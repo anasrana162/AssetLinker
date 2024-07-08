@@ -507,6 +507,7 @@ class Dash extends Component {
               style={{ marginTop: 90 }}
             />
           ) : (
+            // <></>
             <AllPosts
               key={this.state.key}
               data={

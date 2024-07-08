@@ -7,7 +7,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import MultipleimagePicker from '../../../components/MultipleimagePicker'
 import Video, { VideoRef } from 'react-native-video';
 const ImageURL = "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/"
-
+const VideoURL = "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/videos/property/"
 
 const ImageSelector = ({
     setMultipleAssetsPost,
@@ -23,30 +23,7 @@ const ImageSelector = ({
 
     const [isPaused, setIsPaused] = useState([])
     var [keyy, setKeyy] = useState(0)
-    const [videoToPausePlay, setVideoToPausePlay] = useState(null)
 
-    const someCoolFunctions = async () => {
-        if (!videoRef.current) {
-            return;
-        }
-
-        // present or dismiss fullscreen player
-        videoRef.current.presentFullscreenPlayer();
-        videoRef.current.dismissFullscreenPlayer();
-
-        // pause or play the video
-        videoRef.current.play();
-        videoRef.current.pause();
-
-        // save video to your Photos with current filter prop
-        const response = await videoRef.current.save();
-        const path = response.uri;
-
-        // seek to the specified position represented by seconds
-        videoRef.current.seek(200);
-        // or on iOS you can seek with tolerance
-        videoRef.current.seek(200, 10);
-    };
     // console.log("videoRef", videoRef.current);
 
     const videoFunctions = (key, videoIndex) => {
@@ -57,14 +34,14 @@ const ImageSelector = ({
                 temp[videoIndex].paused = true
                 setIsPaused(temp)
                 videoRef?.current?.pause();
-                setKeyy(keyy+1)
+                setKeyy(keyy + 1)
                 break;
             case "play":
                 var temp1 = isPaused
                 temp1[videoIndex].paused = false
                 setIsPaused(temp1)
                 videoRef?.current?.resume();
-                setKeyy(keyy+1)
+                setKeyy(keyy + 1)
                 break;
         }
     }
@@ -86,6 +63,7 @@ const ImageSelector = ({
             setIsPaused(arr)
         }
     }
+    console.log("multipleVideos", multipleVideos);
     return (
         <>
             <View style={styles.mainContainer}>
@@ -115,7 +93,7 @@ const ImageSelector = ({
                         }}>
                         {multipleAssetsPost &&
                             multipleAssetsPost?.map((item, index) => {
-
+                                console.log("itemn Image", item);
                                 return (
                                     <View
                                         style={{ position: 'relative', marginHorizontal: 5 }}
@@ -184,23 +162,60 @@ const ImageSelector = ({
             </View>
             <View style={{ flexDirection: 'row', marginHorizontal: 10, marginTop: 10 }}>
                 <ScrollView
-                   
+
                     horizontal={true} showsHorizontalScrollIndicator={true}>
-                    {multipleVideos &&
+                    {multipleVideos[0] !== '' &&
                         multipleVideos.map((item, index) => {
-                            console.log("index :::", index + " :", isPaused[index]?.paused)
+                            // console.log("index :::", index + " :", isPaused[index]?.paused)
                             return (
                                 <View
                                     style={{ position: 'relative', }}
                                     key={index + 1}>
                                     {
-                                        item.includes(".mp4", 0) == true ?
+                                        item.includes("..mp4", 0) == true ?
                                             <View
                                                 style={{ width: width - 20, justifyContent: "center", marginHorizontal: 5, alignItems: "center", height: 200, borderRadius: 20, overflow: "hidden" }}
                                             >
 
                                                 <Video
-                                                 key={keyy}
+                                                    key={keyy}
+                                                    // Can be a URL or a local file.
+                                                    source={{ uri: VideoURL+item }}
+                                                    // Store reference  
+                                                    ref={videoRef}
+                                                    paused={isPaused[index]?.paused}
+                                                    repeat
+                                                    style={{ width: "100%", height: "100%", }}
+                                                />
+
+                                                <TouchableOpacity
+                                                    style={styles.pause_play_button}
+                                                    onPress={() => {
+                                                        if (isPaused[index].paused == true) {
+                                                            console.log("isPuased");
+                                                            videoFunctions('play', index)
+                                                        } else {
+                                                            console.log("isResumed");
+                                                            videoFunctions('pause', index)
+                                                        }
+
+                                                    }}
+                                                >
+                                                    {isPaused[index]?.paused ?
+                                                        <Feather name="play" size={30} color="white" style={{ marginLeft: 5 }} />
+                                                        :
+                                                        <Feather name="pause" size={30} color="white" style={{ marginLeft: 0 }} />
+                                                    }
+                                                </TouchableOpacity>
+
+                                            </View>
+                                            :
+                                            <View
+                                                style={{ width: width - 20, justifyContent: "center", marginHorizontal: 5, alignItems: "center", height: 200, borderRadius: 20, overflow: "hidden" }}
+                                            >
+
+                                                <Video
+                                                    key={keyy}
                                                     // Can be a URL or a local file.
                                                     source={{ uri: item }}
                                                     // Store reference  
@@ -231,8 +246,7 @@ const ImageSelector = ({
                                                 </TouchableOpacity>
 
                                             </View>
-                                            :
-                                            <Text>This is video</Text>
+                                        // <Text>This is video</Text>
 
                                     }
                                     <TouchableOpacity

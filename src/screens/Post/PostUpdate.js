@@ -285,7 +285,7 @@ const PostUpdate = (props) => {
                 setVideos(mergeImagesWithExistingGalleryAssets);
             } else {
                 const getExistingGalleryAssets = [];
-                const getExistingGalleryAssetsPaths = videoPaths == null ? [] : [...videoPaths];
+                const getExistingGalleryAssetsPaths = videoPaths[0] == '' ? [] : [...videoPaths];
                 // const imageObject = {
                 //     uri: path,
                 //     name: `image${Date.now()}.${mime.slice(mime.lastIndexOf('/') + 1)}`,

@@ -264,7 +264,8 @@ class PostDetail extends Component {
 
           {/* Images Viewer */}
           <ImageViewer
-            Images={data?.post_images}
+            Images={[...data?.post_images,...data?.videos]}
+            // Videos={data?.videos}
             position={data?.post_images?.length == 1 ? 0 : this.state.position}
             openImageModal={(image, index) => this.openImageModal(image, index)}
           />
@@ -507,7 +508,7 @@ class PostDetail extends Component {
           <ImageModal
             imageSelected={this.state.imageModal?.image}
             indexSelected={this.state.imageModal?.index}
-            images={data?.post_images}
+            images={[...data?.post_images,...data?.videos]}
             closeModal={() => this.closeImageModal()}
             imageLink={"https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/"}
           />

@@ -114,7 +114,7 @@ const Post = (props) => {
   const [images, setImages] = useState("");
   const [imagesPaths, setImagesPaths] = useState("");
   const [videos, setVideos] = useState("");
-  const [videoPaths, setVideoPaths] = useState("");
+  const [videoPaths, setVideoPaths] = useState([]);
   const [loader, setLoader] = useState(false);
   const [check, setCheck] = useState(true);
   const [dropdownDataChange, setDropdownDataChange] = useState(false);
@@ -226,7 +226,7 @@ const Post = (props) => {
       console.log("Video recieved :", path);
       if (Array.isArray(path)) {
         const arr = path?.map(async (item) => {
-          console.log("Working Image selector1");
+          // console.log("Working Image selector1");
           const result = await ImageCompressor.compress(item.path, {
             // maxHeight: 400,
             // maxWidth: 400,
@@ -246,7 +246,7 @@ const Post = (props) => {
             .catch((err) => {
               console.log("Error IN BASE^$ Convertion", err);
             });
-          console.log("Selected Images", uri)
+          // console.log("Selected Images", uri)
           multipleVideos.push(uri.apiPath);
           multipleVideosPaths.push(result);
         });
@@ -264,7 +264,7 @@ const Post = (props) => {
         // setMultipleAssetsPost(mergeImagesWithExistingGalleryAssets);
         setVideos(mergeImagesWithExistingGalleryAssets);
       } else {
-        const getExistingGalleryAssets = [];
+        const getExistingGalleryAssets = [...videos];
         const getExistingGalleryAssetsPaths = [...videoPaths];
         // const imageObject = {
         //     uri: path,
@@ -291,7 +291,9 @@ const Post = (props) => {
           .catch((err) => {
             console.log("Error IN BASE^$ Convertion", err);
           });
+        // getExistingGalleryAssets.push("test");
         getExistingGalleryAssets.push(uri.apiPath);
+        console.log("Object Viudeo", getExistingGalleryAssets);
         getExistingGalleryAssetsPaths.push(path);
         setVideoPaths(getExistingGalleryAssetsPaths);
         // setMultipleAssetsPost(getExistingGalleryAssets);
@@ -331,7 +333,7 @@ const Post = (props) => {
             .catch((err) => {
               console.log("Error IN BASE^$ Convertion", err);
             });
-          console.log("Selected Images", uri)
+          // console.log("Selected Images", uri)
           multipleImages.push(uri.apiPath);
           multipleImagePaths.push(result);
         });
@@ -725,6 +727,7 @@ const Post = (props) => {
     var obj = {};
     switch (category) {
       case "Commercial":
+        console.log("location Main", videos);
         const check = checkCategoryData();
         obj = {
           user_id: id,
@@ -736,6 +739,7 @@ const Post = (props) => {
           category: propertyCategory,
           corner: selected_constructionStatus_corner,
           open: selected_constructionStatus_open,
+          videos: videos,
           furnished: "Null",
           bedrooms: "Null",
           bathrooms: "Null",
@@ -762,6 +766,7 @@ const Post = (props) => {
           yards: yards == "Others" ? yardsNumber + " " + yards_Unit : yardsNumber + " " + yards.toLowerCase(),
           category: propertyCategory,
           corner: selected_constructionStatus_corner,
+          videos: videos,
           open: selected_constructionStatus_open,
           furnished: furnished,
           bedrooms: bedrooms1,

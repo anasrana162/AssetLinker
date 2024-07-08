@@ -345,7 +345,8 @@ class App extends Component {
   };
 };
 
-export default codePush(codePush.CheckFrequency.ON_APP_START)(App);
+// export default codePush(codePush.CheckFrequency.ON_APP_START)(App);
+export default App
 
 const styles = StyleSheet.create({
   container: {

@@ -1,312 +1,301 @@
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
-  NativeModules,
   Dimensions,
   TouchableOpacity,
-  Linking,
   FlatList,
   Image,
-  Platform,
 } from "react-native";
-import React, { useState } from "react";
-const {
-  StatusBarManager: { HEIGHT },
-} = NativeModules;
-const width = Dimensions.get("screen").width;
 import { Colors } from "../../../config";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-// import postApi from '../../../../src1/old screensÏ/redux1/RequestTypes/post';
 import moment from "moment";
 import { postImageURL } from "../../../config/Common";
-import { chatDeleteHandler } from "../../Chat/Chatlist";
-import { deleteMessagesHandler } from "../../Chat/ChatScreen";
 
-const AllPosts = ({
-  data,
-  userID,
-  openDeletePostModal,
-  openReportModal,
-  navProps,
-  onFavPress,
-  refreshKey,
-}) => {
-  // STATES
+const { width } = Dimensions.get("screen");
 
-  // console.log(data == null ? "": data[0]);
+const AllPosts = React.memo(
+  ({
+    data,
+    userID,
+    openDeletePostModal,
+    openReportModal,
+    navProps,
+    onFavPress,
+    refreshKey,
+  }) => {
+    const [showOption, setShowOption] = useState(false);
+    const [itemId, setItemId] = useState("");
 
-  const [showOption, setShowOption] = React.useState(false);
-  const [itemId, setItemId] = React.useState("");
+    const onOptionPress = (itemID) => {
+      setImmediate(() => {
+        setItemId(itemID);
+      });
+      setShowOption(!showOption);
+    };
 
-  // Functions
-
-  const onOptionPress = (itemID) => {
-    setImmediate(() => {
-      setItemId(itemID);
-    });
-    setShowOption(!showOption);
-  };
-
-  return (
-    <View style={styles.mainContainer}>
-      <View style={styles.flatlist_cont}>
-        <FlatList
-          data={data}
-          key={refreshKey}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 100, marginTop: 5 }}
-          numColumns={2}
-          scrollEnabled={false}
-          columnWrapperStyle={styles.inner_main}
-          ListEmptyComponent={() => {
-            return (
-              <View style={{ width: "100%", alignSelf: "center", alignItems: "center" }}>
-                <Text style={{ fontSize: 26, color: "black", marginTop: 100 }}>No Data Available</Text>
-              </View>
-            )
-          }}
-          renderItem={(item, index) => {
-            const docID = item?.item?.user_id + "" + item?.item?.id;
-            const postID = "" + item?.item?.id;
-            var Location = "";
-            if (
-              item?.item?.Location !== "Null" ||
-              item?.item?.Location !== ""
-            ) {
-              Location = JSON.parse(item?.item?.Location);
-              // console.log("DATA FLATLIST IMAGES,", Location?.location)
-            }
-            return (
+    return (
+      <View style={styles.mainContainer}>
+        <View style={styles.flatlist_cont}>
+          <FlatList
+            data={data}
+            key={refreshKey}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 100, marginTop: 5 }}
+            numColumns={2}
+            scrollEnabled={false}
+            columnWrapperStyle={styles.inner_main}
+            // ListFooterComponent={()=>{
+            //   return(
+            //     < Text > NO DATA</Text >
+            //   )
+            // }}
+            ListEmptyComponent={() => (
               <View
-
-                key={String(index)}
-
-                style={styles.itemContainer}
+                style={{
+                  width: "100%",
+                  alignSelf: "center",
+                  alignItems: "center",
+                }}
               >
-
-                <TouchableOpacity
-                  onPressIn={() => onOptionPress(item?.item?.id)}
-                  style={styles.optionBtn}>
-                  <Entypo
-                    name="dots-three-horizontal"
-                    size={25}
-                    color="white"
-                  />
-                </TouchableOpacity>
-
-                {/* black background */}
-                {itemId == item?.item?.id && showOption == true && (
-                  <TouchableOpacity
-                    onPress={() => setShowOption(false)}
-                    activeOpacity={0.5}
-                    style={styles.fade}></TouchableOpacity>
-                )}
-
-
-                {itemId == item?.item?.id && showOption == true && <View style={styles.optionMenu_cont}>
-                  {userID == item?.item?.user_id && <TouchableOpacity
-                    onPress={() => {
-                      // console.log("ALL POST >>>>", docID);
-                      setShowOption(false);
-                      openDeletePostModal(postID, docID);
-                    }}
-                    activeOpacity={0.5}
-                    style={styles.menu_item_btn}>
-                    <Text style={styles.delete_text}>Delete</Text>
-                  </TouchableOpacity>}
-                  {/* {userID == item?.item?.user_id &&  */}
-                  <TouchableOpacity
-                    onPress={() => {
-                      // console.log("ALL POST >>>>", docID);
-                      navProps.navigate("PostUpdate", {
-                        data: item?.item,
-                      });
-                      setShowOption(false);
-                    }}
-                    activeOpacity={0.5}
-                    style={styles.menu_item_btn}>
-                    <Text style={[styles.delete_text,{color:Colors.black}]}>Update</Text>
-                  </TouchableOpacity>
-                   {/* } */}
-                  {userID !== item?.item?.user_id && <TouchableOpacity
-                    onPress={() => {
-                      console.log("ALL POST >>>>", docID);
-                      setShowOption(false);
-                      openReportModal(item?.item)
-                    }}
-                    activeOpacity={0.5}
-                    style={styles.menu_item_btn}>
-                    <Text style={styles.delete_text}>Report</Text>
-                  </TouchableOpacity>}
-                </View>}
-
-
-                {/* Image */}
-
-                {item?.item.post_images[0] === "" ? (
-                  <TouchableOpacity
-                    style={styles.itemImage}
-                    activeOpacity={0.7}
-                    disabled={showOption}
-                    onPress={() => {
-                      // console.log(item,index);
-                      navProps.navigate("PostDetail", {
-                        data: item?.item,
-                        location: Location?.location,
-                        subLocation: Location?.place,
-                        index: item?.index,
-                      })
-                    }}
-                  >
-
-                    <Image
-                      resizeMode="cover"
-                      source={require("../../../../assets/Assetlinker_A.jpg")}
-                      style={styles.itemImage}
-                    />
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    style={styles.itemImage}
-                    activeOpacity={0.7}
-                    disabled={showOption}
-                    onPress={() => {
-                      console.log(item);
-                      navProps.navigate("PostDetail", {
-                        data: item?.item,
-                        location: Location?.location,
-                        subLocation: Location?.place,
-                        index: item?.index,
-                      })
-                    }}
-                  >
-
-                    <Image
-                      source={{ uri: postImageURL + item?.item.post_images[0] }}
-                      style={styles.itemImage}
-                    />
-                  </TouchableOpacity>
-                )}
-                {/* Plot Category (Bulding, shop etc) */}
-                {item?.item?.category == "Null" ? <></> : <Text style={styles.propertyTypeText}>
-                  {item?.item?.category}
-                </Text>}
-
-                {item?.item?.property_type.toLowerCase() == "plot" ? <Text numberOfLines={1} style={[styles.propertyTypeText, { fontSize: 14, width: 160 }]}>
-                  {item?.item?.phase}
-                </Text> : <></>}
-
-                {/* Property Type ("commercial",'Residential", Plot) */}
-                <Text style={[styles.propertyTypeText, { fontSize: 14, fontWeight: "600", marginTop: item?.item?.category == "Null" ? 5 : 0 }]}>
-                  {item?.item?.property_type} /
-                  <Text style={[styles.propertyTypeText, { fontSize: 14, fontWeight: "400" }]}> {item?.item?.rent_sale}</Text>
-                  {/* {item?.item?.property_type} */}
+                <Text style={{ fontSize: 26, color: "black", marginTop: 100 }}>
+                  No Data Available
                 </Text>
-                {/* {item?.item?.category == "Null" ? <></> : <Text style={styles.plotCategory}>
-                  Plot Category: {item?.item?.category}
-                </Text>} */}
-
-                {/* Description (details) */}
-                {/* <Text numberOfLines={2} style={styles.description}>{item?.item?.details}</Text> */}
-
-                {/* Location and Price */}
-                <View style={styles.location_price_cont}>
-                  {Location !== "Null" && (
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginLeft: 5,
-                      }}>
-                      <Ionicons name="location-sharp" color={Colors.blue} />
-                      <Text style={styles.locationText}>
-                        {Location?.location},{" "}
-                      </Text>
-                      <Text style={styles.locationText}>
-                        {Location?.place == null ? "":Location?.place}
-                      </Text>
-
-                    </View>
-                  )}
-                  {/* <Text
-                    style={[
-                      styles.priceText,
-                      { marginLeft: Location !== "Null" ? 5 : 0 },
-                    ]}>
-                    {item?.item?.property_type}
-                  </Text> */}
-                </View>
-                <Text
-                  style={[
-                    styles.priceText,
-                    { marginTop: 5, marginLeft: 5, fontSize: 15, fontWeight: "700" },
-                  ]}>
-                  Rs.{item?.item?.price}
-                </Text>
-
-                {/* Posted At */}
-                <Text style={styles.posted_at}>
-                  Posted: {moment(item?.item?.created_at).format("YYYY-MM-DD")}
-                </Text>
-
-                <View style={styles.iconCont}>
-                  {/* Line */}
-                  <View style={styles.line}></View>
-
-                  {/* Icons */}
-                  <View
-                    style={[
-                      styles.location_price_cont,
-                      { justifyContent: "space-around", marginTop: 5 },
-                    ]}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        onFavPress(
-                          item?.item?.id,
-                          item?.item?.is_favourite,
-                          index,
-                        )
-                      }>
-                      <AntDesign
-                        name="heart"
-                        size={20}
-                        color={
-                          item?.item?.is_favourite == 1 ||
-                            item?.item?.is_favourite == undefined
-                            ? "red"
-                            :
-                            Colors.DarkGrey
-                        }
-                      />
-                    </TouchableOpacity>
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}>
-                      <Entypo name="eye" size={20} color={Colors.DarkGrey} />
-                      <Text style={[styles.posted_at, { marginTop: 0 }]}>
-                        {item?.item?.views}
-                      </Text>
-                    </View>
-                    <TouchableOpacity>
-                      <AntDesign
-                        name="staro"
-                        size={20}
-                        color={Colors.DarkGrey}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
               </View>
-            );
-          }}
-        />
-      </View>
-    </View>
-  );
-};
+            )}
+            renderItem={({ item, index }) => {
+              const docID = item?.user_id + "" + item?.id;
+              const postID = "" + item?.id;
+              let Location = "";
+              if (item?.Location !== "Null" || item?.Location !== "") {
+                Location = JSON.parse(item?.Location);
+              }
+              // console.log("index == index + 3", index + 4);
+              return (
+                <>
+                  <View key={String(index)} style={styles.itemContainer}>
+                    <TouchableOpacity
+                      onPressIn={() => onOptionPress(item?.id)}
+                      style={styles.optionBtn}
+                    >
+                      <Entypo
+                        name="dots-three-horizontal"
+                        size={25}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+
+                    {itemId == item?.id && showOption == true && (
+                      <TouchableOpacity
+                        onPress={() => setShowOption(false)}
+                        activeOpacity={0.5}
+                        style={styles.fade}
+                      ></TouchableOpacity>
+                    )}
+
+                    {itemId == item?.id && showOption == true && (
+                      <View style={styles.optionMenu_cont}>
+                        {userID == item?.user_id && (
+                          <TouchableOpacity
+                            onPress={() => {
+                              setShowOption(false);
+                              openDeletePostModal(postID, docID);
+                            }}
+                            activeOpacity={0.5}
+                            style={styles.menu_item_btn}
+                          >
+                            <Text style={styles.delete_text}>Delete</Text>
+                          </TouchableOpacity>
+                        )}
+
+                        <TouchableOpacity
+                          onPress={() => {
+                            navProps.navigate("PostUpdate", { data: item });
+                            setShowOption(false);
+                          }}
+                          activeOpacity={0.5}
+                          style={styles.menu_item_btn}
+                        >
+                          <Text style={[styles.delete_text, { color: Colors.black }]}>
+                            Update
+                          </Text>
+                        </TouchableOpacity>
+
+                        {userID !== item?.user_id && (
+                          <TouchableOpacity
+                            onPress={() => {
+                              setShowOption(false);
+                              openReportModal(item);
+                            }}
+                            activeOpacity={0.5}
+                            style={styles.menu_item_btn}
+                          >
+                            <Text style={styles.delete_text}>Report</Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    )}
+
+                    {item?.post_images[0] === "" ? (
+                      <TouchableOpacity
+                        style={styles.itemImage}
+                        activeOpacity={0.7}
+                        disabled={showOption}
+                        onPress={() => {
+                          navProps.navigate("PostDetail", {
+                            data: item,
+                            location: Location?.location,
+                            subLocation: Location?.place,
+                            index: index,
+                          });
+                        }}
+                      >
+                        <Image
+                          resizeMode="cover"
+                          source={require("../../../../assets/Assetlinker_A.jpg")}
+                          style={styles.itemImage}
+                        />
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity
+                        style={styles.itemImage}
+                        activeOpacity={0.7}
+                        disabled={showOption}
+                        onPress={() => {
+                          navProps.navigate("PostDetail", {
+                            data: item,
+                            location: Location?.location,
+                            subLocation: Location?.place,
+                            index: index,
+                          });
+                        }}
+                      >
+                        <Image
+                          source={{ uri: postImageURL + item?.post_images[0] }}
+                          style={styles.itemImage}
+                        />
+                      </TouchableOpacity>
+                    )}
+
+                    {item?.category == "Null" ? (
+                      <></>
+                    ) : (
+                      <Text style={styles.propertyTypeText}>
+                        {item?.category}
+                      </Text>
+                    )}
+
+                    {item?.property_type.toLowerCase() == "plot" ? (
+                      <Text
+                        numberOfLines={1}
+                        style={[styles.propertyTypeText, { fontSize: 14, width: 160 }]}
+                      >
+                        {item?.phase}
+                      </Text>
+                    ) : (
+                      <></>
+                    )}
+
+                    <Text
+                      style={[
+                        styles.propertyTypeText,
+                        { fontSize: 14, fontWeight: "600", marginTop: item?.category == "Null" ? 5 : 0 }
+                      ]}
+                    >
+                      {item?.property_type}
+                      <Text style={[styles.propertyTypeText, { fontSize: 14, fontWeight: "400" }]}>
+                        {" "}/{" "}
+                        {item?.rent_sale}
+                      </Text>
+                    </Text>
+
+                    {/* <View style={styles.location_price_cont}> */}
+                    {Location !== "Null" && (
+                      <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 5, marginTop: 5 }}>
+                        <Ionicons name="location-sharp" color={Colors.blue} />
+                        <Text style={styles.locationText}>
+                          {Location?.location}
+                        </Text>
+                        {
+                          (Location?.place == null || Location?.place == "Null") ?
+                            <></>
+                            :
+                            <Text style={styles.locationText}>
+                              ,{" "} {Location?.place}
+                            </Text>
+                        }
+                      </View>
+                    )}
+
+                    {/* </View> */}
+                    <Text
+                      style={[
+                        styles.priceText,
+                        { marginTop: 5, marginLeft: 5, fontSize: 15, fontWeight: "700", }
+                      ]}
+                    >
+                      Rs.{item?.price}
+                    </Text>
+
+                    <Text style={styles.posted_at}>
+                      Posted: {moment(item?.created_at).format("YYYY-MM-DD")}
+                    </Text>
+
+                    <View style={styles.iconCont}>
+                      <View style={styles.line}></View>
+
+                      <View
+                        style={[
+                          styles.location_price_cont,
+                          { justifyContent: "space-around", marginTop: 5 },
+                        ]}
+                      >
+                        <TouchableOpacity
+                          onPress={() =>
+                            onFavPress(item?.id, item?.is_favourite, index)
+                          }
+                        >
+                          <AntDesign
+                            name="heart"
+                            size={20}
+                            color={
+                              item?.is_favourite == 1 || item?.is_favourite == undefined
+                                ? "red"
+                                : Colors.DarkGrey
+                            }
+                          />
+                        </TouchableOpacity>
+
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                          <Entypo name="eye" size={20} color={Colors.DarkGrey} />
+                          <Text style={[styles.posted_at, { marginTop: 0 }]}>
+                            {item?.views}
+                          </Text>
+                        </View>
+
+                        <TouchableOpacity>
+                          <AntDesign
+                            name="staro"
+                            size={20}
+                            color={Colors.DarkGrey}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+
+                </>
+              );
+            }}
+          />
+        </View>
+      </View >
+    );
+  }
+);
 
 export default AllPosts;
 
@@ -316,7 +305,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
   flatlist_cont: {
     width: width,
     alignSelf: "center",
@@ -325,13 +313,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   inner_main: {
-    // width: "100%",
-    // alignItems: "center",
-    // width:"100%",
-    // backgroundColor:"green",
     justifyContent: "space-between",
   },
-
   optionBtn: {
     paddingHorizontal: 4,
     paddingVertical: 1,
@@ -346,7 +329,6 @@ const styles = StyleSheet.create({
   },
   optionMenu_cont: {
     width: "70%",
-    // height: 40,
     borderRadius: 10,
     backgroundColor: "white",
     position: "absolute",
@@ -376,7 +358,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
     justifyContent: "center",
     alignItems: "center",
-    // borderWidth:1,
   },
   delete_text: {
     fontWeight: "600",
@@ -412,24 +393,6 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     letterSpacing: 0.5,
   },
-
-  plotCategory: {
-    fontWeight: "400",
-    fontSize: 12,
-    color: Colors.black,
-    marginTop: 5,
-    marginLeft: 5,
-  },
-
-  description: {
-    width: "95%",
-    fontSize: 12,
-    fontSize: 12,
-    color: Colors.black,
-    marginTop: 5,
-    marginLeft: 5,
-  },
-
   location_price_cont: {
     width: "100%",
     flexDirection: "row",
@@ -437,7 +400,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginTop: 5,
   },
-
   locationText: {
     fontWeight: "400",
     fontSize: 12,
@@ -448,7 +410,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.black,
     marginRight: 5,
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
   },
   posted_at: {
     fontWeight: "600",
