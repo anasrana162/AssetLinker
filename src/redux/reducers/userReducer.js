@@ -1,11 +1,12 @@
 import {
-    TOKEN, USER,HOMEPOSTS
+    TOKEN, USER, HOMEPOSTS, HOMEPOSTSBUILDER
 } from '../constants';
 
 const initialState = {
     user: {},
     token: null,
     homeposts: null,
+    homepostsbuilder: null,
 
 };
 
@@ -26,6 +27,11 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 homeposts: action.payload
+            };
+        case HOMEPOSTSBUILDER:
+            return {
+                ...state,
+                homepostsbuilder: action.payload
             };
 
         default:

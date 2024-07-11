@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { Colors } from "../../../config";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -26,9 +27,15 @@ const AllPosts = React.memo(
     navProps,
     onFavPress,
     refreshKey,
+    allowBuilders,
+    showBuilderList,
+    builderData
   }) => {
     const [showOption, setShowOption] = useState(false);
     const [itemId, setItemId] = useState("");
+    const [slicedLength, setSlicedLenght] = useState(10)
+    const [slicedLoader, setSlicedLoader] = useState(false)
+
 
     const onOptionPress = (itemID) => {
       setImmediate(() => {
@@ -37,22 +44,219 @@ const AllPosts = React.memo(
       setShowOption(!showOption);
     };
 
+    // Function to render "Hello" text after every 4 items in the FlatList
+    const renderSeparator = (index) => {
+      // Calculate the row index based on the number of columns
+      const rowIndex = Math.floor(index / 2); // Assuming 2 columns
+
+      // Check if it's the first row or every 4th row after the first
+      if (rowIndex > 0 && (rowIndex % 3 === 0)) {
+        if (builderData == null) {
+          return
+        }
+        return <View style={styles.builderListMainCont}>
+          <FlatList
+            data={builderData == null ? [] : builderData}
+            // keyExtractor={(index) => index}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            renderItem={({ item, index }) => {
+              // console.log("Item",item);
+              const docID = item?.user_id + "" + item?.id;
+              const postID = item?.property_id;
+              let Location = "";
+              if (item?.Location !== "Null" || item?.Location !== "") {
+                Location = JSON.parse(item?.Location);
+              }
+              return (
+                <View
+                  key={index}
+                  style={styles.builderlist}
+                >
+
+                  <TouchableOpacity
+                    onPressIn={() => onOptionPress(item?.id)}
+                    style={styles.optionBtn}
+                  >
+                    <Entypo
+                      name="dots-three-horizontal"
+                      size={25}
+                      color="white"
+                    />
+                  </TouchableOpacity>
+
+                  {itemId == item?.id && showOption == true && (
+                    <TouchableOpacity
+                      onPress={() => setShowOption(false)}
+                      activeOpacity={0.5}
+                      style={styles.fade}
+                    ></TouchableOpacity>
+                  )}
+
+                  {itemId == item?.id && showOption == true && (
+                    <View style={[styles.optionMenu_cont, { top: 55, borderRadius: 10 }]}>
+                      {userID == item?.user_id && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setShowOption(false);
+                            openDeletePostModal(postID, docID);
+                          }}
+                          activeOpacity={0.5}
+                          style={styles.menu_item_btn}
+                        >
+                          <Text style={styles.delete_text}>Delete</Text>
+                        </TouchableOpacity>
+                      )}
+                      {userID == item?.user_id && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            navProps.navigate("PostUpdate", { data: item });
+                            setShowOption(false);
+                          }}
+                          activeOpacity={0.5}
+                          style={styles.menu_item_btn}
+                        >
+                          <Text style={[styles.delete_text, { color: Colors.black }]}>
+                            Update
+                          </Text>
+                        </TouchableOpacity>)}
+
+                      {userID !== item?.user_id && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setShowOption(false);
+                            openReportModal(item);
+                          }}
+                          activeOpacity={0.5}
+                          style={styles.menu_item_btn}
+                        >
+                          <Text style={styles.delete_text}>Report</Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  )}
+
+                  <TouchableOpacity
+                    // style={styles.itemImage}
+                    activeOpacity={0.7}
+                    disabled={showOption}
+                    onPress={() => {
+                      navProps.navigate("PostDetail", {
+                        data: item,
+                        location: Location?.location,
+                        subLocation: Location?.place,
+                        index: index,
+                      });
+                    }}
+                  >
+
+                    <Image
+                      source={{ uri: postImageURL + item?.post_images[0] }}
+                      style={{ width: width / 2.15, height: 100, borderRadius: 10 }}
+                    />
+                  </TouchableOpacity>
+                  {item?.category == "Null" ? (
+                    <></>
+                  ) : (
+                    <Text style={styles.propertyTypeText}>
+                      {item?.category}
+                    </Text>
+                  )}
+
+                  {item?.property_type.toLowerCase() == "plot" ? (
+                    <Text
+                      numberOfLines={1}
+                      style={[styles.propertyTypeText, { fontSize: 14, width: 160 }]}
+                    >
+                      {item?.phase}
+                    </Text>
+                  ) : (
+                    <></>
+                  )}
+
+                  <Text
+                    style={[
+                      styles.propertyTypeText,
+                      { fontSize: 14, fontWeight: "600", marginTop: item?.category == "Null" ? 5 : 0 }
+                    ]}
+                  >
+                    {item?.property_type}
+                    <Text style={[styles.propertyTypeText, { fontSize: 14, fontWeight: "400" }]}>
+                      {" "}/{" "}
+                      {item?.rent_sale}
+                    </Text>
+                  </Text>
+
+                  {Location !== "Null" && (
+                    <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 5, marginTop: 5 }}>
+                      <Ionicons name="location-sharp" color={Colors.blue} />
+                      <Text style={styles.locationText}>
+                        {Location?.location}
+                      </Text>
+                      {
+                        (Location?.place == null || Location?.place == "Null") ?
+                          <></>
+                          :
+                          <Text style={styles.locationText}>
+                            ,{" "} {Location?.place}
+                          </Text>
+                      }
+                    </View>
+                  )}
+                  <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", alignSelf: "flex-start", marginLeft: 5, width: "90%", marginTop: 5 }}>
+                    <Text
+                      style={[
+                        styles.propertyTypeText,
+                        { fontSize: 14, fontWeight: "600", marginTop: item?.category == "Null" ? 5 : 0 }
+                      ]}
+                    >
+                      {item?.name}
+                    </Text>
+                    <Text style={[styles.propertyTypeText, { fontSize: 12, fontWeight: "500", marginTop: 0 }]}>
+                      {item?.user_type?.toUpperCase()}
+                    </Text>
+                  </View>
+
+                </View>
+              )
+            }}
+          />
+        </View>
+      }
+      return null;
+    };
+
+
+    // const onEndReached = () => {
+    //   setSlicedLoader(true)
+    //   // console.log("END Reached")
+    //   // console.log("Data length", data?.length)
+
+    //   if (data?.length <= slicedLength) {
+    //     console.log("no data to reload")
+    //     setSlicedLoader(false)
+    //   }
+    //   if (data?.length > slicedLength) {
+    //     setSlicedLenght(slicedLength + 10)
+    //     setSlicedLoader(false)
+    //   }
+
+    // }
+
     return (
       <View style={styles.mainContainer}>
         <View style={styles.flatlist_cont}>
           <FlatList
+            // data={data.slice(0, slicedLength)}
             data={data}
             key={refreshKey}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 100, marginTop: 5 }}
             numColumns={2}
+            initialNumToRender={10}
+            // onEndReached={() => onEndReached()}
             scrollEnabled={false}
             columnWrapperStyle={styles.inner_main}
-            // ListFooterComponent={()=>{
-            //   return(
-            //     < Text > NO DATA</Text >
-            //   )
-            // }}
             ListEmptyComponent={() => (
               <View
                 style={{
@@ -66,6 +270,14 @@ const AllPosts = React.memo(
                 </Text>
               </View>
             )}
+            ListFooterComponent={() => {
+              return (<>{
+                slicedLoader &&
+                <View style={{ backgroundColor: "#f0f0f0", width: width, height: 60, justifyContent: "center", alignItems: "center" }}>
+
+                  <ActivityIndicator size="small" color="black" />
+                </View>}</>)
+            }}
             renderItem={({ item, index }) => {
               const docID = item?.user_id + "" + item?.id;
               const postID = "" + item?.id;
@@ -73,10 +285,25 @@ const AllPosts = React.memo(
               if (item?.Location !== "Null" || item?.Location !== "") {
                 Location = JSON.parse(item?.Location);
               }
-              // console.log("index == index + 3", index + 4);
+              // const rowIndex = Math.floor(index / 2); // Assuming 2 columns
+              // console.log("rowIndex > 0 ? rowIndex % 4 === 0 ? 100 : 5 : 5",rowIndex > 0 ? rowIndex % 4 === 0 ? 100 : 5 : 5);
               return (
                 <>
-                  <View key={String(index)} style={styles.itemContainer}>
+                  {item?.user_type == "builder" && allowBuilders == false ? <></> : <View key={String(index)} style={[styles.itemContainer, {
+                    marginBottom: (index + 1) % 6 === 0 && index !== data.length - 1 ?
+                      showBuilderList == false ?
+                        5 : builderData == null ?
+                          5 : 250 : 5,
+                    opacity: item?.experied == "expired" ? 0.6 : 1
+                  }]}>
+                    {item?.experied == "expired" && <View style={{
+                      width: "100%",
+                      height: "100%",
+                      position: "absolute",
+                      zIndex: 100
+                    }}>
+
+                    </View>}
                     <TouchableOpacity
                       onPressIn={() => onOptionPress(item?.id)}
                       style={styles.optionBtn}
@@ -111,7 +338,7 @@ const AllPosts = React.memo(
                           </TouchableOpacity>
                         )}
 
-                        <TouchableOpacity
+                        {userID == item?.user_id && <TouchableOpacity
                           onPress={() => {
                             navProps.navigate("PostUpdate", { data: item });
                             setShowOption(false);
@@ -122,7 +349,7 @@ const AllPosts = React.memo(
                           <Text style={[styles.delete_text, { color: Colors.black }]}>
                             Update
                           </Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
 
                         {userID !== item?.user_id && (
                           <TouchableOpacity
@@ -145,6 +372,14 @@ const AllPosts = React.memo(
                         activeOpacity={0.7}
                         disabled={showOption}
                         onPress={() => {
+                          console.log("obj on navigate:",
+                            {
+                              data: item,
+                              location: Location?.location,
+                              subLocation: Location?.place,
+                              index: index,
+                            }
+                          );
                           navProps.navigate("PostDetail", {
                             data: item,
                             location: Location?.location,
@@ -212,7 +447,6 @@ const AllPosts = React.memo(
                       </Text>
                     </Text>
 
-                    {/* <View style={styles.location_price_cont}> */}
                     {Location !== "Null" && (
                       <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 5, marginTop: 5 }}>
                         <Ionicons name="location-sharp" color={Colors.blue} />
@@ -230,7 +464,6 @@ const AllPosts = React.memo(
                       </View>
                     )}
 
-                    {/* </View> */}
                     <Text
                       style={[
                         styles.priceText,
@@ -243,6 +476,14 @@ const AllPosts = React.memo(
                     <Text style={styles.posted_at}>
                       Posted: {moment(item?.created_at).format("YYYY-MM-DD")}
                     </Text>
+                    {item?.experied == "expired" ?
+                      <Text style={[styles.posted_at, { color: "crimson", fontWeight: "600" }]}>
+                        Expired
+                      </Text>
+                      :
+                      <Text style={styles.posted_at}>
+                        Expires in: {item?.day_difference} days
+                      </Text>}
 
                     <View style={styles.iconCont}>
                       <View style={styles.line}></View>
@@ -285,8 +526,10 @@ const AllPosts = React.memo(
                         </TouchableOpacity>
                       </View>
                     </View>
-                  </View>
+                  </View>}
 
+                  {/* Render separator "Hello" after every 4th item */}
+                  {showBuilderList == false && builderData == null ? null : renderSeparator(index)}
                 </>
               );
             }}
@@ -315,6 +558,25 @@ const styles = StyleSheet.create({
   inner_main: {
     justifyContent: "space-between",
   },
+  builderlist: {
+    width: width / 2.15,
+    height: 200,
+    // borderWidth: 1,
+    marginRight: 13,
+    backgroundColor: "white",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    borderRadius: 10,
+    marginBottom: 10,
+    elevation: 5,
+  },
   optionBtn: {
     paddingHorizontal: 4,
     paddingVertical: 1,
@@ -338,6 +600,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 10,
+  },
+  builderListMainCont: {
+    width: width - 20,
+    left: 5,
+    // height: 120,
+    position: "absolute",
+    top: -230,
+    backgroundColor: "white",
+    paddingVertical: 10,
+    // borderWidth: 1,
   },
   fade: {
     width: "100%",

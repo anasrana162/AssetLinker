@@ -5,8 +5,6 @@ import AntDesign from "react-native-vector-icons/AntDesign"
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view';
 import Feather from 'react-native-vector-icons/Feather';
 import Video, { VideoRef } from 'react-native-video';
-const ImageURL = "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/"
-const VideoURL = "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/videos/property/"
 
 const {
     StatusBarManager: { HEIGHT },
@@ -15,7 +13,7 @@ const {
 const width = Dimensions.get("screen").width
 const height = Dimensions.get('screen').height - HEIGHT
 
-const ImageModal = ({ imageSelected, indexSelected, images, closeModal, imageLink }) => {
+const ImageModal = ({ imageSelected, indexSelected, images, closeModal, imageLink,videoLink }) => {
     const videoRef = useRef(VideoRef);
 
     //States
@@ -34,7 +32,7 @@ const ImageModal = ({ imageSelected, indexSelected, images, closeModal, imageLin
         } else if (images?.length == 0) {
             return
         } else {
-            console.log("images");
+            // console.log("images before",images);
             let arr = []
             for (let i = 0; i < images.length; i++) {
                 if (images[i]?.includes("..mp4", 0) == true) {
@@ -110,7 +108,7 @@ const ImageModal = ({ imageSelected, indexSelected, images, closeModal, imageLin
                             <Video
                                 key={keyy}
                                 // Can be a URL or a local file.
-                                source={{ uri: VideoURL + images[imageIndex] }}
+                                source={{ uri: videoLink + images[imageIndex] }}
                                 // Store reference  
                                 ref={videoRef}
                                 paused={isPaused[imageIndex]?.paused}

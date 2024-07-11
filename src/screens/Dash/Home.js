@@ -75,12 +75,14 @@ class Dash extends Component {
       postID: "",
       docID: "",
       Posts: null,
+      PostsBuilder: null,
       FilteredPosts: null,
       openSearchBar: false,
       openPreFilterModal: false,
       searched: "",
       loader: false,
       key: 0,
+      keyBuilder: 0,
       searchText: "",
     };
   }
@@ -98,6 +100,7 @@ class Dash extends Component {
           this.props.navigation.setParams({ refresh: null });
           this.setState({ Posts: null, FilteredPosts: null })
           this.getPosts();
+          this.getPostsBuilder()
         }
 
         //this.ScrollToRefresh();
@@ -112,14 +115,22 @@ class Dash extends Component {
     AsyncStorage.removeItem("@assetlinker_userCreds");
     actions?.userToken("");
     setTimeout(() => {
+      actions?.homePosts("");
+      actions?.homePostsBuilder("");
       actions?.user("");
       this.getPosts()
+      this.getPostsBuilder()
       // this.props?.navigation.navigate("GetStarted");
     }, 1000);
   };
 
   openDeletePostModal = (postID, docID) => {
-    // console.log("POST TO DELETE:", docID);
+    var {
+      userData: {
+        user: { id },
+      },
+    } = this.props;
+    console.log("POST TO DELETE:", postID,"    ",id );
     if (Object.keys(this.props.userData?.user).length == 0) {
       return this.props.navigation.navigate("Login")
     }
@@ -182,11 +193,13 @@ class Dash extends Component {
     })
       .then((res) => {
         if (res?.data) {
-          this.getPosts();
           this.setState({
             openDeletePostModal: false,
             Posts: null,
+            PostsBuilder: null,
           });
+          this.getPosts();
+          this.getPostsBuilder()
           Toast.show({
             type: "success",
             text1: "Post Deleted Successfully!",
@@ -205,10 +218,89 @@ class Dash extends Component {
 
   componentDidMount() {
     this.getPosts();
+    this.getPostsBuilder()
     this.runSlideShow();
     this.checkCallBacks();
   }
 
+  getPostsBuilder = () => {
+    var { userData: { user: { id }, homepostsbuilder, }, actions } = this.props;
+    this.setState({ loader: true })
+    // console.log("user", id);
+    if (id == undefined) {
+      AssetLinkers.get(
+        "get_propertyV2"
+      )
+        .then((res) => {
+          console.log("Get Post api Data :  ", res?.data?.property) 
+          if (res?.data) {
+            var posts = res?.data?.property
+
+            var tempPosts = []
+
+            for (let i = 0; i < posts.length; i++) {
+              if (posts[i].user_type == "builder") {
+                tempPosts.push(posts[i])
+              } else {
+
+              }
+            }
+            // console.log("tempPosts",tempPosts);
+            actions.homePostsBuilder(tempPosts?.reverse())
+            setImmediate(() => {
+              this.setState({
+                PostsBuilder: homepostsbuilder,
+                // FilteredPosts: homepostsbuilder,
+                loader: false,
+                keyBuilder: this.state.keyBuilder + 1
+              });
+            })
+          }
+        })
+        .catch((err) => {
+          this.setState({ loader: false })
+          console.log("Get Post api Error:  ", err?.response);
+        });
+    } else {
+      AssetLinkers.post(
+        "get_propertyV4", {
+        "id": id,
+        // "condition": "builder"
+      }
+      )
+        .then((res) => {
+          if (res?.data) {
+            // console.log("Get Post api Data:  ", res?.data?.property) 
+
+            var posts = res?.data?.property
+            var tempPosts = []
+
+            for (let i = 0; i < posts.length; i++) {
+              if (posts[i].user_type == "builder") {
+                tempPosts.push(posts[i])
+              } else {
+
+              }
+            }
+            // console.log("tempPosts",tempPosts);
+            actions.homePostsBuilder(tempPosts?.reverse())
+            setImmediate(() => {
+              this.setState({
+                PostsBuilder: homepostsbuilder,
+                // FilteredPosts: homepostsbuilder,
+                loader: false,
+                keyBuilder: this.state.keyBuilder + 1
+              });
+            })
+          }
+        })
+        .catch((err) => {
+          this.setState({ loader: false })
+          console.log("Get Post Builder api Error:  ", err);
+        });
+    }
+
+  };
   getPosts = () => {
     var { userData: { user: { id }, homeposts, }, actions } = this.props;
     this.setState({ loader: true })
@@ -220,7 +312,18 @@ class Dash extends Component {
         .then((res) => {
           // console.log("Get Post api Data:  ", res?.data?.property) 
           if (res?.data) {
-            actions.homePosts((res?.data?.property).reverse())
+            var posts = res?.data?.property
+            var tempPosts = []
+
+            for (let i = 0; i < posts.length; i++) {
+              if (posts[i].user_type !== "builder") {
+                tempPosts.push(posts[i])
+              } else {
+
+              }
+            }
+            // console.log("tempPosts",tempPosts);
+            actions.homePosts(tempPosts.reverse())
             setImmediate(() => {
               this.setState({
                 Posts: homeposts,
@@ -237,14 +340,26 @@ class Dash extends Component {
         });
     } else {
       AssetLinkers.post(
-        "get_propertyV3", {
+        "get_propertyV4", {
         id: id
       }
       )
         .then((res) => {
-          // console.log("Get Post api Data:  ", res?.data?.property) 
           if (res?.data) {
-            actions.homePosts((res?.data?.property).reverse())
+            // console.log("Get Post api Data:  ", res?.data?.property) 
+
+            var posts = res?.data?.property
+            var tempPosts = []
+
+            for (let i = 0; i < posts.length; i++) {
+              if (posts[i].user_type !== "builder") {
+                tempPosts.push(posts[i])
+              } else {
+
+              }
+            }
+            // console.log("tempPosts",tempPosts);
+            actions.homePosts(tempPosts.reverse())
             setImmediate(() => {
               this.setState({
                 Posts: homeposts,
@@ -431,7 +546,7 @@ class Dash extends Component {
   };
 
   render() {
-    var { userData: { homeposts } } = this.props;
+    var { userData: { homeposts,homepostsbuilder } } = this.props;
     // console.log("Props:  ",homeposts)
     const reportTypes = [
       {
@@ -515,6 +630,9 @@ class Dash extends Component {
                   ? this.state.FilteredPosts
                   : homeposts
               }
+              builderData={homepostsbuilder}
+              allowBuilders={false}
+              showBuilderList={true}
               navProps={this.props.navigation}
               userID={this.props.userData?.user?.id}
               openDeletePostModal={(postID, docID) =>

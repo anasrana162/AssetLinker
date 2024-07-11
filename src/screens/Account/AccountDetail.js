@@ -60,7 +60,12 @@ class AccountDetail extends Component {
       this.setState({ loader: true })
     })
     try {
-      const res = await AssetLinkers.get(`get_property/${user_id}`);
+      const res = await   AssetLinkers.post(
+        "get_propertyV4", {
+        "id": user_id,
+        "condition": "myprofile"
+      }
+      );
       if (res?.data) {
         console.log("Get User Post api Data:  ", res?.data?.property);
         this.setState({

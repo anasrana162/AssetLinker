@@ -57,9 +57,11 @@ class MyProfile extends Component {
   getUserPosts = () => {
     console.log("Working");
     var { id } = this.props?.userData?.user;
-    AssetLinkers.get(
-      "get_property/" +
-      id
+    AssetLinkers.post(
+      "get_propertyV4", {
+      "id": id,
+      "condition": "myprofile"
+    }
     )
       .then((res) => {
         if (res?.data) {
@@ -194,7 +196,7 @@ class MyProfile extends Component {
         this.deleteAccount()
         break;
       case "blocked_users":
-        this.setState({openDotModal: false})
+        this.setState({ openDotModal: false })
         this.props.navigation.navigate("BlockedUsers");
         break;
     }

@@ -1,5 +1,5 @@
 import {
-    TOKEN, USER, HOMEPOSTS
+    TOKEN, USER, HOMEPOSTS, HOMEPOSTSBUILDER
 } from '../constants';
 
 export function userToken(token) {
@@ -19,6 +19,13 @@ export function homePosts(posts) {
     // console.log("userObject in redux action",userObject)
     return {
         type: HOMEPOSTS,
+        payload: posts
+    }
+}
+export function homePostsBuilder(posts) {
+    // console.log("userObject in redux action",userObject)
+    return {
+        type: HOMEPOSTSBUILDER,
         payload: posts
     }
 }
