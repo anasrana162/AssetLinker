@@ -79,7 +79,7 @@ const Options = ({
                 {/* Price */}
                 <CustomTextInp
                     value={initPrice}
-                    keyboardType={"numeric"}
+                    // keyboardType={"numeric"}
                     titleEN={"Price *"}
                     onChangeText={(txt) => onChangeText(txt, "price")}
                 />

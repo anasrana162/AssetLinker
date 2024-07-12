@@ -695,7 +695,7 @@ const Post = (props) => {
           }
         })
         .catch((err) => {
-          console.log("Post Api Error", err?.response?.data?.msg);
+          console.log("Post Api Error", err?.response?.data);
           if (err?.response?.data?.msg == "Limit Exceeded for creating post please contact AssetsLinkers") {
             alert("Limit Exceeded for creating post please contact AssetsLinkers")
           }
@@ -833,13 +833,20 @@ const Post = (props) => {
           });
           return alert("Please select either Sale or Rent!");
         }
-        // if (images == null || images == [] || images == "") {
-        //   setImmediate(() => {
-        //     setCheck(false);
-        //     setLoader(false);
-        //   });
-        //   return alert("Please select an image");
-        // }
+        if (images?.length > 10) {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Maximum Images can be only 10");
+        }
+        if (videos?.length > 2) {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Maximium videos can only be 2");
+        }
         if (category == null || category == "") {
           setImmediate(() => {
             setCheck(false);
@@ -958,6 +965,20 @@ const Post = (props) => {
         //   });
         //   return alert("Please select an image");
         // }
+        if (images?.length > 10) {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Maximum Images can be only 10");
+        }
+        if (videos?.length > 2) {
+          setImmediate(() => {
+            setCheck(false);
+            setLoader(false);
+          });
+          return alert("Maximium videos can only be 2");
+        }
         if (category == null || category == "") {
           console.log("category is prob,: ", category);
           setImmediate(() => {

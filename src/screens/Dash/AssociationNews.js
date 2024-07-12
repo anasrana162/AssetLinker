@@ -872,6 +872,7 @@ class AssociationNews extends Component {
                                                                     // Can be a URL or a local file.
                                                                     source={{ uri: VideoURL + postData?.value }}
                                                                     // Store reference  
+                                                                     resizeMode='cover'
                                                                     ref={this.videoRef}
                                                                     paused={postData?.isPaused == undefined ? true : postData?.isPaused}
                                                                     repeat
@@ -1134,7 +1135,7 @@ class AssociationNews extends Component {
                                                     // Can be a URL or a local file.
                                                     source={{ uri: video }}
                                                     // Store reference  
-                                                    resizeMode='cover'
+                                                     resizeMode='cover'
                                                     ref={this.videoRef}
                                                     paused={isPaused[index]?.paused}
                                                     repeat

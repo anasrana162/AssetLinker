@@ -36,7 +36,7 @@ import { bindActionCreators } from "redux";
 import Headlines from "./Components/Headlines";
 import Slideshow from "react-native-image-slider-show";
 import TabNavigator from "../../components/TabNavigator";
-import AllPosts from "./Components/AllPosts";
+import PaginatedPosts from "./Components/PaginatedPosts";
 import Toast from "react-native-toast-message";
 import { ActivityIndicator } from "react-native";
 import SearchBar from "./Components/SearchBar";
@@ -84,6 +84,7 @@ class Dash extends Component {
       key: 0,
       keyBuilder: 0,
       searchText: "",
+      paginationArr: []
     };
   }
 
@@ -130,7 +131,7 @@ class Dash extends Component {
         user: { id },
       },
     } = this.props;
-    console.log("POST TO DELETE:", postID,"    ",id );
+    console.log("POST TO DELETE:", postID, "    ", id);
     if (Object.keys(this.props.userData?.user).length == 0) {
       return this.props.navigation.navigate("Login")
     }
@@ -232,7 +233,7 @@ class Dash extends Component {
         "get_propertyV2"
       )
         .then((res) => {
-          console.log("Get Post api Data :  ", res?.data?.property) 
+          // console.log("Get Post api Data :  ", res?.data?.property) 
           if (res?.data) {
             var posts = res?.data?.property
 
@@ -309,7 +310,7 @@ class Dash extends Component {
       AssetLinkers.get(
         "get_propertyV2"
       )
-        .then((res) => {
+        .then(async (res) => {
           // console.log("Get Post api Data:  ", res?.data?.property) 
           if (res?.data) {
             var posts = res?.data?.property
@@ -322,12 +323,17 @@ class Dash extends Component {
 
               }
             }
+            // console.log("tempPosts?.length", tempPosts?.length);
+            let fetchPaginatedPost = await this.createPagination(tempPosts?.reverse(), tempPosts?.length)
+            // console.log("fetchPaginatedPost", fetchPaginatedPost);
+            console.log("fetchPaginatedPost keys", Object.keys(fetchPaginatedPost));
             // console.log("tempPosts",tempPosts);
-            actions.homePosts(tempPosts.reverse())
+            actions.homePosts(fetchPaginatedPost)
             setImmediate(() => {
               this.setState({
                 Posts: homeposts,
                 FilteredPosts: homeposts,
+                paginationArr: Object.keys(fetchPaginatedPost) || [],
                 loader: false,
                 key: this.state.key + 1
               });
@@ -344,13 +350,12 @@ class Dash extends Component {
         id: id
       }
       )
-        .then((res) => {
+        .then(async (res) => {
           if (res?.data) {
             // console.log("Get Post api Data:  ", res?.data?.property) 
 
             var posts = res?.data?.property
             var tempPosts = []
-
             for (let i = 0; i < posts.length; i++) {
               if (posts[i].user_type !== "builder") {
                 tempPosts.push(posts[i])
@@ -358,12 +363,16 @@ class Dash extends Component {
 
               }
             }
-            // console.log("tempPosts",tempPosts);
-            actions.homePosts(tempPosts.reverse())
+            // console.log("tempPosts?.length", tempPosts?.length);
+            var fetchPaginatedPost = await this.createPagination(tempPosts?.reverse(), tempPosts?.length)
+            // console.log("fetchPaginatedPost", fetchPaginatedPost);
+            console.log("fetchPaginatedPost keys", Object.keys(fetchPaginatedPost));
+            actions.homePosts(fetchPaginatedPost || [])
             setImmediate(() => {
               this.setState({
                 Posts: homeposts,
                 FilteredPosts: homeposts,
+                paginationArr: Object.keys(fetchPaginatedPost) || [],
                 loader: false,
                 key: this.state.key + 1
               });
@@ -376,6 +385,33 @@ class Dash extends Component {
         });
     }
 
+  };
+
+  createPagination = async (data, length) => {
+    let arr = data.slice(); // Copying the data array to avoid mutation
+    let arrLength = length;
+    let temp = [];
+    let page = 1;
+
+    while (arrLength > 0) {
+      let pageArr = [];
+
+      for (let i = 0; i < 10; i++) {
+        if (arr.length === 0) break; // Break if no more elements in arr
+
+        pageArr.push(arr.shift()); // Remove the first element from arr and add to pageArr
+        arrLength--;
+      }
+
+      temp.push({
+        [page]: pageArr,
+      });
+
+      page++;
+    }
+
+    // console.log("Pagination result:", temp);
+    return temp;
   };
 
   addToFavourite = (postID, is_favourite, indexPost) => {
@@ -546,7 +582,7 @@ class Dash extends Component {
   };
 
   render() {
-    var { userData: { homeposts,homepostsbuilder } } = this.props;
+    var { userData: { homeposts, homepostsbuilder } } = this.props;
     // console.log("Props:  ",homeposts)
     const reportTypes = [
       {
@@ -623,13 +659,34 @@ class Dash extends Component {
             />
           ) : (
             // <></>
-            <AllPosts
+            // <AllPosts
+            //   key={this.state.key}
+            //   data={
+            //     this.state.openSearchBar
+            //       ? this.state.FilteredPosts
+            //       : homeposts
+            //   }
+            //   builderData={homepostsbuilder}
+            //   allowBuilders={false}
+            //   showBuilderList={true}
+            //   navProps={this.props.navigation}
+            //   userID={this.props.userData?.user?.id}
+            //   openDeletePostModal={(postID, docID) =>
+            //     this.openDeletePostModal(postID, docID)
+            //   }
+            //   openReportModal={(item) => this.openReportModal(item)}
+            //   onFavPress={(postID, is_favourite, index) =>
+            //     this.addToFavourite(postID, is_favourite, index)
+            //   }
+            // />
+            <PaginatedPosts
               key={this.state.key}
               data={
                 this.state.openSearchBar
                   ? this.state.FilteredPosts
                   : homeposts
               }
+              paginationArr={this.state.paginationArr}
               builderData={homepostsbuilder}
               allowBuilders={false}
               showBuilderList={true}

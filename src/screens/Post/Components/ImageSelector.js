@@ -183,6 +183,7 @@ const ImageSelector = ({
                                                     source={{ uri: VideoURL+item }}
                                                     // Store reference  
                                                     ref={videoRef}
+                                                     resizeMode='cover'
                                                     paused={isPaused[index]?.paused}
                                                     repeat
                                                     style={{ width: "100%", height: "100%", }}
@@ -220,6 +221,7 @@ const ImageSelector = ({
                                                     source={{ uri: item }}
                                                     // Store reference  
                                                     ref={videoRef}
+                                                     resizeMode='cover'
                                                     paused={isPaused[index]?.paused}
                                                     repeat
                                                     style={{ width: "100%", height: "100%", }}

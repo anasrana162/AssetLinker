@@ -13,7 +13,7 @@ const VideoURL = "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage
 
 
 const ImageViewer = ({ Images, openImageModal }) => {
-    // console.log("Images COmp", position)
+    // console.log("Images COmp", Images)
     const videoRef = useRef(VideoRef);
     const [position, setPosition] = useState(0)
     const [isPaused, setIsPaused] = useState([])
@@ -134,6 +134,7 @@ const ImageViewer = ({ Images, openImageModal }) => {
                                             ref={videoRef}
                                             paused={isPaused[position]?.paused}
                                             repeat
+                                            resizeMode='cover'
                                             style={{ width: "100%", height: "100%", }}
                                         />
 
@@ -216,10 +217,15 @@ const ImageViewer = ({ Images, openImageModal }) => {
                                         {
                                             Images.map((item, index) => {
                                                 return (
-                                                    <View style={[styles.dots, {
-                                                        backgroundColor: index == position ? Colors.white : Colors.DarkGrey
-                                                    }]}>
-                                                    </View>
+                                                    <>
+                                                    {
+                                                        index <=12 &&
+                                                        <View style={[styles.dots, {
+                                                            backgroundColor: index == position ? Colors.white : Colors.DarkGrey
+                                                        }]}>
+                                                        </View>
+                                                    }
+                                                    </>
                                                 )
                                             })
                                         }
@@ -291,6 +297,8 @@ const styles = StyleSheet.create({
         left: 20
     },
     paginationCont: {
+        // maxWidth: 130,
+        // overflow:"scroll",
         paddingHorizontal: 5,
         paddingVertical: 3,
         borderRadius: 10,

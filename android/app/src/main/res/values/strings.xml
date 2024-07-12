@@ -1,7 +1,8 @@
 <resources>
   <string name="app_name">Assetlinker</string>
   <!-- Production key -->
-  <string moduleConfig="true" name="CodePushDeploymentKey">Tnxv7AW6kIVc0-pbX-kTwZLjU4HBNkQmxT97f</string>
+  <!-- <string moduleConfig="true" name="CodePushDeploymentKey">Tnxv7AW6kIVc0-pbX-kTwZLjU4HBNkQmxT97f</string> -->
+  <string moduleConfig="true" name="CodePushDeploymentKey">VyD91hrVNbGbpLnX9P07E0Mbd_iU3yFPvMdlC</string>
   <!-- Testing key -->
   <!-- <string moduleConfig="true"
   name="CodePushDeploymentKey">rUB5DIQg2V19SgaLcU06OpmA-vl-Is9f-TXuQ</string> -->

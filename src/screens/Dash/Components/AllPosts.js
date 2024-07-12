@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { PureComponent, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   FlatList,
   Image,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { Colors } from "../../../config";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -16,50 +17,49 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import moment from "moment";
 import { postImageURL } from "../../../config/Common";
 
-const { width } = Dimensions.get("screen");
 
-const AllPosts = React.memo(
-  ({
-    data,
-    userID,
-    openDeletePostModal,
-    openReportModal,
-    navProps,
-    onFavPress,
-    refreshKey,
-    allowBuilders,
-    showBuilderList,
-    builderData
-  }) => {
-    const [showOption, setShowOption] = useState(false);
-    const [itemId, setItemId] = useState("");
-    const [slicedLength, setSlicedLenght] = useState(10)
-    const [slicedLoader, setSlicedLoader] = useState(false)
+const { width, height } = Dimensions.get("screen");
 
 
-    const onOptionPress = (itemID) => {
-      setImmediate(() => {
-        setItemId(itemID);
-      });
-      setShowOption(!showOption);
+class AllPosts extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showOption: false,
+      itemId: "",
+      slicedLength: 10,
+      slicedLoader: false,
+    
     };
+  }
 
-    // Function to render "Hello" text after every 4 items in the FlatList
-    const renderSeparator = (index) => {
-      // Calculate the row index based on the number of columns
-      const rowIndex = Math.floor(index / 2); // Assuming 2 columns
+  onOptionPress = (itemID) => {
+    this.setState((prevState) => ({
+      itemId: itemID,
+      showOption: !prevState.showOption,
+    }));
+  };
 
-      // Check if it's the first row or every 4th row after the first
-      if (rowIndex > 0 && (rowIndex % 3 === 0)) {
-        if (builderData == null) {
-          return
-        }
-        return <View style={styles.builderListMainCont}>
+  renderSeparator = (index) => {
+    const { builderData } = this.props;
+    const rowIndex = Math.floor(index / 2);
+
+    if (rowIndex > 0 && rowIndex % 3 === 0) {
+      if (!builderData) {
+        return null;
+      }
+      return (
+        <View style={styles.builderListMainCont}>
+
+          {/* <ScrollView horizontal={true}> */}
+
           <FlatList
-            data={builderData == null ? [] : builderData}
+            data={this.props.builderData || []}
             // keyExtractor={(index) => index}
             showsHorizontalScrollIndicator={false}
             horizontal={true}
+            scrollEnabled={true}
             renderItem={({ item, index }) => {
               // console.log("Item",item);
               const docID = item?.user_id + "" + item?.id;
@@ -75,7 +75,7 @@ const AllPosts = React.memo(
                 >
 
                   <TouchableOpacity
-                    onPressIn={() => onOptionPress(item?.id)}
+                    onPressIn={() => this.onOptionPress(item?.id)}
                     style={styles.optionBtn}
                   >
                     <Entypo
@@ -85,21 +85,21 @@ const AllPosts = React.memo(
                     />
                   </TouchableOpacity>
 
-                  {itemId == item?.id && showOption == true && (
+                  {this.state.itemId == item?.id && this.state.showOption == true && (
                     <TouchableOpacity
-                      onPress={() => setShowOption(false)}
+                      onPress={() => this.setState({ showOption: false })}
                       activeOpacity={0.5}
                       style={styles.fade}
                     ></TouchableOpacity>
                   )}
 
-                  {itemId == item?.id && showOption == true && (
+                  {this.state.itemId == item?.id && this.state.showOption == true && (
                     <View style={[styles.optionMenu_cont, { top: 55, borderRadius: 10 }]}>
-                      {userID == item?.user_id && (
+                      {this.state.userID == item?.user_id && (
                         <TouchableOpacity
                           onPress={() => {
-                            setShowOption(false);
-                            openDeletePostModal(postID, docID);
+                            this.setState({ showOption: false })
+                            this.props.openDeletePostModal(postID, docID);
                           }}
                           activeOpacity={0.5}
                           style={styles.menu_item_btn}
@@ -107,11 +107,11 @@ const AllPosts = React.memo(
                           <Text style={styles.delete_text}>Delete</Text>
                         </TouchableOpacity>
                       )}
-                      {userID == item?.user_id && (
+                      {this.state.userID == item?.user_id && (
                         <TouchableOpacity
                           onPress={() => {
-                            navProps.navigate("PostUpdate", { data: item });
-                            setShowOption(false);
+                            this.props.ƒnavProps.navigate("PostUpdate", { data: item });
+                            this.setState({ showOption: false })
                           }}
                           activeOpacity={0.5}
                           style={styles.menu_item_btn}
@@ -121,11 +121,11 @@ const AllPosts = React.memo(
                           </Text>
                         </TouchableOpacity>)}
 
-                      {userID !== item?.user_id && (
+                      {this.state.itemId !== item?.user_id && (
                         <TouchableOpacity
                           onPress={() => {
-                            setShowOption(false);
-                            openReportModal(item);
+                            this.setState({ showOption: false })
+                            this.props.openReportModal(item);
                           }}
                           activeOpacity={0.5}
                           style={styles.menu_item_btn}
@@ -139,9 +139,9 @@ const AllPosts = React.memo(
                   <TouchableOpacity
                     // style={styles.itemImage}
                     activeOpacity={0.7}
-                    disabled={showOption}
+                    disabled={this.state.showOption}
                     onPress={() => {
-                      navProps.navigate("PostDetail", {
+                      this.props.navProps.navigate("PostDetail", {
                         data: item,
                         location: Location?.location,
                         subLocation: Location?.place,
@@ -221,40 +221,28 @@ const AllPosts = React.memo(
               )
             }}
           />
+          {/* </ScrollView> */}
         </View>
-      }
-      return null;
-    };
+      );
+    }
+    return null;
+  };
 
-
-    // const onEndReached = () => {
-    //   setSlicedLoader(true)
-    //   // console.log("END Reached")
-    //   // console.log("Data length", data?.length)
-
-    //   if (data?.length <= slicedLength) {
-    //     console.log("no data to reload")
-    //     setSlicedLoader(false)
-    //   }
-    //   if (data?.length > slicedLength) {
-    //     setSlicedLenght(slicedLength + 10)
-    //     setSlicedLoader(false)
-    //   }
-
-    // }
-
+  render() {
+    const { data, refreshKey, allowBuilders, showBuilderList, builderData } =
+      this.props;
+    const { slicedLoader, slicedLength } = this.state;
+    // console.log("Rendering");
     return (
       <View style={styles.mainContainer}>
         <View style={styles.flatlist_cont}>
           <FlatList
-            // data={data.slice(0, slicedLength)}
-            data={data}
+            data={data.slice(0, slicedLength)}
             key={refreshKey}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 100, marginTop: 5 }}
             numColumns={2}
             initialNumToRender={10}
-            // onEndReached={() => onEndReached()}
             scrollEnabled={false}
             columnWrapperStyle={styles.inner_main}
             ListEmptyComponent={() => (
@@ -270,14 +258,21 @@ const AllPosts = React.memo(
                 </Text>
               </View>
             )}
-            ListFooterComponent={() => {
-              return (<>{
-                slicedLoader &&
-                <View style={{ backgroundColor: "#f0f0f0", width: width, height: 60, justifyContent: "center", alignItems: "center" }}>
-
+            ListFooterComponent={() =>
+              slicedLoader && (
+                <View
+                  style={{
+                    backgroundColor: "#f0f0f0",
+                    width: width,
+                    height: 60,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <ActivityIndicator size="small" color="black" />
-                </View>}</>)
-            }}
+                </View>
+              )
+            }
             renderItem={({ item, index }) => {
               const docID = item?.user_id + "" + item?.id;
               const postID = "" + item?.id;
@@ -285,18 +280,30 @@ const AllPosts = React.memo(
               if (item?.Location !== "Null" || item?.Location !== "") {
                 Location = JSON.parse(item?.Location);
               }
-              // const rowIndex = Math.floor(index / 2); // Assuming 2 columns
-              // console.log("rowIndex > 0 ? rowIndex % 4 === 0 ? 100 : 5 : 5",rowIndex > 0 ? rowIndex % 4 === 0 ? 100 : 5 : 5);
+
               return (
                 <>
-                  {item?.user_type == "builder" && allowBuilders == false ? <></> : <View key={String(index)} style={[styles.itemContainer, {
-                    marginBottom: (index + 1) % 6 === 0 && index !== data.length - 1 ?
-                      showBuilderList == false ?
-                        5 : builderData == null ?
-                          5 : 250 : 5,
-                    opacity: item?.experied == "expired" ? 0.6 : 1
-                  }]}>
-                    {item?.experied == "expired" && <View style={{
+                  <View
+                    key={String(index)}
+                    style={[
+                      styles.itemContainer,
+                      {
+                        marginBottom:
+                          (index + 1) % 6 === 0 && index !== data.length - 1
+                            ? showBuilderList === false
+                              ? 5
+                              : builderData === null
+                                ? 5
+                                : 250
+                            : 5,
+                        opacity:
+                          item?.experied === "expired" || item?.day_difference === 0
+                            ? 0.6
+                            : 1,
+                      },
+                    ]}
+                  >
+                    {(item?.experied == "expired" || item?.day_difference == 0) && <View style={{
                       width: "100%",
                       height: "100%",
                       position: "absolute",
@@ -305,8 +312,8 @@ const AllPosts = React.memo(
 
                     </View>}
                     <TouchableOpacity
-                      onPressIn={() => onOptionPress(item?.id)}
                       style={styles.optionBtn}
+                      onPressIn={() => this.onOptionPress(item?.id)}
                     >
                       <Entypo
                         name="dots-three-horizontal"
@@ -315,21 +322,26 @@ const AllPosts = React.memo(
                       />
                     </TouchableOpacity>
 
-                    {itemId == item?.id && showOption == true && (
+                    {this.state.itemId == item?.id && this.state.showOption && (
                       <TouchableOpacity
-                        onPress={() => setShowOption(false)}
+                        onPress={() => this.setState({ showOption: false })}
                         activeOpacity={0.5}
                         style={styles.fade}
                       ></TouchableOpacity>
                     )}
 
-                    {itemId == item?.id && showOption == true && (
-                      <View style={styles.optionMenu_cont}>
-                        {userID == item?.user_id && (
+                    {this.state.itemId == item?.id && this.state.showOption && (
+                      <View
+                        style={[
+                          styles.optionMenu_cont,
+                          { top: 55, borderRadius: 10 },
+                        ]}
+                      >
+                        {this.props.userID == item?.user_id && (
                           <TouchableOpacity
                             onPress={() => {
-                              setShowOption(false);
-                              openDeletePostModal(postID, docID);
+                              this.setState({ showOption: false });
+                              this.props.openDeletePostModal(postID, docID);
                             }}
                             activeOpacity={0.5}
                             style={styles.menu_item_btn}
@@ -337,25 +349,33 @@ const AllPosts = React.memo(
                             <Text style={styles.delete_text}>Delete</Text>
                           </TouchableOpacity>
                         )}
-
-                        {userID == item?.user_id && <TouchableOpacity
-                          onPress={() => {
-                            navProps.navigate("PostUpdate", { data: item });
-                            setShowOption(false);
-                          }}
-                          activeOpacity={0.5}
-                          style={styles.menu_item_btn}
-                        >
-                          <Text style={[styles.delete_text, { color: Colors.black }]}>
-                            Update
-                          </Text>
-                        </TouchableOpacity>}
-
-                        {userID !== item?.user_id && (
+                        {this.props.userID == item?.user_id && (
                           <TouchableOpacity
                             onPress={() => {
-                              setShowOption(false);
-                              openReportModal(item);
+                              this.props.navProps.navigate("PostUpdate", {
+                                data: item,
+                              });
+                              this.setState({ showOption: false });
+                            }}
+                            activeOpacity={0.5}
+                            style={styles.menu_item_btn}
+                          >
+                            <Text
+                              style={[
+                                styles.delete_text,
+                                { color: Colors.black },
+                              ]}
+                            >
+                              Update
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+
+                        {this.props.userID !== item?.user_id && (
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.setState({ showOption: false });
+                              this.props.openReportModal(item);
                             }}
                             activeOpacity={0.5}
                             style={styles.menu_item_btn}
@@ -370,7 +390,7 @@ const AllPosts = React.memo(
                       <TouchableOpacity
                         style={styles.itemImage}
                         activeOpacity={0.7}
-                        disabled={showOption}
+                        disabled={this.state.showOption}
                         onPress={() => {
                           console.log("obj on navigate:",
                             {
@@ -380,12 +400,12 @@ const AllPosts = React.memo(
                               index: index,
                             }
                           );
-                          navProps.navigate("PostDetail", {
+                          this.props.navProps.navigate("PostDetail", {
                             data: item,
                             location: Location?.location,
                             subLocation: Location?.place,
                             index: index,
-                          });
+                          })
                         }}
                       >
                         <Image
@@ -398,13 +418,14 @@ const AllPosts = React.memo(
                       <TouchableOpacity
                         style={styles.itemImage}
                         activeOpacity={0.7}
-                        disabled={showOption}
+                        disabled={this.state.showOption}
                         onPress={() => {
-                          navProps.navigate("PostDetail", {
+                          this.props.navProps.navigate("PostDetail", {
                             data: item,
                             location: Location?.location,
                             subLocation: Location?.place,
                             index: index,
+
                           });
                         }}
                       >
@@ -476,7 +497,7 @@ const AllPosts = React.memo(
                     <Text style={styles.posted_at}>
                       Posted: {moment(item?.created_at).format("YYYY-MM-DD")}
                     </Text>
-                    {item?.experied == "expired" ?
+                    {item?.experied == "expired" || item?.day_difference == 0 ?
                       <Text style={[styles.posted_at, { color: "crimson", fontWeight: "600" }]}>
                         Expired
                       </Text>
@@ -496,7 +517,7 @@ const AllPosts = React.memo(
                       >
                         <TouchableOpacity
                           onPress={() =>
-                            onFavPress(item?.id, item?.is_favourite, index)
+                            this.props.onFavPress(item?.id, item?.is_favourite, index)
                           }
                         >
                           <AntDesign
@@ -526,20 +547,27 @@ const AllPosts = React.memo(
                         </TouchableOpacity>
                       </View>
                     </View>
-                  </View>}
-
+                  </View>
                   {/* Render separator "Hello" after every 4th item */}
-                  {showBuilderList == false && builderData == null ? null : renderSeparator(index)}
+                  {this.props.showBuilderList == false && this.props.builderData == null ? null : this.renderSeparator(index)}
                 </>
               );
             }}
+            // onEndReached={() => {
+            //   // if (this.props.allowBuilders && showBuilderList) {
+            //   //   if (builderData.length === slicedLength) {
+            //   console.log("length increased");
+            //   this.setState({ slicedLength: slicedLength + 10 });
+            //   //   }
+            //   // }
+            // }}
+            // onEndReachedThreshold={0.1}
           />
         </View>
-      </View >
+      </View>
     );
   }
-);
-
+}
 export default AllPosts;
 
 const styles = StyleSheet.create({
@@ -638,7 +666,7 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     width: width / 2.15,
-    height: 320,
+    height: 340,
     backgroundColor: "white",
     borderRadius: 10,
     borderWidth: 1,
@@ -652,7 +680,7 @@ const styles = StyleSheet.create({
   },
   itemImage: {
     width: "100%",
-    height: 160,
+    height: 140,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
     backgroundColor: "#0002",
