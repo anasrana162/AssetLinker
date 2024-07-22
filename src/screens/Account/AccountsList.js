@@ -122,7 +122,7 @@ const CustomerContainer = ({ data }) => {
       </View>
 
       <View style={styles.box2}>
-        <Text style={styles.name}>
+        <Text style={styles.name} numberOfLines={2}>
           {data?.detail[0]?.real_estate_name ||
             data?.detail[0]?.frim_name ||
             data?.name}
@@ -210,13 +210,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   img: { width: 60, height: 60, borderRadius: 10 },
-  name: { color: "black", fontWeight: "600", fontSize: 16 },
+  name: { color: "black", fontWeight: "700", fontSize: 15, letterSpacing: 1 },
   designation: { color: "white", fontWeight: "600", fontSize: 12, textAlign: "center", paddingVertical: 3, letterSpacing: 1 },
   tagContainer: {
     backgroundColor: Colors.blue,
     borderRadius: 20,
     width: 110,
     paddingHorizontal: 10,
+    paddingHorizontal: 2
   },
   tagLabel: {
     color: "#fff",
@@ -230,7 +231,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
   },
-  box2: { width: "48%", rowGap: 3, },
+  box2: {
+    width: "48%",
+    rowGap: 3,
+  },
   box3: { width: "30%", rowGap: 15, paddingLeft: 15 },
   viewBTN: {
     flexDirection: "row",

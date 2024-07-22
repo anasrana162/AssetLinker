@@ -117,12 +117,12 @@ const ImageViewer = ({ Images, openImageModal }) => {
 
                     <>
 
-                        {/* {console.log("Images[position]",Images[position] )} */}
+                        {console.log("Images[position]",Images[position] )}
                         {
                             Images[position].includes("..mp4", 0) == true ?
                                 <>
                                     <Pressable
-                                        onPress={() => openImageModal(Image[position], position)}
+                                        onPress={() => openImageModal(Images[position], position)}
                                         style={styles.imagCont}
                                     >
 
@@ -189,7 +189,7 @@ const ImageViewer = ({ Images, openImageModal }) => {
                                 </>
                                 :
                                 <Pressable
-                                    onPress={() => openImageModal(Image[position], position)}
+                                    onPress={() => openImageModal(Images[position], position)}
                                     style={styles.imagCont}>
 
                                     {/* Next Button */}

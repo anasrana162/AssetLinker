@@ -184,10 +184,10 @@ class PostDetail extends Component {
   };
 
   openImageModal = (image, index) => {
-    // console.log("Image Slected for Modal: ", image,
-    //   `${'\n'}`,
-    //   "Image Index fro Modal: ", index
-    // );
+    console.log("Image Slected for Modal: ", image,
+      `${'\n'}`,
+      "Image Index fro Modal: ", index
+    );
     this.setState({
       imageModal: {
         isOpen: true,
@@ -508,7 +508,7 @@ class PostDetail extends Component {
           <ImageModal
             imageSelected={this.state.imageModal?.image}
             indexSelected={this.state.imageModal?.index}
-            images={[...data?.post_images, ...data?.videos]}
+            images={data?.videos == null ? data?.post_images[0] == "" ? [] : data?.post_images : [...data?.post_images, ...data?.videos]}
             closeModal={() => this.closeImageModal()}
             videoLink={"https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/videos/property/"}
             imageLink={"https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/"}
@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
     top: 0,
-    zIndex: 200,
+    zIndex: 50,
     backgroundColor: Colors.fadedBackground,
   },
   headerBtn: {

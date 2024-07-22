@@ -9,6 +9,7 @@ import {
   ScrollView,
   Linking,
   RefreshControl,
+  BackHandler,
   StyleSheet,
   NativeModules,
   Modal,
@@ -36,7 +37,8 @@ import { bindActionCreators } from "redux";
 import Headlines from "./Components/Headlines";
 import Slideshow from "react-native-image-slider-show";
 import TabNavigator from "../../components/TabNavigator";
-import PaginatedPosts from "./Components/PaginatedPosts";
+// import PaginatedPosts from "./Components/PaginatedPosts";
+import AllPosts from "./Components/AllPosts";
 import Toast from "react-native-toast-message";
 import { ActivityIndicator } from "react-native";
 import SearchBar from "./Components/SearchBar";
@@ -46,6 +48,7 @@ import { deleteMessagesHandler } from "../Chat/ChatScreen";
 import Back_handler from "../../components/BackHandler";
 import Entypo from 'react-native-vector-icons/Entypo'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import AgreementModal from "./Components/AgreementModal";
 
 class Dash extends Component {
   constructor(props) {
@@ -71,6 +74,7 @@ class Dash extends Component {
       ],
       openDeletePostModal: false,
       openReportPostModal: false,
+      openAgreementModal: false,
       reportPostData: null,
       postID: "",
       docID: "",
@@ -218,12 +222,23 @@ class Dash extends Component {
   };
 
   componentDidMount() {
+    this.checkAgreement()
     this.getPosts();
     this.getPostsBuilder()
     this.runSlideShow();
     this.checkCallBacks();
   }
+  checkAgreement = async () => {
+    let agreementfetch = await AsyncStorage.getItem("@agreement_assetlinker")
+    console.log("agreementfetch", agreementfetch);
+    if(agreementfetch == "agreed"){
 
+    }else{
+      this.setState({
+        openAgreementModal:true
+      })
+    }
+  }
   getPostsBuilder = () => {
     var { userData: { user: { id }, homepostsbuilder, }, actions } = this.props;
     this.setState({ loader: true })
@@ -315,25 +330,30 @@ class Dash extends Component {
           if (res?.data) {
             var posts = res?.data?.property
             var tempPosts = []
-
             for (let i = 0; i < posts.length; i++) {
-              if (posts[i].user_type !== "builder") {
-                tempPosts.push(posts[i])
-              } else {
+              // console.log("posts[i]?.day_difference",posts[i]?.day_difference);
+              // if (posts[i].user_type !== "builder") {
+                if(posts[i]?.day_difference > 0){
 
-              }
+                  tempPosts.push(posts[i])
+                }else{
+
+                }
+
+              // }
             }
             // console.log("tempPosts?.length", tempPosts?.length);
-            let fetchPaginatedPost = await this.createPagination(tempPosts?.reverse(), tempPosts?.length)
+            // let fetchPaginatedPost = await this.createPagination(tempPosts?.reverse(), tempPosts?.length)
             // console.log("fetchPaginatedPost", fetchPaginatedPost);
-            console.log("fetchPaginatedPost keys", Object.keys(fetchPaginatedPost));
+            // console.log("fetchPaginatedPost keys", Object.keys(fetchPaginatedPost));
             // console.log("tempPosts",tempPosts);
-            actions.homePosts(fetchPaginatedPost)
+            // actions.homePosts(fetchPaginatedPost)
+            actions.homePosts(tempPosts?.reverse())
             setImmediate(() => {
               this.setState({
                 Posts: homeposts,
                 FilteredPosts: homeposts,
-                paginationArr: Object.keys(fetchPaginatedPost) || [],
+                // paginationArr: Object.keys(fetchPaginatedPost) || [],
                 loader: false,
                 key: this.state.key + 1
               });
@@ -357,22 +377,29 @@ class Dash extends Component {
             var posts = res?.data?.property
             var tempPosts = []
             for (let i = 0; i < posts.length; i++) {
-              if (posts[i].user_type !== "builder") {
+              // if (posts[i].user_type !== "builder") {
+              //   tempPosts.push(posts[i])
+              // } else {
+
+              // }
+              if(posts[i]?.day_difference > 0){
+
                 tempPosts.push(posts[i])
-              } else {
+              }else{
 
               }
             }
             // console.log("tempPosts?.length", tempPosts?.length);
-            var fetchPaginatedPost = await this.createPagination(tempPosts?.reverse(), tempPosts?.length)
+            // var fetchPaginatedPost = await this.createPagination(tempPosts?.reverse(), tempPosts?.length)
             // console.log("fetchPaginatedPost", fetchPaginatedPost);
-            console.log("fetchPaginatedPost keys", Object.keys(fetchPaginatedPost));
-            actions.homePosts(fetchPaginatedPost || [])
+            // console.log("fetchPaginatedPost keys", Object.keys(fetchPaginatedPost));
+            // actions.homePosts(fetchPaginatedPost || [])
+            actions.homePosts(tempPosts?.reverse())
             setImmediate(() => {
               this.setState({
                 Posts: homeposts,
                 FilteredPosts: homeposts,
-                paginationArr: Object.keys(fetchPaginatedPost) || [],
+                // paginationArr: Object.keys(fetchPaginatedPost) || [],
                 loader: false,
                 key: this.state.key + 1
               });
@@ -581,6 +608,21 @@ class Dash extends Component {
     // console.log("filterData LEngth", filterData?.length)
   };
 
+  onDisagreeAgree = () => {
+    this.setState({
+      openAgreementModal: false
+    })
+    this.checkAgreement()
+  }
+
+  onAceeptingAgreement = () => {
+    this.setState({
+      openAgreementModal: false
+    })
+
+    AsyncStorage.setItem("@agreement_assetlinker", "agreed")
+
+  }
   render() {
     var { userData: { homeposts, homepostsbuilder } } = this.props;
     // console.log("Props:  ",homeposts)
@@ -645,7 +687,6 @@ class Dash extends Component {
           <Slideshow
             position={this.state.position}
             dataSource={this.state.sliderImages}
-            containerStyle={{ marginBottom: 10 }}
           // onPress={(item,index)=>{console.log("Item from slideshow",item)}}
           />
 
@@ -659,34 +700,13 @@ class Dash extends Component {
             />
           ) : (
             // <></>
-            // <AllPosts
-            //   key={this.state.key}
-            //   data={
-            //     this.state.openSearchBar
-            //       ? this.state.FilteredPosts
-            //       : homeposts
-            //   }
-            //   builderData={homepostsbuilder}
-            //   allowBuilders={false}
-            //   showBuilderList={true}
-            //   navProps={this.props.navigation}
-            //   userID={this.props.userData?.user?.id}
-            //   openDeletePostModal={(postID, docID) =>
-            //     this.openDeletePostModal(postID, docID)
-            //   }
-            //   openReportModal={(item) => this.openReportModal(item)}
-            //   onFavPress={(postID, is_favourite, index) =>
-            //     this.addToFavourite(postID, is_favourite, index)
-            //   }
-            // />
-            <PaginatedPosts
+            <AllPosts
               key={this.state.key}
               data={
                 this.state.openSearchBar
                   ? this.state.FilteredPosts
                   : homeposts
               }
-              paginationArr={this.state.paginationArr}
               builderData={homepostsbuilder}
               allowBuilders={false}
               showBuilderList={true}
@@ -700,6 +720,27 @@ class Dash extends Component {
                 this.addToFavourite(postID, is_favourite, index)
               }
             />
+            // <PaginatedPosts
+            //   key={this.state.key}
+            //   data={
+            //     this.state.openSearchBar
+            //       ? this.state.FilteredPosts
+            //       : homeposts
+            //   }
+            //   paginationArr={this.state.paginationArr}
+            //   builderData={homepostsbuilder}
+            //   allowBuilders={false}
+            //   showBuilderList={true}
+            //   navProps={this.props.navigation}
+            //   userID={this.props.userData?.user?.id}
+            //   openDeletePostModal={(postID, docID) =>
+            //     this.openDeletePostModal(postID, docID)
+            //   }
+            //   openReportModal={(item) => this.openReportModal(item)}
+            //   onFavPress={(postID, is_favourite, index) =>
+            //     this.addToFavourite(postID, is_favourite, index)
+            //   }
+            // />
           )}
         </ScrollView>
 
@@ -771,6 +812,15 @@ class Dash extends Component {
 
 
         </Modal>
+
+        {/* Agreement Modal */}
+        <AgreementModal
+          isVisible={this.state.openAgreementModal}
+          closeModal={() => this.onDisagreeAgree()}
+          onAccept={() => this.onAceeptingAgreement()}
+        // agreementText={agreementText}
+        />
+
 
         {/* Tab Navigator */}
         <TabNavigator navProps={this.props.navigation} screenName={"Dash"} isLoggedIn={Object.keys(this.props.userData?.user).length == 0 ? true : false} />
@@ -891,3 +941,133 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
+
+// import {
+//   Text,
+//   View,
+//   Dimensions,
+//   FlatList,
+//   Image,
+//   TouchableOpacity,
+//   ScrollView,
+//   StyleSheet,
+//   NativeModules,
+
+// } from "react-native";
+// import React, { Component, useState } from "react";
+
+// const {
+//   StatusBarManager: { HEIGHT },
+// } = NativeModules;
+// const width = Dimensions.get("screen").width;
+// const height = Dimensions.get("screen").height - HEIGHT;
+
+// const Home = () => {
+//   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+//   const [highlightedValue, setHighlightedValue] = useState("");
+//   const numbers = Array.from({ length: 300 }, (_, index) => index + 100);
+//   return (
+//     <View style={styles.mainContainer}>
+//       <View style={styles.scrollCont}>
+
+//         {/* Lines */}
+//         <View
+//           style={styles.lines1}
+//         />
+//         <View
+//           style={styles.lines2}
+//         />
+//         <FlatList
+//           style={{ width: "100%" }}
+//           data={numbers}
+//           renderItem={(({ item, index }) => {
+//             return (
+//               <View style={{ height: 45, width: 150, justifyContent: "center", alignItems: "center" }}>
+//                 <Text style={[styles.textScroll, { color: highlightedIndex == index ? "green" : "black" }]}>{item} <Text style={[styles.textScroll, { fontSize: 18, color: highlightedIndex == index ? "green" : "black" }]}>cm</Text></Text>
+//               </View>
+//             )
+//           })
+
+//           }
+//           keyExtractor={(item) => item.toString()}
+//           getItemLayout={(data, index) => ({
+//             length: 45, // Assuming each item has a height of 50
+//             offset: 45 * index,
+//             index,
+//           })}
+//           initialScrollIndex={0}
+//           onScroll={({ nativeEvent }) => {
+//             const offsetY = nativeEvent.contentOffset.y;
+//             // console.log("offsetY",item);
+//             // Calculate index based on offsetY and item height
+//             const index = Math.floor(offsetY / 45); // Assuming each item has a height of 50
+//             if (index >= 0 && index < numbers.length) {
+     
+
+//               console.log("index selected,", index + 6, "  data value: ", numbers[index] + 6);
+//               setHighlightedValue(numbers[index] + 6)
+//               setHighlightedIndex(index + 6);
+              
+//             }
+//           }}
+//           showsVerticalScrollIndicator={false}
+//         />
+//         {/* <ScrollView>
+//           {numbers.map((item, index) => {
+//             return (
+//               <Text style={styles.textScroll}>{item} <Text style={[styles.textScroll, { fontSize: 18 }]}>cm</Text></Text>
+//             )
+//           })}
+//         </ScrollView> */}
+//       </View>
+//     </View>
+//   )
+// }
+
+// export default Home
+
+// const styles = StyleSheet.create({
+//   mainContainer: {
+//     flex: 1,
+//     width: width,
+//     height: height,
+//     justifyContent: "center",
+//     alignItems: "center",
+//     backgroundColor: "white",
+//   },
+//   scrollCont: {
+//     width: 150,
+//     // backgroundColor:"grey",
+//     borderWidth: 1,
+//     height: height / 1.5,
+//     alignSelf: "flex-end",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     marginRight: 30,
+//   },
+//   textScroll: {
+//     fontSize: 22,
+//     fontWeight: "600",
+//     color: "black",
+//     // marginVertical: 10,
+//     letterSpacing: 2
+//   },
+//   lines1: {
+//     width: "100%",
+//     height: 10,
+//     borderRadius: 20,
+//     backgroundColor: "blue",
+//     position: "absolute",
+//     top: height / 1.5 / 2 - 50,
+//     zIndex: 200,
+//   },
+//   lines2: {
+//     width: "100%",
+//     height: 10,
+//     borderRadius: 20,
+//     backgroundColor: "blue",
+//     position: "absolute",
+//     top: height / 1.5 / 2,
+//     zIndex: 200,
+//   }
+// })

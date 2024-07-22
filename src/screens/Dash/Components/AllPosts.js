@@ -45,7 +45,7 @@ class AllPosts extends PureComponent {
     const { builderData } = this.props;
     const rowIndex = Math.floor(index / 2);
 
-    if (rowIndex > 0 && rowIndex % 3 === 0) {
+    if (rowIndex > 0 && rowIndex % 4 === 0) {
       if (!builderData) {
         return null;
       }
@@ -237,7 +237,7 @@ class AllPosts extends PureComponent {
       <View style={styles.mainContainer}>
         <View style={styles.flatlist_cont}>
           <FlatList
-            data={data.slice(0, slicedLength)}
+            data={data}
             key={refreshKey}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 100, marginTop: 5 }}
@@ -288,14 +288,14 @@ class AllPosts extends PureComponent {
                     style={[
                       styles.itemContainer,
                       {
-                        marginBottom:
-                          (index + 1) % 6 === 0 && index !== data.length - 1
-                            ? showBuilderList === false
-                              ? 5
-                              : builderData === null
-                                ? 5
-                                : 250
-                            : 5,
+                        // marginBottom:
+                          // (index + 1) % 8 === 0 && index !== data.length - 1
+                          //   ? showBuilderList === false
+                          //     ? 5
+                          //     : builderData === null
+                          //       ? 5
+                          //       : 250
+                          //   : 5,
                         opacity:
                           item?.experied === "expired" || item?.day_difference === 0
                             ? 0.6
@@ -549,7 +549,7 @@ class AllPosts extends PureComponent {
                     </View>
                   </View>
                   {/* Render separator "Hello" after every 4th item */}
-                  {this.props.showBuilderList == false && this.props.builderData == null ? null : this.renderSeparator(index)}
+                  {/* {this.props.showBuilderList == false && this.props.builderData == null ? null : this.renderSeparator(index)} */}
                 </>
               );
             }}
@@ -666,7 +666,8 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     width: width / 2.15,
-    height: 340,
+    minHeight:310,
+    maxHeight:340,
     backgroundColor: "white",
     borderRadius: 10,
     borderWidth: 1,

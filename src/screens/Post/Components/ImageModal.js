@@ -13,13 +13,29 @@ const {
 const width = Dimensions.get("screen").width
 const height = Dimensions.get('screen').height - HEIGHT
 
-const ImageModal = ({ imageSelected, indexSelected, images, closeModal, imageLink,videoLink }) => {
+const ImageModal = ({ imageSelected, indexSelected, images, closeModal, imageLink, videoLink }) => {
     const videoRef = useRef(VideoRef);
 
     //States
     const [imageIndex, setImageIndex] = useState(indexSelected)
+    const [resizeMode, setResizeMode] = useState("stretch")
+    const [isResize, setIsResize] = useState(false)
     const [isPaused, setIsPaused] = useState([])
     var [keyy, setKeyy] = useState(0)
+
+    const ResizeModes = [
+        {
+            mode: "stretch",
+        },
+        {
+            mode: "contain",
+        },
+        {
+            mode: "cover",
+
+        },
+
+    ]
 
     // console.log("videoRef", videoRef.current);
     useEffect(() => {
@@ -86,6 +102,19 @@ const ImageModal = ({ imageSelected, indexSelected, images, closeModal, imageLin
     }
     // console.log("indexSelected", indexSelected, '\n', imageSelected);
 
+    const resizeModeActions = (key, val) => {
+        switch (key) {
+            case "open":
+                setIsResize(!isResize)
+                break;
+
+            case "set":
+                setResizeMode(val)
+                setIsResize(!isResize)
+                break;
+        }
+    }
+
     return (
         <View
             style={styles.mainCont}>
@@ -95,10 +124,41 @@ const ImageModal = ({ imageSelected, indexSelected, images, closeModal, imageLin
 
 
             </Pressable>
+
+            <Text style={styles.resizeBtnHeading}>Resize Image:</Text>
+            <TouchableOpacity
+                onPress={() => resizeModeActions("open")}
+                style={styles.resizeBtn}>
+                <Text style={styles.selectedReziseMethodText}>{resizeMode}</Text>
+            </TouchableOpacity>
+            {isResize && <View style={styles.resizeListCont}>
+                {ResizeModes.map((item, index) => {
+                    return (
+                        <TouchableOpacity
+                            onPress={() => resizeModeActions("set", item?.mode)}
+                            style={[styles.resizeOptionCont, {
+                                backgroundColor: item?.mode == resizeMode ? Colors.light_blue : Colors?.white
+                            }]}
+                        >
+                            <Text style={[styles.resizeOptionText, {
+                                color: item?.mode == resizeMode ? Colors.white : Colors?.DarkGrey
+                            }]}>{item?.mode}</Text>
+                        </TouchableOpacity>
+                    )
+                })}
+            </View>}
+
             <View style={styles.flexRow}>
                 <TouchableOpacity
                     onPress={() => onBack()}
-                    style={{ padding: 10, }}>
+                    style={{
+                        padding: 7,
+                        position: "absolute",
+                        left: 10,
+                        zIndex:200,
+                        backgroundColor: "rgba(52,52,52,0.8)",
+                        borderRadius: 30,
+                    }}>
                     <AntDesign name="left" size={30} color={Colors.white} />
                 </TouchableOpacity>
 
@@ -145,12 +205,13 @@ const ImageModal = ({ imageSelected, indexSelected, images, closeModal, imageLin
                             // For example, an image with an intrinsic size of 400x200 will be rendered as 300x150 in this case.
                             // Therefore, we'll feed the zoomable view the 300x150 size.
                             contentWidth={width}
-                            contentHeight={height - 400}
+                            contentHeight={height - 200}
+                        // style={{}}
                         >
                             <Image
-                                resizeMode='contain'
+                                resizeMode={resizeMode}
                                 source={{ uri: imageLink + images[imageIndex] }}
-                                style={{ width: "100%", height: "100%", }}
+                                style={{ width: "100%", height: "100%", borderRadius: 20 }}
                             />
                         </ReactNativeZoomableView>
                 }
@@ -158,7 +219,14 @@ const ImageModal = ({ imageSelected, indexSelected, images, closeModal, imageLin
 
                 <TouchableOpacity
                     onPress={() => onNext()}
-                    style={{ padding: 10, }}>
+                    style={{
+                        padding: 7,
+                        position: "absolute",
+                        right: 10,
+                        zIndex:200,
+                        backgroundColor: "rgba(52,52,52,0.8)",
+                        borderRadius: 30,
+                    }}>
                     <AntDesign name="right" size={30} color={Colors.white} />
                 </TouchableOpacity>
             </View>
@@ -176,6 +244,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         position: "absolute",
+        zIndex:200
 
     },
     innerMainCont: {
@@ -187,8 +256,8 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(52,52,52,0.9)"
     },
     flexRow: {
-        width: width,
-        height: height - 400,
+        width: width - 40,
+        height: height - 200,
         alignItems: "center",
         justifyContent: "space-between",
         flexDirection: "row",
@@ -205,4 +274,55 @@ const styles = StyleSheet.create({
         position: 'absolute',
 
     },
+    resizeBtnHeading: {
+        position: "absolute",
+        top: 10,
+        left: 25,
+        color: Colors.white,
+        fontSize: 12,
+        fontWeight: "700"
+    },
+    selectedReziseMethodText: {
+        color: Colors.light_blue,
+        fontSize: 16,
+        fontWeight: "bold"
+    },
+    resizeBtn: {
+        width: 120,
+        height: 30,
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        position: "absolute",
+        zIndex: 200,
+        borderRadius: 10,
+        backgroundColor: Colors.white,
+        top: 30,
+        left: 20,
+    },
+    resizeListCont: {
+        width: 120,
+        height: 100,
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        zIndex: 200,
+        borderRadius: 10,
+        backgroundColor: Colors.white,
+        top: 63,
+        left: 20,
+    },
+    resizeOptionCont: {
+        width: "90%",
+        height: 20,
+        borderRadius: 10,
+        marginVertical: 5,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    resizeOptionText: {
+        color: Colors.DarkGrey,
+        fontSize: 16,
+        fontWeight: "bold"
+    }
 })
