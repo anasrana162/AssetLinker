@@ -562,33 +562,26 @@ class Dash extends Component {
       const matches_rent_sale = data?.rent_sale == undefined ? "" : data?.rent_sale
         .toLowerCase()
         .includes(txt?.toLowerCase());
-      // const matches_open = data?.open
-      //   .toLowerCase()
-      //   .includes(txt?.toLowerCase());
+
       const matches_price = data?.price == undefined ? "" : data?.price
         .toLowerCase()
         .includes(txt?.toLowerCase());
       const matches_location = location.toLowerCase().includes(txt?.toLowerCase());
       const matches_place = place.toLowerCase().includes(txt?.toLowerCase());
       const matches_place_location = concated.toLowerCase().includes(txt?.toLowerCase()) ;
-      // console.log("data?.open", matches_place_location) //.replace(/\s/g, "")
-      // console.log(".toLowerCase().includes(txt?.toLowerCase())", JSON.parse(data?.Location).location.toLowerCase())
       return (
         matches_property_type ||
         matches_category ||
         matches_rent_sale ||
-        // matches_open ||
         matches_price ||
         matches_location ||
         matches_place ||
         matches_address ||
         matches_place_location
-        // ||
-        // matches_location_place
       );
-      // || matches_rent_sale | matches_price
+
     });
-console.log("Filter data",filterData);
+
     setImmediate(() => {
       this.setState({
         FilteredPosts: filterData,
