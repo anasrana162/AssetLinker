@@ -26,9 +26,8 @@ const MenuBar = ({ navProps, logout, disable }) => {
                 )
                 break;
             case "Contact Us":
-                Linking.openURL(
-                    `https://assetslinkers.com/contact-us/`,
-                )
+                setOpenDropDown(false)
+                navProps.navigate('ContactUs')
                 break;
 
             case "Menu":

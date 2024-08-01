@@ -32,7 +32,7 @@ import AssociationNews from "../screens/Dash/AssociationNews";
 import PostUpdate from "../screens/Post/PostUpdate";
 import BlockedUsers from "../screens/Profile/BlockedUsers";
 import ResetPassword from "../screens/Authentication/ResetPassword";
-
+import ContactUs from "../screens/Dash/ContactUs";
 const Stack = createNativeStackNavigator();
 
 export default Navigation = () => {
@@ -61,6 +61,7 @@ export default Navigation = () => {
         <Stack.Screen name="MyProfile" component={MyProfile} />
         <Stack.Screen name="BlockedUsers" component={BlockedUsers} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen name="ContactUs" component={ContactUs} />
         <Stack.Screen name="Favourite" component={Favourite} />
         <Stack.Screen name="AccountsList" component={AccountsList} />
         <Stack.Screen name="Account" component={Account} />
