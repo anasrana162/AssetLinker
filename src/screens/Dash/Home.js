@@ -542,11 +542,14 @@ class Dash extends Component {
   onSearch = (txt) => {
     var { Posts } = this.state;
     //     var { userData: { homeposts } } = this.props;
-    console.log("Posts in serach", Posts);
+    // console.log("Posts in serach", Posts);
     const filterData = Posts?.filter((data) => {
 
-      var locationParser = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
-      // console.log("locationParser",locationParser)
+      const locationData = JSON.parse(data?.Location || '');
+    const location = locationData.location || '';
+    const place = locationData.place || '';
+    const concated =locationData.location  + " " +locationData.place ;
+      console.log("locationParser",concated)
       const matches_property_type = data?.property_type == undefined ? "" : data?.property_type
         .toLowerCase()
         .includes(txt.toLowerCase());
@@ -565,22 +568,10 @@ class Dash extends Component {
       const matches_price = data?.price == undefined ? "" : data?.price
         .toLowerCase()
         .includes(txt?.toLowerCase());
-      const matches_location = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
-        .location.toLowerCase()
-        .includes(txt?.toLowerCase());
-      console.log("data", data);
-      // const matches_location_place = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)?.place
-      //   .location.toLowerCase()
-      //   .includes(txt?.toLowerCase());
-      const matches_place = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
-        .place.toLowerCase()
-        .includes(txt?.toLowerCase());
-      const matches_place_location = JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
-        .location.toLowerCase()
-        .includes(txt?.toLowerCase()) + JSON.parse(data?.Location) == undefined ? "" : JSON.parse(data?.Location)
-          .place.toLowerCase()
-          .includes(txt?.toLowerCase());
-      // console.log("data?.open", data?.open) //.replace(/\s/g, "")
+      const matches_location = location.toLowerCase().includes(txt?.toLowerCase());
+      const matches_place = place.toLowerCase().includes(txt?.toLowerCase());
+      const matches_place_location = concated.toLowerCase().includes(txt?.toLowerCase()) ;
+      // console.log("data?.open", matches_place_location) //.replace(/\s/g, "")
       // console.log(".toLowerCase().includes(txt?.toLowerCase())", JSON.parse(data?.Location).location.toLowerCase())
       return (
         matches_property_type ||
@@ -597,7 +588,7 @@ class Dash extends Component {
       );
       // || matches_rent_sale | matches_price
     });
-
+console.log("Filter data",filterData);
     setImmediate(() => {
       this.setState({
         FilteredPosts: filterData,
@@ -621,7 +612,6 @@ class Dash extends Component {
     })
 
     AsyncStorage.setItem("@agreement_assetlinker", "agreed")
-
   }
   render() {
     var { userData: { homeposts, homepostsbuilder } } = this.props;

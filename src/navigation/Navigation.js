@@ -31,6 +31,7 @@ import Chatlist from "../screens/Chat/Chatlist";
 import AssociationNews from "../screens/Dash/AssociationNews";
 import PostUpdate from "../screens/Post/PostUpdate";
 import BlockedUsers from "../screens/Profile/BlockedUsers";
+import ResetPassword from "../screens/Authentication/ResetPassword";
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,7 @@ export default Navigation = () => {
         <Stack.Screen name="Forgot" component={ForgetPassword} />
         <Stack.Screen name="OTP" component={Otp} />
         <Stack.Screen name="ChangePassword" component={ChangePassword} />
+        <Stack.Screen name="ResetPassword" component={ResetPassword} />
         <Stack.Screen name="AssociationNews" component={AssociationNews} />
         <Stack.Screen name="Dash" component={Dash} />
         <Stack.Screen name="Post" component={Post} />

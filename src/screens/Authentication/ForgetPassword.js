@@ -10,7 +10,7 @@ import { Colors, size, WP } from '../../config';
 
 import Toast from 'react-native-toast-message';
 import Links from './Components/Links';
-import { AuthTextInput } from '../../components/TextInputCustom';
+
 import AuthTextIput from './Components/AuthTextIput';
 import PhoneInput from 'react-native-phone-number-input';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,25 +24,38 @@ class ForgetPassword extends Component {
 
         this.state = {
             loader: false,
-            mobile: null,
+            email: null,
             password: null,
         };
     }
 
-    onChangeFormattedText = (no) => {
+    onChangeFormattedText = (mail) => {
         setImmediate(() => {
             this.setState({
-                mobile: no
+                email: mail
             })
         })
     }
 
     onSubmitPress = () => {
-        if (this.state.mobile == null || this.state.mobile == "") {
-            alert("Please enter mobile number!")
-        } else {
-            this.props.navigation.navigate("OTP", { mobile: this.state.mobile })
+        this.setState({ loader: true })
+        if (this.state.email == null || this.state.email == "") {
+            alert("Please enter email number!")
         }
+
+        AssetLinkers.post("/forget/password", {
+            "email": this.state.email
+        })
+            .then((res) => {
+                console.log("res", res?.data);
+                this.setState({ loader: false })
+                this.props.navigation.navigate("OTP", { email: this.state.email, otp: res?.data?.otp })
+            }).catch((err) => {
+                this.setState({ loader: false })
+                console.log("Err in sending email", err);
+            })
+
+
     }
 
     render() {
@@ -63,10 +76,10 @@ class ForgetPassword extends Component {
                     </View>
 
                     {/* Screen Text */}
-                    <Text style={styles.screenText}>Enter your phone number ad we'll send you OTP Code</Text>
+                    <Text style={styles.screenText}>Enter your Email and we'll send you an OTP Code</Text>
 
 
-                    <PhoneInput
+                    {/* <PhoneInput
                         // ref={phoneInput}
                         defaultValue={''}
                         defaultCode="PK"
@@ -82,9 +95,14 @@ class ForgetPassword extends Component {
                             color: "black"
                         }}
 
-                        codeTextStyle={{ height:45,marginTop:20 }}
+                        codeTextStyle={{ height: 45, marginTop: 20 }}
                         textInputStyle={{ fontSize: 13, color: 'black', width: "100%", height: 45, }}
                         onChangeFormattedText={(txt) => this.onChangeFormattedText(txt)}
+                    /> */}
+
+                    <AuthTextIput
+                        placeholder={"Email"}
+                        onChangeText={(txt) => this.onChangeFormattedText(txt)}
                     />
 
 

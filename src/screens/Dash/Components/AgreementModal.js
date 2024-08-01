@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'left',
         lineHeight: 24,
+        color:"black"
     },
     closeButton: {
         backgroundColor: '#F194FF',

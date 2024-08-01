@@ -7,41 +7,79 @@ const height = Dimensions.get("screen").height - HEIGHT
 
 // imports
 import { Colors, size, WP } from '../../config';
-import OTPTextView from 'react-native-otp-textinput';
-import Toast from 'react-native-toast-message';
+import AuthTextIput from './Components/AuthTextIput';
 
 {/* {---------------Redux Imports------------} */ }
 import { connect } from 'react-redux';
 import * as userActions from "../../redux/actions/user"
 import { bindActionCreators } from 'redux';
-class Otp extends Component {
+class ResetPassword extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             loader: false,
+            password: null,
             email: this.props.route?.params?.email,
-            code: '',
+            confirmPassword: null,
         };
     }
 
-    setCode = (val) => {
-        setImmediate(() => {
-            this.setState({ code: val })
-        })
-    }
+    onChangeText = (val, key) => {
+        switch (key) {
+            case "password":
+                setImmediate(() => {
+                    this.setState({
+                        password: val,
+                    })
+                })
+                break;
 
-    onSubmitPress = () => {
-        console.log("Code", this.state.code)
-        var { otp } = this.props.route.params
-        if (this.state.code == otp) {
-            this.props.navigation.navigate("ResetPassword", { email: this.state.email })
-        } else {
-            alert("Please enter correct Code!")
+            case "confirm_password":
+                setImmediate(() => {
+                    this.setState({
+                        confirmPassword: val,
+                    })
+                })
+                break;
+
         }
     }
 
+    onSubmitPress = () => {
+        setImmediate(() => {
+            this.setState({ loader: true })
+        })
+
+        var { email, password, confirmPassword } = this.state
+
+        if (email?.length == 0) {
+            return alert("Email is empty ")
+        }
+        if (password == null || password == "") {
+            return alert("Enter correct Password")
+        }
+        if (confirmPassword !== password) {
+            return alert("Password does not match!")
+        }
+
+        AssetLinkers.post("/forget/password/update", {
+            "email": email,
+            "password": password,
+        }).then((response) => {
+            console.log("Reset Password Api Response:|||", response?.data)
+            setImmediate(() => {
+                this.setState({ loader: false })
+            })
+            this.props.navigation.navigate("Login")
+        }).catch((err) => {
+            console.log("Reset Password Api Error:|||" + "  " + err + "  ", err?.response)
+        })
+
+    }
+
     render() {
+        console.log("props", this.props.route.params)
         return (
             <View style={styles.mainContainer}>
                 {/* Backround Image */}
@@ -54,34 +92,31 @@ class Otp extends Component {
                     <View style={styles.header}>
 
                         {/* Screen Title */}
-                        <Text style={styles.screenTitle}>OTP</Text>
+                        <Text style={styles.screenTitle}>Reset Password</Text>
 
                     </View>
 
-                    {/* Screen Text */}
-                    <Text style={styles.screenText}>
-                        We have sent you a six-digits verification code with instructions to your email.
-                        Please enter the code change password.
-                    </Text>
 
-
-                    <OTPTextView
-                        // ref={(e) => (ref = e)}
-                        keyboardType="numeric"
-                        // style={{
-                        //   width: '80%',
-                        //   height: 20,
-                        //   alignSelf: 'center',
-                        //   marginVertical: 40,
-                        // }}
-                        handleTextChange={(text) => this.setCode(text)}
-                        containerStyle={styles.textInputContainer}
-                        textInputStyle={styles.roundedTextInput}
-                        inputCount={5}
-
+                    {/* Password Textinput */}
+                    <AuthTextIput
+                        placeholder={"Password"}
+                        placeholderTextColor={Colors.secondary}
+                        onChangeText={(text) => this.onChangeText(text, "password")}
+                        style={{ marginTop: 60 }}
+                        showEye={true}
+                    />
+                    <Text style={styles.warning_text}>Password must be 6 characters long, should contain atleast 1 uppercase,1 lowercase and 1 digit</Text>
+                    {/* Confirm Password Textinput */}
+                    <AuthTextIput
+                        placeholder={"Confirm Password"}
+                        placeholderTextColor={Colors.secondary}
+                        onChangeText={(text) => this.onChangeText(text, "confirm_password")}
+                        style={{ marginBottom: 20 }}
+                        showEye={true}
                     />
 
-                    {/* Signup Button */}
+
+                    {/* Submit Button */}
 
                     <TouchableOpacity
                         onPress={() => this.onSubmitPress()}
@@ -120,7 +155,7 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(ActionCreators, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Otp)
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPassword)
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -143,8 +178,8 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.main,
         justifyContent: "center",
         alignItems: "center",
-        borderBottomLeftRadius: 30,
-        borderBottomRightRadius: 30
+        borderBottomLeftRadius: 60,
+        // borderBottomRightRadius: 30
     },
     screenTitle: {
         fontSize: 30,
@@ -167,7 +202,7 @@ const styles = StyleSheet.create({
         height: 40,
         justifyContent: "center",
         alignItems: "center",
-        marginVertical: 40,
+        marginVertical: 20,
         backgroundColor: "#3081bf",
         alignSelf: "center",
         borderRadius: 10,
@@ -189,14 +224,13 @@ const styles = StyleSheet.create({
         color: 'black',
 
     },
-    textInputContainer: {
-        marginBottom: 20,
-        padding: 50
-        // alignSelf: 'center',
-
-    },
-    roundedTextInput: {
-        // borderRadius: 10,
-        borderBottomWidth: 4,
-    },
+    warning_text: {
+        fontSize: 12,
+        fontWeight: "500",
+        color: Colors.black,
+        width: width - 96,
+        alignSelf: "center",
+        marginTop: 10,
+        marginBottom: -5
+    }
 })

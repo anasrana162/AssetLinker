@@ -8,8 +8,10 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  Modal,
+  Pressable
 } from "react-native";
-import { useState } from "react";
+import { useState, PureComponent } from "react";
 import { Colors } from "../../config";
 import Entypo from "react-native-vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
@@ -25,6 +27,8 @@ const height = Dimensions.get("screen").height - HEIGHT;
 
 const AccountsList = (props) => {
   const [searchInput, setSearchInput] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [imageSelected, setImageSelected] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const data = props.route?.params?.data;
 
@@ -55,6 +59,13 @@ const AccountsList = (props) => {
     return () => clearTimeout(delay);
   }, [searchInput]);
   // data.sort((a, b) => a.name.localeCompare(b.name))
+
+  const openImageDetailModal = (image) => {
+    console.log("opening");
+    setImageSelected(image)
+    setOpenModal(!openModal)
+  }
+
   return (
     <View style={styles.mainContainer}>
       {/* {console.log(data)} */}
@@ -63,9 +74,37 @@ const AccountsList = (props) => {
         data={filteredData.length == 0 ? data?.sort((a, b) => a?.name?.localeCompare(b?.name)) : filteredData?.sort((a, b) => a?.name?.localeCompare(b?.name))}
         renderItem={({ item, index }) => {
           // console.log(item, "~~~~~~ITEM~~~~~~~");
-          return <CustomerContainer data={item} key={index} />;
+          return <CustomerContainer
+            data={item}
+            key={index}
+            navigation={props?.navigation}
+            openImageModal={(image) => openImageDetailModal(image)}
+          />;
         }}
       />
+
+      <Modal
+        visible={openModal}
+        transparent={true}
+      >
+        <View style={styles.mainModalCont}>
+
+          <Pressable
+            onPress={() => openImageDetailModal()}
+            style={styles.modalBackgroundClose}>
+          </Pressable>
+
+          <View style={styles.smallModalCont}>
+            <Image
+              source={{ uri: imageSelected }}
+              style={{ width: "95%", height: "95%" }}
+            />
+          </View>
+        </View>
+
+
+      </Modal>
+
     </View>
   );
 };
@@ -93,81 +132,91 @@ const SearchBar = ({ onChangeText, navProps }) => (
   </View>
 );
 
-const CustomerContainer = ({ data }) => {
-  const navigation = useNavigation();
-  const { user_id, created_at } = data?.detail[0];
-  var user_type = "";
-  switch (data?.user_type) {
-    case "buyer_seller":
-      user_type = "Buyer/Seller";
-      break;
-    case "estate_agent":
-      user_type = "Consultant";
-      break;
-    case "builder":
-      user_type = "Builder";
-      break;
-  }
-  return (
-    <View style={styles.customerMain}>
-      <View style={{ width: "22%" }}>
-        <Image
-          source={
-            data?.image
-              ? { uri: `${ImagePath}/${data?.image}` }
-              : require("../../../assets/placeholderPost.jpeg")
-          }
-          style={styles.img}
-        />
-      </View>
+class CustomerContainer extends PureComponent {
 
-      <View style={styles.box2}>
-        <Text style={styles.name} numberOfLines={2}>
-          {data?.detail[0]?.real_estate_name ||
-            data?.detail[0]?.frim_name ||
-            data?.name}
-        </Text>
-        {data?.detail[0]?.designation == undefined || data?.detail[0]?.designation == "" ? <></> :
-          <>
-            <View style={styles.tagContainer}>
+
+
+  getUserType = (type) => {
+    switch (type) {
+      case "buyer_seller":
+        return "Buyer/Seller";
+      case "estate_agent":
+        return "Consultant";
+      case "builder":
+        return "Builder";
+      default:
+        return "";
+    }
+  };
+
+  render() {
+    const { data, navigation, openImageModal } = this.props;
+    // console.log("this.props.navigation",this.props.navigation);
+    const { user_id, created_at } = data?.detail[0];
+    const user_type = this.getUserType(data?.user_type);
+
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("AccountDetail", {
+            user_id: user_id,
+            created_at: created_at,
+            image: data?.image,
+            name: data?.name,
+            designation: data?.detail[0]?.designation,
+            user_type: user_type,
+          })
+        }
+        style={styles.customerMain}>
+        <TouchableOpacity
+          onPress={() => openImageModal(`${ImagePath}/${data?.image}`)}
+          style={{ width: "22%", zIndex: 20 }}>
+          <Image
+            source={
+              data?.image
+                ? { uri: `${ImagePath}/${data?.image}` }
+                : require("../../../assets/placeholderPost.jpeg")
+            }
+            style={styles.img}
+          />
+        </TouchableOpacity>
+
+        <View style={[styles.box2, { width: "48%" }]}>
+          <Text style={styles.name} numberOfLines={2}>
+            {data?.detail[0]?.real_estate_name ||
+              data?.detail[0]?.frim_name ||
+              data?.name}
+          </Text>
+          {data?.detail[0]?.designation ? (
+            <View style={[styles.tagContainer, { backgroundColor: Colors.light_blue }]}>
               <Text numberOfLines={1} style={styles.designation}>
                 {data?.detail[0]?.designation}
               </Text>
             </View>
-          </>
-        }
-        <View style={styles.tagContainer}>
-          <Text style={styles.tagLabel}>
-            {user_type}
-          </Text>
+          ) : null}
+          <View style={styles.tagContainer}>
+            <Text style={styles.tagLabel}>
+              {user_type}
+            </Text>
+          </View>
         </View>
-      </View>
 
+        {/* View Project Button */}
+        <View style={styles.box3}>
+          <Text style={styles.msID}>MS #{data?.ms_id}</Text>
+          <View
 
-      {/* View Project Button */}
-      <View style={styles.box3}>
-        <Text style={styles.msID}>MS #{data?.ms_id}</Text>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.push("AccountDetail", {
-              user_id: user_id,
-              created_at: created_at,
-              image: data?.image,
-              name: data?.name,
-              designation: data?.detail[0]?.designation,
-              user_type: user_type,
-            })
-          }
-          activeOpacity={0.5}
-          style={styles.viewBTN}
-        >
-          <Text style={styles.viewBTNlabel}>View Project</Text>
-          <Entypo name="chevron-thin-right" size={14} color={Colors.blue} />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-};
+            activeOpacity={0.5}
+            style={styles.viewBTN}
+          >
+            <Text style={styles.viewBTNlabel}>View Project</Text>
+            <Entypo name="chevron-thin-right" size={14} color={Colors.blue} />
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -178,6 +227,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     rowGap: 10,
+  },
+  mainModalCont: {
+    width: width,
+    height: height,
+    marginTop: HEIGHT,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+
+  modalBackgroundClose: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(52,52,52,0.4)",
+    position: "absolute",
+    zIndex: 30,
+  },
+  smallModalCont: {
+    width: width - 140,
+    height: 270,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#000000",
+    position: "absolute",
+    borderRadius:10,
+    overflow:"hidden",
+    zIndex: 50
   },
   searchbar: {
     width: width,
@@ -205,25 +280,27 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
     borderBottomWidth: 1,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     paddingHorizontal: 10,
   },
   img: { width: 60, height: 60, borderRadius: 10 },
   name: { color: "black", fontWeight: "700", fontSize: 15, letterSpacing: 1 },
-  designation: { color: "white", fontWeight: "600", fontSize: 12, textAlign: "center", paddingVertical: 3, letterSpacing: 1 },
+  designation: { color: "white", fontWeight: "800", fontSize: 12, textAlign: "center", paddingVertical: 3, letterSpacing: 1 },
   tagContainer: {
     backgroundColor: Colors.blue,
     borderRadius: 20,
-    width: 110,
+    // width: 110,
     paddingHorizontal: 10,
-    paddingHorizontal: 2
+    // paddingHorizontal: 2
   },
   tagLabel: {
     color: "#fff",
     fontSize: 12,
+    fontWeight: "600",
     textTransform: "capitalize",
     paddingVertical: 3,
+    letterSpacing: 1,
     textAlign: "center",
   },
   msID: {
@@ -233,6 +310,8 @@ const styles = StyleSheet.create({
   },
   box2: {
     width: "48%",
+    justifyContent: "center",
+    alignItems: "flex-start",
     rowGap: 3,
   },
   box3: { width: "30%", rowGap: 15, paddingLeft: 15 },

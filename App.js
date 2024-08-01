@@ -16,7 +16,6 @@ import {
   Image,
 
 } from "react-native";
-import { Provider } from "react-redux";
 import Navigation from "./src/navigation/Navigation";
 import Toast from "react-native-toast-message";
 import { check, PERMISSIONS, RESULTS } from "react-native-permissions";
@@ -45,7 +44,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
       network: true,
       syncMessage: 'Loading',
       progress: null,

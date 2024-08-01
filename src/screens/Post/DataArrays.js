@@ -127,6 +127,9 @@ export const listOfArea = [
     {
         name: 'MDA',
     },
+    {
+        name: 'PECHS',
+    },
 ];
 export const ResidentialCategories = [
     { id: 1, name: 'Bangalow' },

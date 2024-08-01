@@ -51,15 +51,15 @@ class Account extends Component {
         if (item?.user_type === "buyer_seller") {
           buyerSeller.push(item)
           this.setState({ buyerSeller });
-          console.log(item, "=========Buyer Seller===========");
+          // console.log(item, "=========Buyer Seller===========");
         } else if (item?.user_type === "estate_agent") {
           consultant.push(item)
           this.setState({ consultant });
-          console.log(item, "=========Consultant===========");
+          // console.log(item, "=========Consultant===========");
         } else if (item?.user_type === "builder") {
           builder.push(item)
           this.setState({ builder });
-          console.log(item, "=========builder===========");
+          // console.log(item, "=========builder===========");
         }
       });
     } catch (error) {
@@ -120,7 +120,7 @@ class Account extends Component {
   render() {
 
     // var { user_id, name, image, created_at, designation } = this.props?.route?.params;
-    console.log("userData", this.props?.userData?.user?.detail[0]?.user_id)
+    // console.log("userData", this.props?.userData?.user?.detail[0]?.user_id)
 
     var { userData: { user: { name, image, created_at, detail } } } = this.props
     const memberSince = moment(created_at).format("YYYY/MM/DD");
