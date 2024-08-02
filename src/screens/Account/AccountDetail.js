@@ -60,7 +60,7 @@ class AccountDetail extends Component {
       this.setState({ loader: true })
     })
     try {
-      const res = await   AssetLinkers.post(
+      const res = await AssetLinkers.post(
         "get_propertyV4", {
         "id": user_id,
         "condition": "myprofile"
@@ -279,6 +279,20 @@ class AccountDetail extends Component {
         name: "False news"
       },
     ]
+    const getUserType = (type) => {
+      switch (type) {
+        case "buyer_seller":
+          return "Buyer/Seller";
+        case "estate_agent":
+          return "Consultant";
+        case "builder":
+          return "Builder";
+        default:
+          return "";
+      }
+    };
+    const user_type_changed = getUserType(user_type);
+
     // console.log(memberSince);
     // console.log(user_id, "~~~~~~~~~~~~~", memberSince);
     // console.log("-----------+_+_+_+_+-------------", this.props?.userData?.user?.id)
@@ -331,17 +345,19 @@ class AccountDetail extends Component {
               {user_type == "" || user_type == undefined ?
                 <></>
                 :
-                <Text style={[styles.text, { fontWeight: "600", fontSize: 15, color: "black", letterSpacing: 1 }]}>{user_type}</Text>}
+                <Text style={[styles.text, { fontWeight: "600", fontSize: 15, color: "black", letterSpacing: 1 }]}>{user_type_changed}</Text>}
               <Text style={styles.text}>{name}</Text>
               {designation == "" || designation == undefined ? <></> :
                 <View style={{
-                  width: 60,
-                  height: 25,
+                  // width: 60,
+                  // height: 25,
                   backgroundColor: Colors.blue,
                   justifyContent: "center",
                   alignItems: "center",
                   borderRadius: 5,
-                  marginVertical: 3
+                  marginVertical: 3,
+                  paddingHorizontal: 5,
+                  paddingVertical: 3,
                   // marginVertical: 3
                 }}>
                   <Text style={[styles.text, { fontWeight: "800", fontSize: 15, color: "white", letterSpacing: 1 }]}>{designation}</Text>

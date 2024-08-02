@@ -13,6 +13,7 @@ import {
     NativeModules,
     Modal,
     ActivityIndicator,
+    Pressable,
     Platform,
     TextInput,
 } from "react-native";
@@ -30,7 +31,7 @@ import * as ImageCropPicker from 'react-native-image-crop-picker';
 import Video, { VideoRef } from 'react-native-video';
 const ImageURL = "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/property/"
 const VideoURL = "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/videos/ceo_post/"
-
+const profilePictureLinkUser = "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/userProfile/"
 import {
     Image as ImageCompressor,
 } from 'react-native-compressor';
@@ -83,7 +84,10 @@ class AssociationNews extends Component {
                 image: "",
                 index: 0,
                 allImages: [],
-            }
+            },
+            profileImageModal: false,
+            profileImageSelected: null,
+
         };
     }
     _onFinishedPlayingSubscription = null
@@ -682,6 +686,15 @@ class AssociationNews extends Component {
         )
     }
 
+    openImageDetailModal = (image) => {
+        // console.log("opening");
+        this.setState({
+            profileImageModal: !this.state.profileImageModal,
+            profileImageSelected: image
+        })
+
+    }
+
     render() {
 
         var { userData: { user } } = this.props
@@ -753,26 +766,43 @@ class AssociationNews extends Component {
                         break;
                 }
             }
-
+            // console.log("data",data);
             return (
                 <View style={styles.itemContainer}>
 
                     {/* User Data */}
                     <View style={styles.userDataCont}>
-                        <Image
-                            source={{
-                                uri: "https://devstaging.a2zcreatorz.com/assetLinker_laravel/storage/app/public/images/userProfile/"
-                                    + data?.user_image
-                            }}
-                            style={{
-                                width: 50,
-                                height: 50,
-                                borderRadius: 60,
-                                marginHorizontal: 10,
+                        <TouchableOpacity onPress={() => this.openImageDetailModal(profilePictureLinkUser
+                            + data?.user_image)}>
+                            <Image
+                                source={{
+                                    uri: profilePictureLinkUser
+                                        + data?.user_image
+                                }}
+                                style={{
+                                    width: 50,
+                                    height: 50,
+                                    borderRadius: 60,
+                                    borderWidth: 1,
+                                    borderColor: "#EEEEEE",
+                                    marginHorizontal: 10,
 
-                            }}
-                        />
-                        <View style={styles.userDataTextCont}>
+                                }}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() =>
+
+                                this.props.navigation.navigate("AccountDetail", {
+                                    user_id: data?.user_id,
+                                    created_at: data?.created_at,
+                                    image: data?.user_image,
+                                    name: data?.name,
+                                    designation: data?.designation,
+                                    user_type: data?.user_type,
+                                })
+                            }
+                            style={styles.userDataTextCont}>
                             <Text style={styles.userName}>{data?.name}</Text>
 
                             {data?.designation == undefined ||
@@ -794,7 +824,7 @@ class AssociationNews extends Component {
                                 }}>
                                     <Text style={{ fontWeight: "600", fontSize: 14, color: "white", letterSpacing: 1 }}>{data?.designation}</Text>
                                 </View>}
-                        </View>
+                        </TouchableOpacity>
 
                         {/* Delete Button */}
                         {user?.ms_id == data?.ms_id && (
@@ -872,7 +902,7 @@ class AssociationNews extends Component {
                                                                     // Can be a URL or a local file.
                                                                     source={{ uri: VideoURL + postData?.value }}
                                                                     // Store reference  
-                                                                     resizeMode='cover'
+                                                                    resizeMode='cover'
                                                                     ref={this.videoRef}
                                                                     paused={postData?.isPaused == undefined ? true : postData?.isPaused}
                                                                     repeat
@@ -1135,7 +1165,7 @@ class AssociationNews extends Component {
                                                     // Can be a URL or a local file.
                                                     source={{ uri: video }}
                                                     // Store reference  
-                                                     resizeMode='cover'
+                                                    resizeMode='cover'
                                                     ref={this.videoRef}
                                                     paused={isPaused[index]?.paused}
                                                     repeat
@@ -1584,6 +1614,28 @@ class AssociationNews extends Component {
                     user?.allow_to_post == 1 &&
                     <this.Footer />
                 }
+                {/* Profile Picture detail Modal */}
+                <Modal
+                    visible={this.state.profileImageModal}
+                    transparent={true}
+                >
+                    <View style={styles.profileMainModalCont}>
+
+                        <Pressable
+                            onPress={() => this.openImageDetailModal()}
+                            style={styles.profileModalBackgroundClose}>
+                        </Pressable>
+
+                        <View style={styles.profileSmallModalCont}>
+                            <Image
+                                source={{ uri: this.state.profileImageSelected }}
+                                style={{ width: "95%", height: "95%" }}
+                            />
+                        </View>
+                    </View>
+
+
+                </Modal>
 
                 {/* Image Modal */}
                 {
@@ -1668,6 +1720,32 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         position: "absolute",
         left: 5,
+    },
+    profileMainModalCont: {
+        width: width,
+        height: height,
+        marginTop: HEIGHT,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+
+    profileModalBackgroundClose: {
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(52,52,52,0.4)",
+        position: "absolute",
+        zIndex: 30,
+    },
+    profileSmallModalCont: {
+        width: width - 140,
+        height: 270,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#000000",
+        position: "absolute",
+        borderRadius: 10,
+        overflow: "hidden",
+        zIndex: 50
     },
     cross: {
         padding: 5,
